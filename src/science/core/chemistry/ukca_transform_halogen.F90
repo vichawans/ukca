@@ -55,7 +55,12 @@ USE ukca_constants, ONLY: c_hcl, c_cl, c_clo, c_cl2o2, c_hocl,                 &
                           c_ch2br2, c_n, c_no, c_no3, c_n2o5,                  &
                           c_ho2no2, c_hono2, c_hono, c_meono2,                 &
                           c_pan, c_ppan, c_ison, c_mpan,                       &
-                          c_bro, c_no2
+                          c_bro, c_no2, c_chbr3, c_ch2cl2,                     &
+                          c_chcl3, c_c2cl4, c_c2h4cl2, c_clno2,                &
+                          c_cocl2, c_ch2brcl, c_chbr2cl,                       &
+                          c_chbrcl2, c_chcl2o2, c_cf2clcf2cl,                  &
+                          c_cf2clcf3, c_mecfcl2, c_mecf2cl,                    &
+                          c_cl2, c_br2
 
 IMPLICIT NONE
 
@@ -96,7 +101,7 @@ INTEGER, SAVE :: n_n_tracers =0
 
 ! the maximum number of tracers in any one
 ! family
-INTEGER, PARAMETER :: tr_max = 30
+INTEGER, PARAMETER :: tr_max = 50
 
 ! Position in tracer array of compounds
 INTEGER, SAVE :: cl_tracers(tr_max)=0
@@ -638,6 +643,98 @@ DO i=1,jpctr
     c_br_tracers(n_br_tracers) = c_cf2clbr
     br_tracers(n_br_tracers) = i
     s_br_tracers(n_br_tracers) = source_gas
+! DEST
+  CASE ('CH2Cl2    ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_ch2cl2/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('CHCl3     ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_chcl3/3.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('C2Cl4     ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_c2cl4/4.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('C2H4Cl2   ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_c2h4cl2/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('ClNO2     ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_clno2
+    cl_tracers(n_cl_tracers) = i
+    n_n_tracers = n_n_tracers + 1
+    c_n_tracers(n_n_tracers) = c_clno2
+    n_tracers(n_n_tracers) = i
+    s_n_tracers(n_n_tracers) = mixed_compound
+  CASE ('COCl2    ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_cocl2/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = unrestricted     
+  CASE ('CH2BrCl   ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_ch2brcl
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = mixed_compound
+    n_br_tracers = n_br_tracers + 1
+    c_br_tracers(n_br_tracers) = c_ch2brcl
+    br_tracers(n_br_tracers) = i
+    s_br_tracers(n_br_tracers) = source_gas
+  CASE ('CHBr2Cl   ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_chbr2cl
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = mixed_compound
+    n_br_tracers = n_br_tracers + 1
+    c_br_tracers(n_br_tracers) = c_chbr2cl/2.0
+    br_tracers(n_br_tracers) = i
+    s_br_tracers(n_br_tracers) = source_gas
+ CASE ('CHBrCl2   ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_chbrcl2/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = mixed_compound
+    n_br_tracers = n_br_tracers + 1
+    c_br_tracers(n_br_tracers) = c_chbrcl2
+    br_tracers(n_br_tracers) = i
+    s_br_tracers(n_br_tracers) = source_gas
+  CASE ('CHCl2O2   ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_chcl2o2/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = unrestricted
+  CASE ('CF2ClCF2Cl')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_cf2clcf2cl/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('CF2ClCF3  ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_cf2clcf3
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('MeCFCl2   ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_mecfcl2/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('MeCF2Cl   ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_mecf2cl
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = source_gas
+  CASE ('Cl2       ')
+    n_cl_tracers = n_cl_tracers + 1
+    c_cl_tracers(n_cl_tracers) = c_cl2/2.0
+    cl_tracers(n_cl_tracers) = i
+    s_cl_tracers(n_cl_tracers) = unrestricted
+
 
     ! ************************************************************
     ! Bromine tracers
@@ -680,6 +777,17 @@ DO i=1,jpctr
     c_br_tracers(n_br_tracers) = c_ch2br2/2.0
     br_tracers(n_br_tracers) = i
     s_br_tracers(n_br_tracers) = 1
+! DEST
+  CASE ('CHBr3     ')
+    n_br_tracers = n_br_tracers + 1
+    c_br_tracers(n_br_tracers) = c_chbr3/3.0
+    br_tracers(n_br_tracers) = i
+    s_br_tracers(n_br_tracers) = source_gas
+  CASE ('Br2       ')
+    n_br_tracers = n_br_tracers + 1
+    c_br_tracers(n_br_tracers) = c_br2/2.0
+    br_tracers(n_br_tracers) = i
+    s_br_tracers(n_br_tracers) = unrestricted
 
     ! ************************************************************
     ! nitrogen tracers
