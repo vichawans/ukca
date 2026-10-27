@@ -372,6 +372,14 @@ REAL, PARAMETER :: c_maco3      = 3.489
 !                            Same as Sec_org
 REAL, PARAMETER :: c_cri        = 5.1782
 
+!     Extra species for DEST chemistry
+REAL, PARAMETER :: c_ch2cl2     = 2.9317
+REAL, PARAMETER :: c_chcl3      = 4.1205
+REAL, PARAMETER :: c_c2cl4      = 5.7239
+REAL, PARAMETER :: c_c2h4cl2    = 3.4159
+REAL, PARAMETER :: c_clno2      = 2.8119
+REAL, PARAMETER :: c_cocl2      = 3.4142
+
 !     molecular masses in g/mol of emitted species,
 !     for budget calculations
 REAL, PARAMETER :: m_ho2     =  33.007
@@ -415,7 +423,6 @@ REAL, PARAMETER :: m_mecl       =  50.5
 REAL, PARAMETER :: m_cf2clbr    = 165.5
 REAL, PARAMETER :: m_cf3br      = 149.0
 REAL, PARAMETER :: m_ch2br2     = 173.835
-REAL, PARAMETER :: m_chbr3      = 252.72
 
 ! sulphur containing, etc.
 REAL, PARAMETER :: m_ocs        =  60.0
@@ -628,6 +635,15 @@ REAL, PARAMETER :: m_maco3      = 101.081
 !   in CRI mechanism, as these do not have defined molecular masses.
 !   - Using m_cri = 150g/mol (same as Sec_org)
 REAL, PARAMETER :: m_cri = 150.0
+
+!     Extra species for DEST chemistry
+REAL, PARAMETER :: m_chbr3      = 252.72
+REAL, PARAMETER :: m_ch2cl2     = 84.93
+REAL, PARAMETER :: m_chcl3      = 119.37
+REAL, PARAMETER :: m_c2cl4      = 165.82
+REAL, PARAMETER :: m_c2h4cl2    = 98.96
+REAL, PARAMETER :: m_clno2      = 81.46
+REAL, PARAMETER :: m_cocl2      = 98.91
 
 ! For solar calculations
 

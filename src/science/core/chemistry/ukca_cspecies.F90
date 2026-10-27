@@ -184,7 +184,8 @@ USE ukca_constants,  ONLY: c_br, c_brcl, c_bro, c_brono2, c_buoo,              &
     c_txcarb22, c_ru12pan, c_rtn26pan, c_aroh14, c_aroh17, c_arnoh14,          &
     c_arnoh17, c_anhy, c_cri,c_dhpcarb9, c_hpucarb12, c_hucarb9, c_iepox,      &
     c_hmml, c_dhpr12ooh, c_dhcarb9, c_ru12no3, c_ru10no3, c_dhpr12o2,          &
-    c_ru10ao2, c_maco3
+    c_ru10ao2, c_maco3, c_ch2cl2, c_chcl3, c_c2cl4, c_c2h4cl2, c_clno2,        &
+    c_cocl2
 
 
 USE asad_mod,        ONLY: advt, nadvt, speci, jpctr, jpspec
@@ -468,7 +469,13 @@ WHERE (advt == 'AGE OF AIR') c_species = 1.0
 
 ! DEST
 WHERE (advt == 'CHBr3     ') c_species = c_chbr3   !for DEST
-
+WHERE (advt == 'CH2Cl2    ') c_species = c_ch2cl2  !for DEST
+WHERE (advt == 'CHCl3     ') c_species = c_chcl3   !for DEST
+WHERE (advt == 'C2Cl4     ') c_species = c_c2cl4   !for DEST
+WHERE (advt == 'C2H4Cl2   ') c_species = c_c2h4cl2 !for DEST
+WHERE (advt == 'ClNO2     ') c_species = c_clno2   !for DEST
+WHERE (advt == 'COCl2     ') c_species = c_cocl2   !for DEST
+        
 ! non-advected tracers
 c_na_species=0.0
 WHERE (nadvt == 'OH        ') c_na_species = c_oh

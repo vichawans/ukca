@@ -104,7 +104,7 @@ INTEGER, PARAMETER :: rm = 1024   ! Used to remove reactions that existed at
                                   ! later ones
 
 ! Define size of master chemistry
-INTEGER, PARAMETER :: n_chch_master = 366 ! number of known species !DEST +9
+INTEGER, PARAMETER :: n_chch_master = 372 ! number of known species !DEST +15
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
@@ -943,7 +943,7 @@ chch_t1(282,'RU10NO3   ',1,'TR        ','          ',1,1,cs,0,0,119),          &
 chch_t1(283,'MACO3     ',1,'OO        ','          ',0,0,cs,rp,0,119),         &
 ! 284
 chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st+dest,a,0,132),     &
-! Unlumping long-lived ODS for DEST
+! Unlumping long-lived ODS, for DEST
 ! 285
 chch_t1(285,'CCl4      ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 286
@@ -961,7 +961,21 @@ chch_t1(291,'CF2ClBr   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 292
 chch_t1(292,'CF3Br     ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 293
-chch_t1(293,'CHBr3     ',1,'TR        ','          ',0,0,dest,0,0,107)         &
+chch_t1(293,'CHBr3     ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! adding Cl-VSLSs, for DEST
+! 294
+chch_t1(294,'CH2Cl2    ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 295
+chch_t1(295,'CHCl3     ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 296
+chch_t1(296,'C2Cl4     ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 297
+chch_t1(297,'C2H4Cl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! adding extra mid-products, for DEST
+! 298
+chch_t1(298,'ClNO2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for ClNO2
+! 299
+chch_t1(299,'COCl2     ',1,'TR        ','          ',0,0,dest,0,0,107)         & !!! Add W+D deposition for COCl2
 ]
 
 
