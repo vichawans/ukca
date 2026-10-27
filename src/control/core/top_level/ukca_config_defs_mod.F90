@@ -134,7 +134,7 @@ IF (ukca_config%l_ukca_deststrattrop) THEN !! .AND. ukca_config%l_ukca_dest_clvs
          ['CH2Cl2    ','CHCl3     ',                                           &
            'C2Cl4     ','C2H4Cl2   ']
     
-  ! ELSE IF SOMELOGICAL !!!Also implement option LBC for CHCl3 and C2H4Cl2 and emissions for CH2Cl2 and C2Cl4 ???
+  ! ELSE IF SOMELOGICAL !!!Also implement option LBC for CHCl3 and C2H4Cl2 and emissions for CH2Cl2 and C2Cl4 ???
   !   n_boundary_vals_2D = 2
   !   ALLOCATE(lbc_mmr_2D(rows,n_boundary_vals_2D))
   !   ALLOCATE(lbc_spec_2D(n_boundary_vals_2D))

@@ -55,6 +55,7 @@ SUBROUTINE ukca_scenario_ctl(n_boundary_vals, lbc_spec,                        &
 USE yomhook,               ONLY: lhook, dr_hook
 USE parkind1,              ONLY: jprb, jpim
 USE ereport_mod,           ONLY: ereport
+USE ukca_um_legacy_mod,    ONLY: mype
 USE umPrintMgr, ONLY: umPrint, umMessage, PrStatus_Oper, PrStatus_DIAG, PrintStatus
 USE ukca_config_specification_mod, ONLY: ukca_config,                          &
                                          i_strat_lbc_wmoa1, i_strat_lbc_env
@@ -63,9 +64,9 @@ USE nlsizes_namelist_mod, ONLY: rows
 
 USE ukca_scenario_prescribed_mod, ONLY: ukca_scenario_prescribed
 USE ukca_scenario_wmoa1_mod, ONLY: ukca_scenario_wmoa1
-USE ukca_scenario_Cl_VSLSs_mod,  ONLY: ukca_scenario_Cl_VSLSs
-                                       !test_scenario_cl_vsls_ctl, &
-                                       !l_ukca_test_scenario_cl_vsls
+USE ukca_scenario_Cl_VSLSs_mod,  ONLY: ukca_scenario_Cl_VSLSs,                 &
+                                       test_scenario_cl_vsls_ctl,              &
+                                       l_ukca_test_scenario_cl_vsls
 IMPLICIT NONE
 
 ! Number of lower BC species
@@ -147,16 +148,17 @@ IF ((ukca_config%l_ukca_deststrattrop) .AND. (ukca_config%l_ukca_dest_clvsls_lbc
   END IF
 
   CALL ukca_scenario_Cl_VSLSs(n_boundary_vals_2D, lbc_spec_2D,   &
-                              i_year, i_day_number,           &
+                              i_year, i_day_number,              &
                               lbc_mmr_2D)
- ! Include test later
- !  IF (L_first) THEN
- !    IF (mype == 0) THEN
- !      IF (L_ukca_test_scenario_cl_vsls) THEN
- !         CALL test_scenario_cl_vsls_ctl(n_boundary_vals_2D, lbc_spec_2D)
- !      END IF
- !    END IF
- ! END IF
+
+  ! Output LBCs of Cl-VSLSs for testing
+  IF (L_first) THEN
+    IF (mype == 0) THEN
+      IF (L_ukca_test_scenario_cl_vsls) THEN
+         CALL test_scenario_cl_vsls_ctl(n_boundary_vals_2D, lbc_spec_2D)
+      END IF
+    END IF
+ END IF
  
 END IF
 
