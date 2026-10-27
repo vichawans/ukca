@@ -222,7 +222,7 @@ chch_t1( 8,'N2O5      ',2,'TR        ','          ',1,1,ti+st+cs,0,0,107),     &
 chch_t1( 9,'HO2NO2    ',1,'TR        ','          ',0,1,r+t,0,0,107),          &
 chch_t1( 9,'HO2NO2    ',1,'TR        ','          ',1,1,ti+s+st+cs,0,0,107),   &
 !  10 DD:  7,WD:  5,   (20)
-chch_t1(10,'HONO2     ',1,'TR        ','          ',1,1,ti+s+t+st+r+cs,        &
+chch_t1(10,'HONO2     ',1,'TR        ','          ',0,0,ti+s+t+st+r+cs,        &
                                                                 0,0,107),      &
 !  11 DD:  8,WD:  6,
 chch_t1(11,'H2O2      ',1,'TR        ','          ',1,1,ti+s+t+st+ol+r+cs,     &
