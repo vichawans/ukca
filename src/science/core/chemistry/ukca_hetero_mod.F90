@@ -511,8 +511,18 @@ ELSE ! New config
   END IF
 
   ! Calculate uptake coefficients on SA using formulation of Shi et al. 2001
-  IF (ukca_config%i_ukca_hetconfig > 0) THEN
+  ! for i_ukca_hetconfig == 1 (Shi coeff) or == 2 (Shi coeff + Br)
+  IF (ukca_config%i_ukca_hetconfig == 1) .OR.                                  & 
+     (ukca_config%i_ukca_hetconfig == 2) THEN
     CALL ukca_shi_liquid_aerosol(1,n_points,n_points,                          &
+                                 zt(1:n_points),zh2o(1:n_points),              &
+                                 zhcl(1:n_points),zclono2(1:n_points),         &
+                                 gam3calc(1:n_points,:))
+
+  ! Calculate uptake coefficient on SA using formula of Solomon et al. 2023
+  ! for i_ukca_hetconfig == 3 (Solomon coeff) or == 4 (Solomon coeff + Br)
+  ELSE IF (ukca_config%i_ukca_hetconfig == 3) THEN
+    CALL ukca_solomon_liquid_aerosol(1,n_points,n_points,                      &
                                  zt(1:n_points),zh2o(1:n_points),              &
                                  zhcl(1:n_points),zclono2(1:n_points),         &
                                  gam3calc(1:n_points,:))
@@ -1087,6 +1097,336 @@ IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 RETURN
 END SUBROUTINE ukca_shi_liquid_aerosol
 
+!-------------------------------------------------------------------------
+
+!===========================================================================
+SUBROUTINE ukca_solomon_liquid_aerosol(kstart,kend,kchmlev,t,th2o,             &
+                                   thcl,tcnit,gam3arr)
+
+!*********************************************************************
+!subroutine description
+!
+!new method for calculating uptake coeffiecients of heterogeneous
+!reactions on liquid sulphate aerosol with dilution from organic acids.  
+!produces differnt gamma values to the pre-existing ukca scheme and to 
+! jmk's Shi scheme for (1) ClONO2+HCl, (2) ClONO2 + H2O, (3) HOCl + HCl 
+! and, optionally (6) HObr + HCl,
+!
+!written by Vichawan S. 03/11/25
+!
+!*********************************************************************
+!technical notes and references
+!
+!calculations of uptake coeffiecients based on the parameterisation
+!of Shi et al. (2001) "Kinetic model for reaction of ClONO2 with H2O
+!and HCl and HOCl with HCl in sulfuric acid solutions" J. Geophys. Res.
+!with modifications by Solomon et al. (2023) "Chlorine activation and 
+!enhanced ozone depletion induced by wildfire aerosol" Nature
+
+USE ukca_config_constants_mod, ONLY: boltzmann
+USE asad_mod,                  ONLY: peps
+IMPLICIT NONE
+
+INTEGER, INTENT(IN) :: kchmlev             ! no. of chem. levels
+INTEGER, INTENT(IN) :: kstart              ! chem level to begin loop
+INTEGER, INTENT(IN) :: kend                ! chem level to end loop
+
+REAL, INTENT(IN) :: t(kchmlev)             ! temperature (K)
+REAL, INTENT(IN) :: th2o(kchmlev)          ! number density H2O (cm-3)
+REAL, INTENT(IN) :: thcl(kchmlev)          !                HCl
+REAL, INTENT(IN) :: tcnit(kchmlev)         !                ClONO2
+
+REAL, INTENT(OUT) :: gam3arr(kchmlev, 8)   ! uptake coefficients
+
+REAL, PARAMETER :: r_vol=0.082             ! gas constant/vol (atm K-1 M-1)
+
+REAL :: tt               ! local temperature             (K)
+REAL :: p0h2o            ! saturation water vapour       (mbar)
+REAL :: ph2o             ! partial pressure water vapour (mbar)
+REAL :: phcl             ! partial pressure hcl          (atm)
+REAL :: pclono2          ! partial pressure clono2       (atm)
+REAL :: aw               ! water activity                (unitless)
+REAL :: ml_h2so4         ! h2so4 molality                (mol kg-1)
+REAL :: wt_h2so4         ! h2so4 weight percentage       (%)
+REAL :: mr_h2so4         ! h2so4 molarity                (mol l-1)
+REAL :: rho_h2so4        ! h2so4 solution density        (g cm-3)
+REAL :: vis_h2so4        ! viscosity of h2so4 solution   (cp)
+REAL :: a1, b1, c1, d1
+REAL :: a2, b2, c2, d2
+REAL :: z1, z2, z3
+REAL :: mf_h2so4         ! h2so4 mole fraction
+REAL :: a
+REAL :: t0
+REAL :: ah               ! acid activity                 (mol l-1)
+REAL :: y1, y2
+REAL :: k_h2o, k_hydr, k_hcl, k_hocl ! rate constant     (s-1)
+REAL :: k_h              ! rate constant                 (M-1 s-1)
+REAL :: c_clono2, c_hocl ! molecular velocity    (cm s-1)
+REAL :: h_clono2, h_hocl, h_hcl ! Henry coeff     (M atm-1)
+REAL :: s_clono2, s_hocl ! Setchenow coeff               (M-1)
+REAL :: d_clono2, d_hocl ! diffusion coeff (cm2 s-1)
+REAL :: g_h2o, g_hcl, g_s, g_s2, g_hcl2, g_clono2, g_b  ! react. prob.
+REAL :: g_s2_b           ! intermediate value for checking
+REAL :: gam_hocl_f_hcl   ! intermediate value for checking
+REAL :: m_hcl            ! hcl conc.                     (M)
+REAL :: l_clono2, l_hocl ! reacto-diffusive length       (cm)
+REAL :: f_clono2, f_hocl, f_hcl
+REAL :: gam_hocl, gam_clono2 ! reaction prob.
+REAL :: small_value
+REAL, PARAMETER :: min_value=1.0e-15
+INTEGER :: jl
+
+INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
+INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
+REAL(KIND=jprb)               :: zhook_handle
+
+CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_SHI_LIQUID_AEROSOL'
+
+IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
+
+! initialise to zero
+gam3arr(:,:)= 0.0
+
+! calculate a small value for comparison in IF blocks. Use same as for rafeps:
+small_value=SQRT(peps)
+
+DO jl=kstart, kend
+  !set temperature lower limit to 185k - below this the
+  !parameterisation breaks down
+  tt = MAX(t(jl),185.0)
+
+  !*********************************************************************
+  !calculations of h2so4 wt% from temp and ph2o, after tabazadeh et al. (1997)
+  !*********************************************************************
+  !calculate sturation water vapour pressure (mbar)
+  p0h2o = EXP(18.452406985 - (3505.1578807/tt) -                               &
+          (330918.55082/tt**2) + (12725068.262/tt**3))
+
+  !calculate partial pressure of h2o (mbar)
+  ! may have small/negative values of th2o - this is trapped below
+  ! -ve values will NOT be passed back to the UM
+  ph2o=1.0e4*th2o(jl)*boltzmann*tt
+
+  !partial pressure hcl and clono2 (atm)
+  ! trap for v. low number densities (molec cm-3). THIS VALUE MAY BE UNPHYSICAL
+  phcl=1.0e4*thcl(jl)*boltzmann*tt/1013.0
+
+  pclono2=1.0e4*tcnit(jl)*boltzmann*tt/1013.0
+
+  !calculate water activity - trap for small/negative values
+  IF (ABS(p0h2o) < small_value) THEN
+    aw = 0.0
+  ELSE
+    aw = ph2o/p0h2o
+    IF (aw < min_value) aw = min_value
+  END IF
+
+  ! determine constants for subsequent reactions, from tabazadeh et al. (1997)
+  IF (aw < 0.85) THEN
+    IF (aw <= 0.05) THEN
+      a1 = 12.37208932
+      b1 = -0.16125516114
+      c1 = -30.490657554
+      d1 = -2.1133114241
+      a2 = 13.455394705
+      b2 = -0.1921312255
+      c2 = -34.285174607
+      d2 = -1.7620073078
+    ELSE
+      a1 = 11.820654354
+      b1 = -0.20786404244
+      c1 = -4.807306373
+      d1 = -5.1727540348
+      a2 = 12.891938068
+      b2 = -0.23233847708
+      c2 = -6.4261237757
+      d2 = -4.9005471319
+    END IF
+  ELSE
+    a1 = -180.06541028
+    b1 = -0.38601102592
+    c1 = -93.317846778
+    d1 = 273.88132245
+    a2 = -176.95814097
+    b2 = -0.36257048154
+    c2 = -90.469744201
+    d2 = 267.45509988
+  END IF
+
+  y1 = a1*(aw**b1) + (c1*aw) + d1
+
+  y2 = a2*(aw**b2) + (c2*aw) + d2
+
+  !calculate molality h2so4 (mol kg-1)
+  ml_h2so4 = y1 + (((tt - 190.0)*(y2 - y1))/70.0)
+
+  ! MOLALITY CANNOT BE -VE
+  ml_h2so4 = MAX(ml_h2so4,small_value)
+
+  !calculate weight % h2so4
+  wt_h2so4 = (9800.0*ml_h2so4)/((98.0*ml_h2so4)+1000.0)
+
+  !*********************************************************************
+  !parameters for the h2so4 solution
+  !*********************************************************************
+
+  !set up terms for h2so4 solution density calculation
+  z1 = 0.12364 - (5.6e-7 * (tt**2.0))
+
+  z2 = -0.02954 + (1.814e-7 * (tt**2.0))
+
+  z3 = 2.343e-3 - (1.487e-6 * tt) - (1.324e-8 * (tt**2.0))
+
+  !calculate h2so4 solution density (g cm-3)
+  rho_h2so4 = 1.0 + (z1*ml_h2so4) + (z2*(ml_h2so4**1.5)) +                     &
+              (z3*(ml_h2so4**2.0))
+
+  !calculate molarity h2so4 (mol l-1)
+  mr_h2so4 = (rho_h2so4*wt_h2so4)/9.8
+
+  !calculate h2so4 mole fraction
+  mf_h2so4 = wt_h2so4/(wt_h2so4+((100.0-wt_h2so4)*(98.0/18.0)))
+
+  !set up terms for h2so4 viscosity calculation
+  IF (wt_h2so4 <= 80.0) THEN ! parameterisation valid for wt% < 80
+    a = 169.5 + (5.18*wt_h2so4) - (0.0825*(wt_h2so4**2.0)) +                   &
+        (3.27e-3*(wt_h2so4**3.0))
+
+    t0 = 144.11 + (0.166*wt_h2so4) - (0.015*(wt_h2so4**2.0)) +                 &
+         (2.18e-4*(wt_h2so4**3.0))
+
+    !calculate viscosity of h2so4 solution
+    vis_h2so4 = a*(tt**(-1.43))*EXP(448.0/(tt-t0))
+
+  ELSE ! assume wt% = 80
+    vis_h2so4 = 1730.14 * (tt**(-1.43))*EXP(448.0/(tt-173.006))
+
+  END IF
+
+  !calculate acid activity
+  ah = EXP(60.51 - (0.095*wt_h2so4) + (0.0077*(wt_h2so4**2.0))                 &
+       - (1.61e-5*(wt_h2so4**3.0))                                             &
+       - ((1.76+(2.52e-4*(wt_h2so4**2.0)))*(tt**0.5))                          &
+       + ((-805.89 + (253.05*(wt_h2so4**0.076)))/(tt**0.5)))
+
+  !*********************************************************************
+  !calculate uptake parameters for clono2+h2o and clono2+hcl
+  !*********************************************************************
+
+  k_h2o = 1.95e10*EXP(-2800.0/tt)
+
+  k_h = 1.22e12*EXP(-6200.0/tt)
+
+  k_hydr = (k_h2o*aw)+(k_h*ah*aw)
+
+  c_clono2 = 1474.0*(tt**0.5)
+
+  s_clono2 = 0.306+(24.0/tt)
+
+  h_clono2 = 1.6e-6*EXP((4710.0/tt)-(s_clono2*mr_h2so4))
+
+  d_clono2 = 5e-8*tt/vis_h2so4
+
+  g_h2o=(4*h_clono2*r_vol*tt/c_clono2)*(d_clono2*k_hydr)**0.5
+
+  h_hcl = (0.094 - 0.61*mf_h2so4 + 1.2*mf_h2so4**2)*                           &
+       EXP(-8.68 + (8515.0 - 10718.0*mf_h2so4**0.7)/tt)
+
+  m_hcl = h_hcl*phcl
+
+  k_hcl = 7.9e11*ah*d_clono2*m_hcl
+
+  l_clono2 = (d_clono2/(k_hydr + k_hcl))**0.5
+
+  f_clono2 = (1/(TANH(radsa/l_clono2))) - l_clono2/radsa
+
+  g_clono2 = f_clono2*g_h2o*((1+(k_hcl/k_hydr))**0.5)
+
+  g_hcl = (g_clono2 * k_hcl)/(k_hcl + k_hydr)
+
+  g_s = 66.12*EXP(-1374.0/tt)*h_clono2*m_hcl
+
+  f_hcl = 1/(1 + (0.612*(g_s + g_hcl)*(pclono2/phcl)))
+
+  g_s2 = f_hcl*g_s
+
+  g_hcl2 = f_hcl*g_hcl
+
+  g_b = g_hcl2 + ((g_clono2*k_hydr)/(k_hcl + k_hydr))
+
+  ! traps for small value division
+  IF (ABS(g_s2 + g_b) < small_value) THEN
+    ! We've got a divide by zero problem
+    gam3arr(jl,1) = 0.0
+    gam3arr(jl,2) = 0.0
+  ELSE
+    ! calculate this first to test against
+    g_s2_b = (1.0 + (1.0/(g_s2 + g_b)))
+    IF (ABS(g_s2_b) < small_value) THEN
+
+      gam3arr(jl,1) = 0.0
+      gam3arr(jl,2) = 0.0
+    ELSE
+      gam_clono2 = 1.0/g_s2_b
+
+      gam3arr(jl,1) = gam_clono2*((g_s2 + g_hcl2)/(g_s2 + g_b))
+
+      gam3arr(jl,2) = gam_clono2 - gam3arr(jl,1)
+
+      ! make sure at a minimum value
+      IF (gam3arr(jl,1) < min_value) gam3arr(jl,1)=min_value
+
+      IF (gam3arr(jl,2) < min_value) gam3arr(jl,2)=min_value
+    END IF
+  END IF
+
+  !*********************************************************************
+  !calculate uptake parameters for hocl+hcl
+  !*********************************************************************
+
+  s_hocl = 0.0776 + 59.18/tt
+
+  h_hocl = 1.91e-6*EXP((5862.4/tt) - (s_hocl*mr_h2so4))
+
+  d_hocl = 6.4e-8 *tt/vis_h2so4
+
+  k_hocl = 1.25e9*ah*d_hocl*m_hcl
+
+  c_hocl = 2009.0*(tt**0.5)
+
+  l_hocl = (d_hocl/k_hocl)**0.5
+
+  f_hocl = (1/(TANH(radsa/l_hocl))) - l_hocl/radsa
+
+  ! check for small value division
+  IF ((ABS(f_hocl) < small_value) .OR. (ABS(f_hcl) < small_value)) THEN
+    gam3arr(jl,3) = 0.0
+  ELSE
+    gam_hocl = (f_hocl*4.0*h_hocl*r_vol*tt/c_hocl) * (d_hocl*k_hocl)**0.5
+
+    ! trap for small value division
+    IF (gam_hocl*f_hcl < small_value) THEN
+      gam3arr(jl,3) = 0.0
+    ELSE
+      gam_hocl_f_hcl = (1.0 + 1.0/(gam_hocl*f_hcl))
+      gam3arr(jl,3) = 1.0/gam_hocl_f_hcl
+
+      ! make sure at a minimum value
+      IF (gam3arr(jl,3) < min_value) gam3arr(jl,3)=min_value
+    END IF
+  END IF
+
+  ! Additional reactions on sulfate aerosol
+  ! BrONO2 + H2O
+  gam3arr(jl,8) = 1.0 / (1.0/0.8 + 1.0 / (EXP(29.2 - 0.4 * wt_h2so4) + 0.11))
+
+END DO !(jl=kstart, kend)
+
+IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
+RETURN
+END SUBROUTINE ukca_shi_liquid_aerosol
+
+!--------------------------------------------------------------------------------
 
 ! ######################################################################
 SUBROUTINE ukca_solidphase(n_points)
