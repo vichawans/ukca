@@ -177,60 +177,63 @@ IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 ! into the master mechanism.
 chch_defs_master(1:149)=[                                                      &
 !   1
-chch_t1( 1,'O(3P)     ',1,'TR        ','Ox        ',0,0,s+st+cs,0,0,107),      &
+chch_t1( 1,'O(3P)     ',1,'TR        ','Ox        ',0,0,s+st+cs+dest,0,0,107), &
 !   1
 chch_t1( 1,'O(3P)     ',1,'SS        ','Ox        ',0,0,ti+t+r,0,0,107),       &
 !   2
-chch_t1( 2,'O(1D)     ',1,'SS        ','Ox        ',0,0,ti+s+t+st+r+cs,        &
+chch_t1( 2,'O(1D)     ',1,'SS        ','Ox        ',0,0,ti+s+t+st+r+cs+dest,   &
                                                                 0,0,107),      &
 !   3 DD:  1,
-chch_t1( 3,'O3        ',1,'TR        ','Ox        ',1,0,ti+s+t+st+r+cs,        &
+chch_t1( 3,'O3        ',1,'TR        ','Ox        ',1,0,ti+s+t+st+r+cs+dest,   &
                                                                 0,a,107),      &
 !   3        WD:  1,
 !      Wet deposition of ozone was introduced for aerosol chemistry
 !      The GLOMAP-mode aerosol scheme needs to know about dissolved O3 in the
 !      aqueous phase to be able to perform SO2 in-cloud oxidation.
 !      Wet deposition is a negligible loss process for O3.
-chch_t1( 3,'O3        ',1,'TR        ','Ox        ',1,1,ti+st+s+t+r+cs,        &
+chch_t1( 3,'O3        ',1,'TR        ','Ox        ',1,1,ti+st+s+t+r+cs+dest,   &
                                                                 a,0,107),      &
 !   3
 chch_t1( 3,'O3        ',1,'CF        ','Ox        ',0,0,ol,0,0,107),           &
 !   4
-chch_t1( 4,'N         ',1,'TR        ','NOx       ',0,0,s+st+cs,0,0,107),      &
+chch_t1( 4,'N         ',1,'TR        ','NOx       ',0,0,s+st+cs+dest,0,0,107), &
 ! NOx is emitted as NO2 for all schemes except RAQ which causes ozone
 ! depletion (NO + O3 -> NO2 + O2).
 ! This could be made consistent. Also RAQ scheme does not do dry deposition of
 ! NO.
 !   5 DD:  2,
-chch_t1( 5,'NO        ',1,'TR        ','NOx       ',1,0,s+st+cs,0,0,107),      &
+chch_t1( 5,'NO        ',1,'TR        ','NOx       ',1,0,s+st+cs+dest,0,0,107), &
 chch_t1( 5,'NO        ',1,'TR        ','NOx       ',1,0,ti+t,0,0,107),         &
 !   5                 (10)
 chch_t1( 5,'NO        ',1,'TR        ','NOx       ',0,0,r,0,0,107),            &
 !   6 DD:  3,WD:  2,
 ! No dry deposition for NO3 in RAQ/S/T schemes.
 chch_t1( 6,'NO3       ',1,'TR        ','NOx       ',0,1,r+s+t,0,0,107),        &
-chch_t1( 6,'NO3       ',1,'TR        ','NOx       ',1,1,ti+st+cs,0,0,107),     &
+chch_t1( 6,'NO3       ',1,'TR        ','NOx       ',1,1,ti+st+cs+dest,         &
+                                                                0,0,107),      &
 chch_t1( 6,'NO3       ',1,'CF        ','NOx       ',0,0,ol,0,0,107),           &
 !   7 DD:  4,
-chch_t1( 7,'NO2       ',1,'TR        ','NOx       ',1,0,ti+s+st+cs,0,0,107),   &
+chch_t1( 7,'NO2       ',1,'TR        ','NOx       ',1,0,ti+s+st+cs+dest,       &
+                                                                0,0,107),      &
 chch_t1( 7,'NO2       ',1,'TR        ','NOx       ',1,0,t+r,0,0,107),          &
 ! No dry deposition for N2O5 in R/S/T schemes
 !   8 DD:  5,WD:  3,
 chch_t1( 8,'N2O5      ',2,'TR        ','          ',0,1,r+s+t,0,0,107),        &
-chch_t1( 8,'N2O5      ',2,'TR        ','          ',1,1,ti+st+cs,0,0,107),     &
+chch_t1( 8,'N2O5      ',2,'TR        ','          ',1,1,ti+st+cs+dest,0,0,107),&
 !   9 DD:  6,WD:  4,
 ! No dry deposition for HO2NO2 in R and T schemes
 chch_t1( 9,'HO2NO2    ',1,'TR        ','          ',0,1,r+t,0,0,107),          &
-chch_t1( 9,'HO2NO2    ',1,'TR        ','          ',1,1,ti+s+st+cs,0,0,107),   &
+chch_t1( 9,'HO2NO2    ',1,'TR        ','          ',1,1,ti+s+st+cs+dest,       &
+                                                                0,0,107),      &
 !  10 DD:  7,WD:  5,   (20)
-chch_t1(10,'HONO2     ',1,'TR        ','          ',1,1,ti+s+t+st+r+cs,        &
+chch_t1(10,'HONO2     ',1,'TR        ','          ',1,1,ti+s+t+st+r+cs+dest,   &
                                                                 0,0,107),      &
 !  11 DD:  8,WD:  6,
-chch_t1(11,'H2O2      ',1,'TR        ','          ',1,1,ti+s+t+st+ol+r+cs,     &
-                                                                   0,0,107),   &
+chch_t1(11,'H2O2      ',1,'TR        ','          ',1,1,ti+s+t+st+ol+r+cs,dest,&
+                                                                0,0,107),      &
 !  12
 ! Dry deposition of CH4 not enabled in S and ST schemes.
-chch_t1(12,'CH4       ',1,'TR        ','          ',0,0,s+st+cs,0,ce,107),     &
+chch_t1(12,'CH4       ',1,'TR        ','          ',0,0,s+st+cs+dest,0,ce,107),&
 !  12 DD:  9,
 chch_t1(12,'CH4       ',1,'TR        ','          ',1,0,ti+t+r,0,ce,107),      &
 !  12
@@ -238,37 +241,40 @@ chch_t1(12,'CH4       ',1,'TR        ','          ',1,0,ti+t+r,0,ce,107),      &
 chch_t1(12,'CH4       ',1,'TR        ','          ',0,0,s+cs,ce,0,107),        &
 !  12 DD:  9,
 ! Dry deposition of CH4 enabled in TI, T, ST and R schemes.
-chch_t1(12,'CH4       ',1,'TR        ','          ',1,0,ti+t+st+r,ce,0,107),   &
+chch_t1(12,'CH4       ',1,'TR        ','          ',1,0,ti+t+st+r+dest,
+                                                                ce,0,107),     &
 !  13 DD: 10,
-chch_t1(13,'CO        ',1,'TR        ','          ',1,0,ti+s+t+st+r+cs,        &
+chch_t1(13,'CO        ',1,'TR        ','          ',1,0,ti+s+t+st+r+cs+dest,   &
                                                                 0,0,107),      &
 !  14 DD: 11,WD:  7,
 ! No dry deposition for HCHO in S/T/R schemes
 chch_t1(14,'HCHO      ',1,'TR        ','          ',0,1,s+t+r,0,0,107),        &
-chch_t1(14,'HCHO      ',1,'TR        ','          ',1,1,ti+st+cs,0,0,107),     &
+chch_t1(14,'HCHO      ',1,'TR        ','          ',1,1,ti+st+cs+dest,0,0,107),&
 !  15        WD:  8,
 chch_t1(15,'MeOO      ',1,'TR        ','          ',0,1,ti+s,0,0,107),         &
 chch_t1(15,'MeOO      ',1,'SS        ','          ',0,1,t+r,0,0,107),          &
-chch_t1(15,'MeOO      ',1,'TR        ','          ',0,1,st,0,rn+rp,107),       &
+chch_t1(15,'MeOO      ',1,'TR        ','          ',0,1,st+dest,0,rn+rp,107),  &
 ! Select 'OO' type MeOO in ST mechanism if RN or RP == T
 !                     (30)
-chch_t1(15,'MeOO      ',1,'OO        ','          ',0,1,st+cs,rn+rp,0,107),    &
+chch_t1(15,'MeOO      ',1,'OO        ','          ',0,1,st+cs+dest,            &
+                                                                rn+rp,0,107),  &
 !  16 DD: 12,WD:  9,
-chch_t1(16,'MeOOH     ',1,'TR        ','          ',1,1,ti+s+t+st+r+cs,        &
+chch_t1(16,'MeOOH     ',1,'TR        ','          ',1,1,ti+s+t+st+r+cs+dest,   &
     0,0,107),                                                                  &
 !  17
-chch_t1(17,'H         ',1,'TR        ','HOx       ',0,0,s+st+cs,0,0,107),      &
+chch_t1(17,'H         ',1,'TR        ','HOx       ',0,0,s+st+cs+dest,0,0,107), &
 !  18
 ! No water in RAQ scheme? I presume H2O is implicit.
-chch_t1(18,'H2O       ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+chch_t1(18,'H2O       ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  18
 chch_t1(18,'H2O       ',1,'CF        ','          ',0,0,ti+t+r,0,0,107),       &
 !  19
-chch_t1(19,'OH        ',1,'TR        ','HOx       ',0,0,ti+s+st+cs,0,0,107),   &
+chch_t1(19,'OH        ',1,'TR        ','HOx       ',0,0,ti+s+st+cs+dest,       &
+                                                                0,0,107),      &
 chch_t1(19,'OH        ',1,'SS        ','HOx       ',0,0,t+r,0,0,107),          &
 chch_t1(19,'OH        ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
 !  20        WD: 10,
-chch_t1(20,'HO2       ',1,'TR        ','HOx       ',0,1,ti+s+st+cs,0,0,107),   &
+chch_t1(20,'HO2       ',1,'TR        ','HOx       ',0,1,ti+s+st+dest,0,0,107), &
 chch_t1(20,'HO2       ',1,'SS        ','HOx       ',0,1,t+r,0,0,107),          &
 chch_t1(20,'HO2       ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
 !  21
