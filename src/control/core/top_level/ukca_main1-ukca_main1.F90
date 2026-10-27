@@ -2473,6 +2473,8 @@ IF (ukca_config%l_ukca_chem) THEN
            delso2_wet_o3,                                                      &
            delh2so4_chem,                                                      &
            so4_sa,                                                             &
+           focr,                                                               &
+           roc,                                                                & 
            ! Diagnostics
            atm_ch4_mol,                                                        &
            atm_co_mol,                                                         &
@@ -2553,6 +2555,8 @@ IF (ukca_config%l_ukca_chem) THEN
            delso2_wet_o3,                                                      &
            delh2so4_chem,                                                      &
            so4_sa,                                                             &
+           focr,                                                               &
+           roc,                                                                &
            ! Diagnostics
            atm_ch4_mol,                                                        &
            atm_co_mol,                                                         &
