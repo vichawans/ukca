@@ -183,7 +183,8 @@ REAL :: psc1sa(n_points)
 REAL :: psc2sa(n_points)
 
 ! heterogeneous reaction rate
-REAL :: kpsc(n_points, 13)
+REAL :: kpsc(n_points, 13) ! reaction rate
+REAL :: rkpsc(n_points, 13) ! reaction rate as bimolecular reaction
 
 REAL :: gam1(13) ! uptake coefficients on ice and NAT
 REAL :: gam2(13) ! uptake coefficients on ice
@@ -503,10 +504,9 @@ IF (ukca_config%i_ukca_hetconfig == 0) THEN
   ! =====================================================================
 
 ELSE ! New config
-  ukca_config%i_ukca_hetconfig = 3
-  PRINT *, 'ukca_config%i_ukca_hetconfig =', ukca_config%i_ukca_hetconfig 
   ! Calculate non-constant gammas
-  IF ( ukca_config%i_ukca_hetconfig == 2 ) THEN
+  IF ( ukca_config%i_ukca_hetconfig == 2 .OR.                                  &
+      ukca_config%i_ukca_hetconfig == 4 ) THEN
     CALL ukca_br_gamma(1,n_points,n_points,zt(1:n_points),zhbr(1:n_points),    &
                        gam_calc)
   END IF
@@ -530,13 +530,15 @@ ELSE ! New config
                                  zhcl(1:n_points),zclono2(1:n_points),         &
                                  gam3calc(1:n_points,:))
   END IF
+
   IF ( gppsc ) THEN     !  If heterogeneous processes are on.
 
     ! Set conversion factor (atomic mass unit in kg)
     amu = 1.0 / (avogadro * 1000.0)
 
     ! calculate reaction rate on psc
-    IF (ukca_config%i_ukca_hetconfig == 2) THEN
+    IF (ukca_config%i_ukca_hetconfig == 2 .OR.                                 & 
+        ukca_config%i_ukca_hetconfig == 4) THEN
       n_hk = 13
     ELSE
       n_hk = 5        ! leave out Br reactions
@@ -547,6 +549,7 @@ ELSE ! New config
     kpsc(1:n_points, :) = 0.0
 
     DO jh = 1, n_hk ! loop over reactions
+
       !---------------------------------------------------------------------
       !          2.  GENERAL TERMS IN COLLISION FREQUENCY EXPRESSION
       !              ------- ----- -- --------- --------- ----------
@@ -635,7 +638,8 @@ ELSE ! New config
 
     !       6. CHECK FOR LOW HBr
     !          ----- --- --- ---
-    IF ( ukca_config%i_ukca_hetconfig == 2 ) THEN
+    IF ( ukca_config%i_ukca_hetconfig == 2 .OR.                                &
+        ukca_config%i_ukca_hetconfig == 4 ) THEN
       DO jl = 1, n_points
         zrate=MAX(1.0,                                                         &
                   cdt*(kpsc(jl,9)  * zhobr(jl)+                                &
@@ -657,42 +661,82 @@ ELSE ! New config
 
   ! divide rates by h2o/hcl/hbr as asad treats psc reactions as bimolecular
   WHERE ( zhcl > peps )
-    rk(:,n_clono2_hcl) = kpsc(:,1) / zhcl
-    rk(:,n_hocl_hcl) = kpsc(:,3) / zhcl
-    rk(:,n_n2o5_hcl) = kpsc(:,5) / zhcl
-    rk(:,n_hobr_hcl) = kpsc(:,6) / zhcl
-    rk(:,n_brono2_hcl) = kpsc(:,7) / zhcl
+    rkpsc(:,1) = kpsc(:,1) / zhcl
+    rkpsc(:,3) = kpsc(:,3) / zhcl
+    rkpsc(:,5) = kpsc(:,5) / zhcl
+    rkpsc(:,6) = kpsc(:,6) / zhcl
+    rkpsc(:,7) = kpsc(:,7) / zhcl
   ELSE WHERE
-    rk(:,n_clono2_hcl) = 0.0
-    rk(:,n_hocl_hcl) = 0.0
-    rk(:,n_n2o5_hcl) = 0.0
-    rk(:,n_hobr_hcl) = 0.0
-    rk(:,n_brono2_hcl) = 0.0
+    rkpsc(:,1) = 0.0
+    rkpsc(:,3) = 0.0
+    rkpsc(:,5) = 0.0
+    rkpsc(:,6) = 0.0
+    rkpsc(:,7) = 0.0
   END WHERE
 
   WHERE ( zh2o > peps )
-    rk(:,n_clono2_h2o) = kpsc(:,2) / zh2o
-    rk(:,n_n2o5_h2o) = kpsc(:,4) / zh2o
-    rk(:,n_brono2_h2o) = kpsc(:,8) / zh2o
+    rkpsc(:,2) = kpsc(:,2) / zh2o
+    rkpsc(:,4) = kpsc(:,4) / zh2o
+    rkpsc(:,8) = kpsc(:,8) / zh2o
   ELSE WHERE
-    rk(:,n_clono2_h2o) = 0.0
-    rk(:,n_n2o5_h2o) = 0.0
-    rk(:,n_brono2_h2o) = 0.0
+    rkpsc(:,2) = 0.0
+    rkpsc(:,4) = 0.0
+    rkpsc(:,8) = 0.0
   END WHERE
 
   WHERE ( zhbr > peps )
-    rk(:,n_hobr_hbr) = kpsc(:,9) / zhbr
-    rk(:,n_hocl_hbr) = kpsc(:,10) / zhbr
-    rk(:,n_clono2_hbr) = kpsc(:,11) / zhbr
-    rk(:,n_brono2_hbr) = kpsc(:,12) / zhbr
-    rk(:,n_n2o5_hbr) = kpsc(:,13) / zhbr
+    rkpsc(:,9) = kpsc(:,9) / zhbr
+    rkpsc(:,10) = kpsc(:,10) / zhbr
+    rkpsc(:,11) = kpsc(:,11) / zhbr
+    rkpsc(:,12) = kpsc(:,12) / zhbr
+    rkpsc(:,13) = kpsc(:,13) / zhbr
   ELSE WHERE
-    rk(:,n_hobr_hbr) = 0.0
-    rk(:,n_hocl_hbr) = 0.0
-    rk(:,n_clono2_hbr) = 0.0
-    rk(:,n_brono2_hbr) = 0.0
-    rk(:,n_n2o5_hbr) = 0.0
+    rkpsc(:,9) = 0.0
+    rkpsc(:,10) = 0.0
+    rkpsc(:,11) = 0.0
+    rkpsc(:,12) = 0.0
+    rkpsc(:,13) = 0.0
   END WHERE
+
+  ! 1) ClONO2 + HCl -> 2Cl + HONO2
+  IF (n_clono2_hcl > 0) rk(:,n_clono2_hcl) = rkpsc(:,1)
+
+  ! 2. ClONO2 + H2O -> HOCl + HONO2
+  IF (n_clono2_h2o > 0) rk(:,n_clono2_h2o) = rkpsc(:,2)
+
+  ! 3) HOCl + HCl   -> H2O + 2Cl
+  IF (n_hocl_hcl > 0) rk(:,n_hocl_hcl) = rkpsc(:,3)
+
+  ! 4) N2O5 + H2O   -> 2HONO2
+  IF (n_n2o5_h2o > 0) rk(:,n_n2o5_h2o) = rkpsc(:,4)
+
+  ! 5) N2O5 + HCl   -> ClNO2 + HONO2
+  IF (n_n2o5_hcl > 0) rk(:,n_n2o5_hcl) = rkpsc(:,5)
+
+  ! 6) HOBr + HCl   -> H2O + BrCl
+  IF (n_hobr_hcl > 0) rk(:,n_hobr_hcl) = rkpsc(:,6)
+
+  ! 7) HCl + BrONO2 -> BrCl + HONO2
+  IF (n_brono2_hcl > 0) rk(:,n_brono2_hcl) = rkpsc(:,7)
+
+  ! 8) BrONO2 + H2O -> HOBr + HONO2
+  IF (n_brono2_h2o > 0) rk(:,n_brono2_h2o) = rkpsc(:,8)
+
+  ! 9) HOBr+HBr     -> 2Br + H2O
+  IF (n_hobr_hbr > 0) rk(:,n_hobr_hbr) = rkpsc(:,9)
+
+  ! 10) HOCl+HBr    -> BrCl + H2O
+  IF (n_hocl_hbr > 0) rk(:,n_hocl_hbr) = rkpsc(:,10)
+
+  ! 11) ClONO2 + HBr-> BrCl + HONO2
+  IF (n_clono2_hbr > 0) rk(:,n_clono2_hbr) = rkpsc(:,11)
+
+  ! 12) BrONO2 + HBr-> 2Br + HONO2
+  IF (n_brono2_hbr > 0) rk(:,n_brono2_hbr) = rkpsc(:,12)
+
+  ! 13) N2O5 + HBr  -> BrNO2 + HONO2
+  IF (n_n2o5_hbr > 0) rk(:,n_n2o5_hbr) = rkpsc(:,13)
+
 END IF
 
 
@@ -1186,9 +1230,10 @@ INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
 INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
 REAL(KIND=jprb)               :: zhook_handle
 
-CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_SHI_LIQUID_AEROSOL'
+CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_SOLOMON_LIQUID_AEROSOL'
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
+PRINT *, 'SOLOMON WAS CALLED'
 
 ! initialise to zero
 gam3arr(:,:)= 0.0
