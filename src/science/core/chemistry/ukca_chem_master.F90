@@ -570,7 +570,7 @@ chch_t1(114,'GLY       ',1,'TR        ','          ',0,1,r,0,0,107),           &
 ! 115
 chch_t1(115,'oXYLENE   ',1,'TR        ','          ',0,0,r+cs,0,0,107),        &
 ! 116 - Lumped peroxy radical field for use with RO2-permutation chemistry
-chch_t1(116,'RO2       ',1,'CF        ','          ',0,0,st+cs,rp,0,107),      &
+chch_t1(116,'RO2       ',1,'CF        ','          ',0,0,st+cs+dest,rp,0,107),      &
 ! From here on out, all new CRI species
 ! 117
 chch_t1(117,'TBUT2ENE  ',1,'TR        ','          ',0,0,cs,0,0,107),          &
@@ -941,7 +941,7 @@ chch_t1(282,'RU10NO3   ',1,'TR        ','          ',1,1,cs,0,0,119),          &
 ! 283
 chch_t1(283,'MACO3     ',1,'OO        ','          ',0,0,cs,rp,0,119),         &
 ! 284
-chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st,a,0,132)           &
+chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st+dest,a,0,132)           &
 ]
 
 
@@ -4610,38 +4610,48 @@ ratb_t1(277,'MACRO2    ','MeOO      ','HO2       ','CO        ','          ',  &
 ! using StratTrop chemical mechanism
 ! B278 IUPAC2002 see also asad_bimol
 ratb_t1(278,'MeOO      ','RO2       ','HO2       ','HCHO      ','          ',  &
-'          ',2.06e-13, 0.00, -365.00, 0.00, 0.00, 0.00, 0.00, st,rp,0,107),    &
+'          ',2.06e-13, 0.00, -365.00, 0.00, 0.00, 0.00, 0.00, st+dest,         &
+                                                              rp,0,107),       &
 ! B279 IUPAC2002 see also asad_bimol
 ratb_t1(279,'MeOO      ','RO2       ','MeOH      ','HCHO      ','          ',  &
-'          ',2.06e-13, 0.00, -365.00, 0.50, 0.50, 0.00, 0.00,st,rp,0,107),     &
+'          ',2.06e-13, 0.00, -365.00, 0.50, 0.50, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B280 MCM 3.3.1
 ratb_t1(280,'EtOO      ','RO2       ','HO2       ','MeCHO     ','          ',  &
-'          ',9.74e-14, 0.00, -182.50, 0.00, 0.00, 0.00, 0.00,st,rp,0,107),     &
+'          ',9.74e-14, 0.00, -182.50, 0.00, 0.00, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B281 MCM 3.3.1; 2nd & 3rd pathways merged into one reaction
 ! with MeCHO as product for branch 3, as EtOH is not a species in ST
 ratb_t1(281,'EtOO      ','RO2       ','MeCHO     ','          ','          ',  &
-'          ',6.50e-14, 0.00, -182.50, 0.0,  0.00, 0.00, 0.00,st,rp,0,107),     &
+'          ',6.50e-14, 0.00, -182.50, 0.0,  0.00, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B282 MCM 3.3.1
 ratb_t1(282,'n-PrOO    ','RO2       ','HO2       ','EtCHO     ','          ',  &
-'          ',3.89e-13, 0.00,    0.00, 0.00, 0.00, 0.00, 0.00,st,rp,0,107),     &
+'          ',3.89e-13, 0.00,    0.00, 0.00, 0.00, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B283 MCM 3.3.1; 2nd & 3rd pathways merged into one reaction
 ! EtCHO used instead of n-PrOH for branch 3
 ratb_t1(283,'n-PrOO    ','RO2       ','EtCHO     ','          ','          ',  &
-'          ',2.59e-13, 0.00,    0.00, 0.00, 0.00, 0.00, 0.00,st,rp,0,107),     &
+'          ',2.59e-13, 0.00,    0.00, 0.00, 0.00, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B284 MCM 3.3.1
 ratb_t1(284,'i-PrOO    ','RO2       ','HO2       ','Me2CO     ','          ',  &
-'          ',4.87e-13, 0.00,  917.50, 0.00, 0.00, 0.00, 0.00,st,rp,0,107),     &
+'          ',4.87e-13, 0.00,  917.50, 0.00, 0.00, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B285 MCM 3.3.1; 2nd & 3rd pathways merged into one reaction
 ! Me2CO used instead of i-PrOH for branch 3
 ratb_t1(285,'i-PrOO    ','RO2       ','Me2CO     ','          ','          ',  &
-'          ',3.25e-13, 0.00, 917.50, 0.0,  0.00,  0.00, 0.00,st,rp,0,107),     &
+'          ',3.25e-13, 0.00, 917.50, 0.0,  0.00,  0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B286 MCM 3.3.1; Two pathways merged into one reaction
 ratb_t1(286,'MeCO3     ','RO2       ','MeCO2H    ','MeOO      ','          ',  &
-'          ',1.00e-11, 0.00,    0.00, 0.30, 0.70, 0.00, 0.00,st,rp,0,107),     &
+'          ',1.00e-11, 0.00,    0.00, 0.30, 0.70, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B287 MCM 3.3.1; Two pathways merged into one reaction
 !  - NOTE EtCO2H IS *NOT* CURRENTLY A SPECIES CONSIDERED BY ASAD
 ratb_t1(287,'EtCO3     ','RO2       ','EtCO2H    ','EtOO      ','          ',  &
-'          ',1.00e-11,  0.00,    0.00, 0.30, 0.70, 0.00, 0.00,st,rp,0,107)     &
+'          ',1.00e-11,  0.00,    0.00, 0.30, 0.70, 0.00, 0.00,st+dest,         &
+                                                              rp,0,107)        &
 ]
 
 
@@ -4652,28 +4662,36 @@ n_ratb_e = n_ratb_s+80
 ratb_defs_master(n_ratb_s:n_ratb_e) = [                                        &
 ! B288 MCM 3.3.1
 ratb_t1(288,'MeCOCH2OO ','RO2       ','HCHO      ','MeCO3     ','          ',  &
-'          ',2.01e-12, 0.00,    0.00, 0.00, 0.00, 0.00, 0.00,st,rp,0,107),     &
+'          ',2.01e-12, 0.00,    0.00, 0.00, 0.00, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B289 MCM 3.3.1; Two pathways merged into one reaction
 ratb_t1(289,'MeCOCH2OO ','RO2       ','HACET     ','MGLY      ','          ',  &
-'          ',1.34e-12, 0.00,    0.00, 0.50, 0.50, 0.00, 0.00,st,rp,0,107),     &
+'          ',1.34e-12, 0.00,    0.00, 0.50, 0.50, 0.00, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! B290 Poschl00; reformulated to RO2+RO2 style
 ratb_t1(290,'ISO2      ','RO2       ','MACR      ','HCHO      ','HO2       ',  &
-'          ',1.67e-12, 0.00,    0.00, 1.00, 0.50, 0.50, 0.00,st,rp,0,107),     &
+'          ',1.67e-12, 0.00,    0.00, 1.00, 0.50, 0.50, 0.00,st+dest,          &
+                                                              rp,0,107),       &
 ! updates for 121
 ratb_t1(290,'ISO2      ','RO2       ','MACR      ','HCHO      ','HO2       ',  &
-'          ',1.26e-12, 0.00,    0.00, 1.00, 0.50, 0.50, 0.00,st,rp,0,121),     &
+'          ',1.26e-12, 0.00,    0.00, 1.00, 0.50, 0.50, 0.00,st+dest,          &
+                                                              rp,0,121),       &
 ! B291 Poschl00; reformulated to RO2+RO2 style
 ratb_t1(291,'MACRO2    ','RO2       ','HACET     ','MGLY      ','HCHO      ',  &
-'CO        ',8.37e-13, 0.00,    0.00, 1.00, 1.00, 0.50, 0.50,st,rp,0,107),     &
+'CO        ',8.37e-13, 0.00,    0.00, 1.00, 1.00, 0.50, 0.50,st+dest,          &
+                                                              rp,0,107),       &
 ! updates for 121
 ratb_t1(291,'MACRO2    ','RO2       ','HACET     ','MGLY      ','HCHO      ',  &
-'CO        ',2.10e-13, 0.00,    0.00, 1.00, 1.00, 0.50, 0.50,st,rp,0,121),     &
+'CO        ',2.10e-13, 0.00,    0.00, 1.00, 1.00, 0.50, 0.50,st+dest,          &
+                                                              rp,0,121),       &
 ! B292 Poschl00; reformulated to RO2+RO2 style
 ratb_t1(292,'MACRO2    ','RO2       ','HO2       ','          ','          ',  &
-'          ',8.37e-13,  0.00,    0.00, 1.00, 0.00, 0.00, 0.00,st,rp,0,107),    &
+'          ',8.37e-13,  0.00,    0.00, 1.00, 0.00, 0.00, 0.00,st+dest,         &
+                                                              rp,0,107),       &
 ! updates for 121
 ratb_t1(292,'MACRO2    ','RO2       ','HO2       ','          ','          ',  &
-'          ',2.10e-13,  0.00,    0.00, 1.00, 0.00, 0.00, 0.00,st,rp,0,121),    &
+'          ',2.10e-13,  0.00,    0.00, 1.00, 0.00, 0.00, 0.00,st+dest,         &
+                                                              rp,0,121),       &
 ! From here on out, new CRI reactions!
 ! B313
 ratb_t1(313,'OH        ','TBUT2ENE  ','RN12O2    ','          ','          ',  &
@@ -6595,7 +6613,8 @@ ratb_t1(744,'O3        ','C5H8      ','OH        ','          ','          ',  &
 '          ',3.93e-15,  0.00, 1913.00, 0.54, 0.00, 0.00, 0.00,r,0,0,107),      &
 ! B745 - updates for 121
 ratb_t1(745,'HO2       ','EtCO3     ','OH        ','EtOO      ','CO2       ',  &
-'          ',1.89e-13,  0.00,  -1040.00, 0.00, 0.00, 0.00, 0.00,st,0,0,121)    &
+'          ',1.89e-13,  0.00,  -1040.00, 0.00, 0.00, 0.00, 0.00,st+dest,       &
+                                                              0,0,121)         &
 ]
 
 !----------------------------------------------------------------------
