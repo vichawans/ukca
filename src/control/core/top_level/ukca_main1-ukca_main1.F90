@@ -907,7 +907,8 @@ IF (l_first_call) THEN
 
     ! set constants needed in sulphur chemistry
     IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.        &
-        ukca_config%l_ukca_stratcfc .OR. ukca_config%l_ukca_cristrat) THEN
+        ukca_config%l_ukca_stratcfc .OR. ukca_config%l_ukca_cristrat .OR.      &
+        ukca_config%l_ukca_deststrattrop ) THEN
       lambda_aitken = 3.0/rho_so4 / chi /                                      &
                      rad_ait * EXP(-2.5 * (LOG(sigma)**2))                     &
                      * 0.01 ! revert from m^-1 to cm^2/cm^3
@@ -1513,7 +1514,8 @@ IF (ukca_config%l_ukca_chem .OR. ukca_config%l_ukca_mode) THEN
   ! Determine preciptation totals for wet deposition or conservation scheme
   IF ((.NOT. ukca_config%l_ukca_wetdep_off) .OR.                               &
       ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.           &
-      ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) THEN
+      ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.       &
+      ukca_config%l_ukca_deststrattrop ) THEN
     ls_ppn3d(:,:,:)   = ls_rain3d  (:,:,:) + ls_snow3d  (:,:,:)
     ls_ppn3d(:,:,:)   = MAX(ls_ppn3d  (:,:,:), 0.0)
     IF (ukca_config%l_param_conv) THEN
@@ -1884,7 +1886,8 @@ IF (ukca_config%l_ukca_chem) THEN
     ! by 24% to account for non-included species and HBr is set to 0.
 
     IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.         &
-        ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) THEN
+        ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.     &
+        ukca_config%l_ukca_deststrattrop ) THEN
 
       ! LBC code contained within UKCA_SCENARIO_CTL
       CALL ukca_scenario_ctl(n_boundary_vals, lbc_spec,                        &

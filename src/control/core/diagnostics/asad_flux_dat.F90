@@ -8867,7 +8867,8 @@ CHARACTER(LEN=errormessagelength) :: cmessage     ! error message
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 
-IF (ukca_config%l_ukca_strattrop) THEN
+! LS: Use same flux diagnostics for DEST to begin with
+IF (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_deststrattrop) THEN
   ! Select the asad diagnostics appropriate for StratTrop chemistry and
   ! allocate the generic flux arrays according to the model configuration
   ! ===============================================================

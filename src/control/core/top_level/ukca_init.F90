@@ -776,7 +776,8 @@ IF ((.NOT. ukca_config%l_use_gridbox_mass) .AND.                               &
     ((ukca_config%i_ukca_chem /= i_ukca_chem_off .AND.                         &
       ukca_config%l_enable_diag_um) .OR.                                       &
      ((ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.          &
-      ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) .AND.     &
+      ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.       &
+      ukca_config%l_ukca_deststrattrop ) .AND.                                 &
       .NOT. ukca_config%l_ukca_emissions_off))) THEN
   cmessage = 'Cannot run without mass of air in grid box as it is needed'      &
              // newline // 'for UM diagnostics and/or a stratospheric'         &

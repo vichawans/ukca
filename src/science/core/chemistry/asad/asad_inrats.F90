@@ -135,7 +135,7 @@ END DO
 ! Currently N-R solver assumes that O(1D) is in steady-state
 IF (.NOT. o1d_in_ss .AND. (ukca_config%l_ukca_strat .OR.                       &
     ukca_config%l_ukca_stratcfc .OR. ukca_config%l_ukca_strattrop .OR.         &
-    ukca_config%l_ukca_cristrat)) THEN
+    ukca_config%l_ukca_cristrat .OR. ukca_config%l_ukca_deststrattrop)) THEN
   cmessage=' O(1D) is not a Steady-State species'
   errcode = 1
   CALL ereport(RoutineName,errcode,cmessage)

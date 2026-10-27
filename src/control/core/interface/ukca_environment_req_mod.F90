@@ -1163,7 +1163,8 @@ END IF
 ! certain species if running a stratospheric scheme
 IF ((.NOT. ukca_config%l_ukca_wetdep_off) .OR.                                 &
     ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.             &
-    ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) THEN
+    ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.         &
+    ukca_config%l_ukca_deststrattrop ) THEN
 
   n = n + 1
   IF (n <= n_max) fld_names(n) = fldname_ls_rain3d

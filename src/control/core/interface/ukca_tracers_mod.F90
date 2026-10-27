@@ -316,7 +316,7 @@ DO i = 1, n_mode_tracers
 END DO
 
 ! Add 'Passive O3' tracer if required
-IF (config%l_ukca_strattrop .OR. config%l_ukca_strat) THEN
+IF (config%l_ukca_strattrop .OR. config%l_ukca_strat .OR. config%l_ukca_deststrattrop) THEN
   n = n + 1
   IF (n <= n_max) fld_names(n) = fldname_passive_o3
 END IF

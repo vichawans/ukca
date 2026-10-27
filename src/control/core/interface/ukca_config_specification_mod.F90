@@ -382,6 +382,7 @@ TYPE :: ukca_config_spec_type
   LOGICAL :: l_ukca_offline            ! True for N-R Offline Oxidants chemistry
                                        ! scheme
   LOGICAL :: l_ukca_cristrat           ! True for CRI-Strat chemistry (N-R)
+  LOGICAL :: l_ukca_deststrattrop      ! True for DEST (Double Extended StratTrop) chemistry (N-R)
   LOGICAL :: l_ukca_stratcfc           ! True for Strat-CFC chemistry (N-R)
   LOGICAL :: l_ukca_achem              ! True to add aerosol chemistry to an
                                        ! N-R scheme
@@ -569,6 +570,8 @@ INTEGER, PARAMETER :: i_ukca_chem_offline    = 54 ! Offline Oxidants (N-R)
 INTEGER, PARAMETER :: i_ukca_chem_cristrat   = 59 ! Common Representative
                                                   ! Intermidiates (CRI) scheme
                                                   ! with stratospheric chem.
+INTEGER, PARAMETER :: i_ukca_chem_deststrattrop  = 60 ! Double Extended Strat-trop
+                                                      ! (DEST) scheme
 
 ! Option codes for 'i_mode_setup'
 INTEGER, PARAMETER :: i_suss_4mode              = 1
@@ -966,6 +969,7 @@ ukca_config%l_ukca_strattrop = .FALSE.
 ukca_config%l_ukca_strat = .FALSE.
 ukca_config%l_ukca_offline = .FALSE.
 ukca_config%l_ukca_cristrat = .FALSE.
+ukca_config%l_ukca_deststrattrop = .FALSE.
 ukca_config%l_ukca_stratcfc = .FALSE.
 ukca_config%l_ukca_achem = .FALSE.
 ukca_config%l_ukca_nr_aqchem = .FALSE.

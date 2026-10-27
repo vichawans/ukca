@@ -286,7 +286,8 @@ END IF
 IF (ukca_config%l_ukca_offline_be) RETURN
 
 IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.             &
-    ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) THEN
+    ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.         &
+    ukca_config%l_ukca_deststrattrop) THEN
 
   ! Calculate total chlorine and total bromine before chemistry
   IF (nn_cl > 0) THEN

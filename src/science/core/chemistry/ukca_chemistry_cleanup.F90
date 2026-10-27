@@ -119,7 +119,8 @@ IF (nn_cl > 0) THEN
 END IF
 
 IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.             &
-    ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) THEN
+    ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.         &
+    ukca_config%l_ukca_deststrattrop ) THEN
 
   IF (ukca_config%l_ukca_het_psc) THEN
     ! Do NAT PSC sedimentation

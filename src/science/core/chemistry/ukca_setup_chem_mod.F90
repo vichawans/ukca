@@ -44,6 +44,7 @@ USE ukca_config_specification_mod, ONLY:                                       &
    i_ukca_chem_off, i_ukca_chem_trop, i_ukca_chem_raq,                         &
    i_ukca_chem_tropisop, i_ukca_chem_strattrop, i_ukca_chem_strat,             &
    i_ukca_chem_offline, i_ukca_chem_offline_be, i_ukca_chem_cristrat,          &
+   i_ukca_chem_deststrattrop,                                                  &
    int_method_none, i_du_2mode
 
 USE asad_mod, ONLY: jpctr, jpspec, jpbk, jptk, jppj, jphk, jpdd, jpdw,         &
@@ -78,8 +79,9 @@ CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_SETUP_CHEM'
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 
-
+!!! Test DEST hardcoded switched on LS
 SELECT CASE (ukca_config%i_ukca_chem)
+!SELECT CASE (60)
 
 CASE (i_ukca_chem_off)
   ! Chemistry off completely
@@ -282,6 +284,27 @@ CASE (i_ukca_chem_cristrat)
     END IF
   END IF
 
+CASE (i_ukca_chem_deststrattrop)
+  ukca_config%l_ukca_chem          = .TRUE.
+  ukca_config%l_ukca_deststrattrop = .TRUE.
+  ukca_config%l_ukca_advh2o        = .TRUE.
+  ukca_config%ukca_int_method      = int_method_nr
+
+  ! If aerosol chemistry on, add additional reactions
+  IF (ukca_config%l_ukca_chem_aero) THEN
+    ukca_config%l_ukca_achem     = .TRUE.
+    ukca_config%l_ukca_nr_aqchem = .TRUE.
+
+  ELSE
+     ! Can't have trophet reactions without aerosol chemistry
+    IF (ukca_config%l_ukca_trophet) THEN
+      CALL umPrint( 'trop het chem requires aerosol chemistry on',             &
+          src='ukca_setup_chem_mod')
+      cmessage='Unsupported option choice'
+      errcode=ABS(ukca_config%i_ukca_chem)
+      CALL ereport('ukca_setup_chem',errcode,cmessage)
+    END IF
+  END IF
 
 CASE DEFAULT
   ! If we get here, we don't know how to deal with this chemistry scheme,
@@ -423,6 +446,8 @@ IF (PrintStatus >= PrStatus_Diag) THEN
   CALL umPrint(umMessage,src='ukca_setup_chem_mod')
   WRITE(umMessage,'(A,1X,L7)') 'l_ukca_cristrat  = ',                          &
     ukca_config%l_ukca_cristrat
+  WRITE(umMessage,'(A,1X,L7)') 'l_ukca_deststrattrop  = ',                     &
+    ukca_config%l_ukca_deststrattrop
   CALL umPrint(umMessage,src='ukca_setup_chem_mod')
   WRITE(umMessage,'(A,1X,I5)') 'ukca_int_method  = ',                          &
     ukca_config%ukca_int_method

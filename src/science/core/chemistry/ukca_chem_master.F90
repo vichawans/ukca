@@ -75,6 +75,7 @@ INTEGER, PARAMETER :: ol  = 16  ! offline scheme
 INTEGER, PARAMETER :: ti  = 32  ! troposphere-isoprene scheme
 INTEGER, PARAMETER :: cs  = 64  ! Common Representative Intermediates +
                                 ! Stratosphere scheme
+INTEGER, PARAMETER:: dest = 128 ! double extended stratosphere-troposphere scheme by EMB
 
 ! CRI-Strat 2 (CS2) is an update to CRI-Strat (CS) which is turned on if
 ! CRI-Strat is selected and i_ukca_chem_version >= 119
@@ -8380,7 +8381,10 @@ IF (ukca_config%l_ukca_cristrat) THEN
   chem_scheme = cs
   i = i + 1
 END IF
-
+IF (ukca_config%l_ukca_deststrattrop) THEN
+  chem_scheme = dest
+  i = i + 1
+END IF
 
 ! Determine which qualifiers to use, based on namelist options.
 qualifier = 0

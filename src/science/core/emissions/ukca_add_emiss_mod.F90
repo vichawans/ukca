@@ -375,7 +375,8 @@ IF (firstcall) THEN
     END IF  ! is any molmass < small_number ?
 
     IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.        &
-        ukca_config%l_ukca_stratcfc .OR. ukca_config%l_ukca_cristrat) THEN
+        ukca_config%l_ukca_stratcfc .OR. ukca_config%l_ukca_cristrat .OR.      &
+        ukca_config%l_ukca_deststrattrop) THEN
 
       ! Set MMRs of N2O, CFCs and halons to specified global constants,
       ! which may follow a time dependence. Set values of inorganic
@@ -762,7 +763,8 @@ IF (ukca_config%l_ukca_chem) THEN
     !   area and timestep, to turn it into a surface emission rate.
     !   No emissions for other model levels
     IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.         &
-        ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) THEN
+        ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.     &
+        ukca_config%l_ukca_deststrattrop) THEN
       DO l = 1, n_boundary_vals
 
         IF (ukca_config%l_ukca_emsdrvn_ch4) THEN
@@ -1095,7 +1097,8 @@ IF (ukca_config%l_ukca_chem) THEN
   ! Emission of volcanic SO2 from explosive volcanic eruptions
   ! into stratosphere
   IF ((ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_stratcfc .OR.          &
-       ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat) .AND.    &
+       ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.      &
+       ukca_config%l_ukca_deststrattrop) .AND.                                 &
       iso2 > 0 .AND. ukca_config%l_ukca_so2ems_expvolc ) THEN
 
     !   Diagnostics - volcanic SO2 emissions

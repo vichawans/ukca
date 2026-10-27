@@ -591,7 +591,7 @@ IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 
 IF (.NOT. (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.     &
            ukca_config%l_ukca_tropisop .OR. ukca_config%l_ukca_offline .OR.    &
-           ukca_config%l_ukca_cristrat)) THEN
+           ukca_config%l_ukca_cristrat .OR. ukca_config%l_ukca_deststrattrop)) THEN
   IF (.NOT. ALLOCATED(chch_defs)) ALLOCATE(chch_defs(jpspec))
   IF (.NOT. ALLOCATED(ratb_defs)) ALLOCATE(ratb_defs(jpbk))
   IF (.NOT. ALLOCATED(rath_defs)) ALLOCATE(rath_defs(jphk))
@@ -691,7 +691,7 @@ ELSE IF (.NOT. ukca_config%l_ukca_chem ) THEN
   ! Do nothing -- Age-of-air-only or dust-only configuration
 ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
          ukca_config%l_ukca_tropisop .OR. ukca_config%l_ukca_offline .OR.      &
-         ukca_config%l_ukca_cristrat) THEN
+         ukca_config%l_ukca_cristrat .OR. ukca_config%l_ukca_deststrattrop) THEN
 
   ! This calculates the sizes of chemisty arrays (jpspec, jpbk, etc.) and fills
   ! them with the chemistry tables.

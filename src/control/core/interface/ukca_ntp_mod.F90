@@ -935,6 +935,7 @@ ELSE
     ntp_req = ANY(nadvt(:) == varname) .AND.                                   &
          ((ukca_config%ukca_int_method  == int_method_be_explicit) .OR.        &
           (ukca_config%l_ukca_ro2_ntp .AND. ukca_config%l_ukca_strattrop) .OR. &
+          (ukca_config%l_ukca_ro2_ntp .AND. ukca_config%l_ukca_deststrattrop) .OR. &
           ukca_config%l_ukca_cristrat )
 
   END SELECT

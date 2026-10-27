@@ -159,7 +159,8 @@ IF (error_code_ptr <= 0) THEN
   ukca_config%l_asad_chem_diags_support =                                      &
     ukca_config%l_use_gridbox_volume .AND.                                     &
     (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_cristrat .OR.        &
-     ukca_config%l_ukca_offline .OR. ukca_config%l_ukca_offline_be)
+     ukca_config%l_ukca_offline .OR. ukca_config%l_ukca_offline_be .OR.        &
+     ukca_config%l_ukca_deststrattrop)
 
   IF (ukca_config%l_asad_chem_diags_support) CALL asad_load_default_fluxes()
 
