@@ -1424,7 +1424,7 @@ END DO !(jl=kstart, kend)
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 RETURN
-END SUBROUTINE ukca_shi_liquid_aerosol
+END SUBROUTINE ukca_solomon_liquid_aerosol
 
 !--------------------------------------------------------------------------------
 
