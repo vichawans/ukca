@@ -485,21 +485,27 @@ chch_t1(79,'MSA       ',1,'TR        ','          ',1,0,ti,a,0,107),           &
 !  80 DD: 42,WD: 32,
 ! No dry deposition for DMSO in R scheme.
 chch_t1(80,'DMSO      ',1,'TR        ','          ',0,1,r,a,0,107),            &
-chch_t1(80,'DMSO      ',1,'TR        ','          ',1,1,ti+st+ol+cs+dest,a,0,107),  &
+chch_t1(80,'DMSO      ',1,'TR        ','          ',1,1,ti+st+ol+cs+dest,      &
+                                                              a,0,107),        &
 !  81 DD: 43,WD: 33,
-chch_t1(81,'NH3       ',1,'TR        ','          ',1,1,ti+st+r+cs,a,0,107),   &
+chch_t1(81,'NH3       ',1,'TR        ','          ',1,1,ti+st+r+cs+dest,       &
+                                                              a,0,107),        &
 !  82
-chch_t1(82,'CS2       ',1,'TR        ','          ',0,0,ti+s+st+cs,a,0,107),   &
+chch_t1(82,'CS2       ',1,'TR        ','          ',0,0,ti+s+st+cs+dest,       &
+                                                              a,0,107),        &
 !  83
-chch_t1(83,'COS       ',1,'TR        ','          ',0,0,ti+s+st+cs,a,0,107),   &
+chch_t1(83,'COS       ',1,'TR        ','          ',0,0,ti+s+st+cs+dest,       &
+                                                              a,0,107),        &
 !  84
-chch_t1(84,'H2S       ',1,'TR        ','          ',0,0,ti+s+st+cs,a,0,107),   &
+chch_t1(84,'H2S       ',1,'TR        ','          ',0,0,ti+s+st+cs+dest,       &
+                                                              a,0,107),        &
 !  85                 (140)
-chch_t1(85,'SO3       ',1,'TR        ','          ',0,0,s+st+cs,a,0,107),      &
+chch_t1(85,'SO3       ',1,'TR        ','          ',0,0,s+st+cs+dest,a,0,107), &
 !  86 DD: 44,
-chch_t1(86,'Monoterp  ',1,'TR        ','          ',1,0,ti+st+ol+r,a,0,107),   &
+chch_t1(86,'Monoterp  ',1,'TR        ','          ',1,0,ti+st+ol+r+dest,       &
+                                                              a,0,107),        &
 !  87 DD: 45,WD: 34,
-chch_t1(87,'Sec_Org   ',1,'TR        ','          ',1,1,ti+st+ol+r+cs,         &
+chch_t1(87,'Sec_Org   ',1,'TR        ','          ',1,1,ti+st+ol+r+cs+dest,    &
                                                                a,0,107),       &
 chch_t1(88,'O(3P)S    ',1,'SS        ','          ',0,0,t,0,0,107),            &
 chch_t1(89,'O(1D)S    ',1,'SS        ','          ',0,0,t,0,0,107),            &
