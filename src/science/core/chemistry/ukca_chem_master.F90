@@ -8389,8 +8389,7 @@ IF (ukca_config%l_ukca_trophet) qualifier = qualifier + th
 IF (ukca_config%l_ukca_het_psc) qualifier = qualifier + hp
 IF (ukca_config%l_ukca_stratcfc) qualifier = qualifier + es
 IF (ukca_config%l_chem_environ_co2_fld) qualifier = qualifier + ci
-IF (ukca_config%i_ukca_hetconfig == 2 .OR.                                     & 
-    ukca_config%i_ukca_hetconfig == 4) qualifier = qualifier + eh
+IF (ukca_config%i_ukca_hetconfig == 2) qualifier = qualifier + eh
 IF (ukca_config%i_ukca_chem_version >= 119  .AND.                              &
     ukca_config%i_ukca_chem == 59) qualifier = qualifier + cs2
 
