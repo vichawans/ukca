@@ -189,7 +189,8 @@ USE ukca_config_defs_mod,   ONLY:                                              &
     n_chem_tracers,         n_aero_tracers,         em_chem_spec,              &
     n_boundary_vals,        lbc_mmr,                n_mode_tracers,            &
     lbc_spec,               n_use_tracers,          nmax_mode_diags,           &
-    nmax_strat_fluxdiags
+    nmax_strat_fluxdiags,   n_boundary_vals_2D,     lbc_spec_2D,               &
+    lbc_mmr_2D
 
 USE ukca_transform_halogen_mod,                                                &
                             ONLY: ukca_transform_halogen
@@ -1893,7 +1894,8 @@ IF (ukca_config%l_ukca_chem) THEN
       CALL ukca_scenario_ctl(n_boundary_vals, lbc_spec,                        &
                              i_year, i_day_number, lbc_mmr,                    &
                               .NOT. ( ukca_config%l_ukca_stratcfc .OR.         &
-                                      ukca_config%l_ukca_deststrattrop ) )
+                                      ukca_config%l_ukca_deststrattrop ),      &
+                             n_boundary_vals_2D, lbc_spec_2D, lbc_mmr_2D)
 
     END IF
 

@@ -49,28 +49,36 @@ CONTAINS
 
 SUBROUTINE ukca_scenario_ctl(n_boundary_vals, lbc_spec,                        &
                              i_year, i_day_number,                             &
-                             lbc_mmr, perform_lumping)
+                             lbc_mmr, perform_lumping,                         &
+                             n_boundary_vals_2D, lbc_spec_2D, lbc_mmr_2D)
 
 USE yomhook,               ONLY: lhook, dr_hook
 USE parkind1,              ONLY: jprb, jpim
 USE ereport_mod,           ONLY: ereport
-USE umPrintMgr, ONLY: umPrint, umMessage, PrStatus_Oper, PrintStatus
+USE umPrintMgr, ONLY: umPrint, umMessage, PrStatus_Oper, PrStatus_DIAG, PrintStatus
 USE ukca_config_specification_mod, ONLY: ukca_config,                          &
                                          i_strat_lbc_wmoa1, i_strat_lbc_env
 USE errormessagelength_mod, ONLY: errormessagelength
+USE nlsizes_namelist_mod, ONLY: rows
 
 USE ukca_scenario_prescribed_mod, ONLY: ukca_scenario_prescribed
 USE ukca_scenario_wmoa1_mod, ONLY: ukca_scenario_wmoa1
+!USE ukca_scenario_Cl_VSLSs_mod,  ONLY: ukca_scenario_Cl_VSLSs
+                                       !test_scenario_cl_vsls_ctl, &
+                                       !l_ukca_test_scenario_cl_vsls
 IMPLICIT NONE
 
 ! Number of lower BC species
 INTEGER, INTENT(IN) :: n_boundary_vals
+INTEGER, INTENT(IN) :: n_boundary_vals_2D
 ! LBC species
 CHARACTER(LEN=10), INTENT(IN) :: lbc_spec(n_boundary_vals)
+CHARACTER(LEN=10), INTENT(IN) :: lbc_spec_2D(n_boundary_vals_2D)
 INTEGER, INTENT(IN) :: i_year                    ! model year
 INTEGER, INTENT(IN) :: i_day_number              ! model day
 ! Lower BC mass mixing ratios
 REAL, INTENT(IN OUT) :: lbc_mmr(n_boundary_vals)
+REAL, INTENT(IN OUT) :: lbc_mmr_2D(rows,n_boundary_vals_2D)
 ! T for lumping of lower boundary conditions
 LOGICAL, INTENT(IN) :: perform_lumping
 
@@ -128,6 +136,28 @@ IF (PrintStatus >= Prstatus_Oper) THEN
                                  lbc_mmr(i)
     CALL umPrint(umMessage,src=RoutineName)
   END DO
+END IF
+
+! DEST
+IF ((ukca_config%l_ukca_deststrattrop) .AND. (ukca_config%l_ukca_dest_clvsls_emiss) ) THEN
+
+  IF (PrintStatus >= Prstatus_DIAG) THEN
+    WRITE(umMessage,*) 'n_boundary_vals_2D:',n_boundary_vals_2D,'; lbc_spec_2D:',lbc_spec_2D
+    CALL umPrint(umMessage,src='ukca_scenario_ctl_mod')
+  END IF
+
+  !CALL ukca_scenario_Cl_VSLSs(n_boundary_vals_2D, lbc_spec_2D,   &
+  !                            i_year, i_day_number,           &
+  !                            lbc_mmr_2D)
+ ! Include test later
+ !  IF (L_first) THEN
+ !    IF (mype == 0) THEN
+ !      IF (L_ukca_test_scenario_cl_vsls) THEN
+ !         CALL test_scenario_cl_vsls_ctl(n_boundary_vals_2D, lbc_spec_2D)
+ !      END IF
+ !    END IF
+ ! END IF
+ 
 END IF
 
 L_first = .FALSE.

@@ -103,6 +103,8 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       i_photol_scheme_strat_only,                              &
                       i_photol_scheme_2d,                                      &
                       i_photol_scheme_fastjx,                                  &
+                      clvsls_fix_year,                                         &
+                      ukca_clvsls_specify_method,                              &
                       dzsoil_layer1,                                           &
                       timestep,                                                &
                       max_ageair_reset_height,                                 &
@@ -136,6 +138,10 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       const_avogadro,                                          &
                       const_boltzmann,                                         &
                       const_rho_so4,                                           &
+                      userval_ch2cl2,                                          &
+                      userval_chcl3,                                           &
+                      userval_c2cl4,                                           &
+                      userval_c2h4cl2,                                         &
                       l_cal360,                                                &
                       l_ukca_chem_aero,                                        &
                       l_ukca_mode,                                             &
@@ -166,6 +172,8 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       l_ukca_scale_soa_yield_isop,                             &
                       l_ukca_dest_iodine,                                      &
                       l_ukca_dest_clvsls_emiss,                                &
+                      l_ukca_include_clvsls,                                   &
+                      l_ukca_fix_clvsls,                                       &
                       l_ukca_het_psc,                                          &
                       l_ukca_limit_nat,                                        &
                       l_ukca_sa_clim,                                          &
@@ -436,6 +444,8 @@ INTEGER, OPTIONAL, INTENT(IN) :: i_photol_scheme_off
 INTEGER, OPTIONAL, INTENT(IN) :: i_photol_scheme_strat_only
 INTEGER, OPTIONAL, INTENT(IN) :: i_photol_scheme_2d
 INTEGER, OPTIONAL, INTENT(IN) :: i_photol_scheme_fastjx
+INTEGER, OPTIONAL, INTENT(IN) :: clvsls_fix_year
+INTEGER, OPTIONAL, INTENT(IN) :: ukca_clvsls_specify_method
 
 REAL, OPTIONAL, INTENT(IN) :: dzsoil_layer1
 REAL, OPTIONAL, INTENT(IN) :: timestep
@@ -470,6 +480,10 @@ REAL, OPTIONAL, INTENT(IN) :: const_lc
 REAL, OPTIONAL, INTENT(IN) :: const_avogadro
 REAL, OPTIONAL, INTENT(IN) :: const_boltzmann
 REAL, OPTIONAL, INTENT(IN) :: const_rho_so4
+REAL, OPTIONAL, INTENT(IN) :: userval_ch2cl2(5)
+REAL, OPTIONAL, INTENT(IN) :: userval_chcl3(5)
+REAL, OPTIONAL, INTENT(IN) :: userval_c2cl4(5)
+REAL, OPTIONAL, INTENT(IN) :: userval_c2h4cl2(5)
 
 LOGICAL, OPTIONAL, INTENT(IN) :: l_cal360
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_chem_aero
@@ -499,6 +513,8 @@ LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_ro2_perm
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_intph
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_dest_iodine
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_dest_clvsls_emiss
+LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_include_clvsls
+LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_fix_clvsls
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_het_psc
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_limit_nat
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_sa_clim
@@ -950,12 +966,36 @@ IF (ukca_config%i_ukca_chem /= i_ukca_chem_off) THEN
   IF (ukca_config%l_ukca_scale_ppe) THEN
     IF (PRESENT(dry_depvel_so2_scaling))                                       &
       ukca_config%dry_depvel_so2_scaling = dry_depvel_so2_scaling
- END IF
+  END IF
   IF (PRESENT(l_ukca_dest_iodine))                                             &
     ukca_config%l_ukca_dest_iodine = l_ukca_dest_iodine
 
- IF (PRESENT(l_ukca_dest_clvsls_emiss))                                        &
+  IF (PRESENT(l_ukca_dest_clvsls_emiss))                                       &
     ukca_config%l_ukca_dest_clvsls_emiss = l_ukca_dest_clvsls_emiss
+
+  IF (PRESENT(l_ukca_include_clvsls))                                          &
+    ukca_config%l_ukca_include_clvsls = l_ukca_include_clvsls
+
+  IF (PRESENT(l_ukca_fix_clvsls))                                              &
+    ukca_config%l_ukca_fix_clvsls = l_ukca_fix_clvsls
+    
+  IF (PRESENT(clvsls_fix_year))                                                &
+    ukca_config%clvsls_fix_year = clvsls_fix_year
+
+  IF (PRESENT(ukca_clvsls_specify_method))                                     &
+    ukca_config%ukca_clvsls_specify_method = ukca_clvsls_specify_method
+
+  IF (PRESENT(userval_ch2cl2))                                                 &
+    ukca_config%userval_ch2cl2 = userval_ch2cl2
+
+  IF (PRESENT(userval_chcl3))                                                  &
+    ukca_config%userval_chcl3 = userval_chcl3
+
+  IF (PRESENT(userval_c2cl4))                                                  &
+    ukca_config%userval_c2cl4 = userval_c2cl4
+
+  IF (PRESENT(userval_c2h4cl2))                                                &
+    ukca_config%userval_c2h4cl2 = userval_c2h4cl2
 
   ! -- Chemistry - Heterogeneous chemistry --
 

@@ -37,6 +37,7 @@ INTEGER, SAVE :: n_use_emissions      ! No. of emissions used
 INTEGER, SAVE :: n_3d_emissions       ! No. of 3-D emissions used
 INTEGER, PARAMETER :: n_boundary_vals  = 18   ! No. lower boundary vals for
                                               ! stratospheric chemistry, DEST+11
+INTEGER, SAVE :: n_boundary_vals_2D      ! No. lat-dependent LBCs for Cl-VSLS
 INTEGER, PARAMETER :: n_cfc_lumped  = 13 ! No. of CFC species that are not part
                                          ! of boundary values but are lumped
                                          ! into some of the boundary val CFCs
@@ -58,8 +59,10 @@ CHARACTER(LEN=10), SAVE :: microplastic_spec(2)
 
 ! Lower BCs for stratospheric species
 CHARACTER(LEN=10), SAVE :: lbc_spec(n_boundary_vals)  ! species names
+CHARACTER(LEN=10), ALLOCATABLE, SAVE :: lbc_spec_2D(:)
 CHARACTER(LEN=10), SAVE :: cfc_lumped(n_cfc_lumped)  ! CFC species lumped
 REAL, SAVE :: lbc_mmr(n_boundary_vals)               ! mixing ratios
+REAL, ALLOCATABLE, SAVE :: lbc_mmr_2D(:,:)           ! mixing ratios of 2D LBCs
 
 CHARACTER(LEN=*), PARAMETER, PRIVATE :: ModuleName = 'UKCA_CONFIG_DEFS_MOD'
 
@@ -76,6 +79,7 @@ USE yomhook,                 ONLY: lhook, dr_hook
 USE ereport_mod,             ONLY: ereport
 USE ukca_missing_data_mod,   ONLY: rmdi
 USE errormessagelength_mod,  ONLY: errormessagelength
+USE nlsizes_namelist_mod, ONLY: rows
 
 IMPLICIT NONE
 
@@ -117,6 +121,33 @@ cfc_lumped = ['CF2ClCFCl2','CF2ClCF2Cl','CF2ClCF3  ','CCl4      ',             &
                'MeCCl3    ','CHF2Cl    ','MeCFCl2   ','MeCF2Cl   ',            &
                'CF2ClBr   ','CF2Br2    ','CF3Br     ','CF2BrCF2Br',            &
                'MeCl      ']
+
+IF (ukca_config%l_ukca_deststrattrop) THEN !! .AND. ukca_config%l_ukca_include_clvsls ???
+  IF (.NOT. ukca_config%l_ukca_dest_clvsls_emiss) THEN
+    n_boundary_vals_2D = 4
+    ALLOCATE(lbc_mmr_2D(rows,n_boundary_vals_2D))
+    ALLOCATE(lbc_spec_2D(n_boundary_vals_2D))
+    
+    lbc_mmr_2D(:,:) = rmdi
+    !  Species with potential lower boundary conditions
+    lbc_spec_2D =                                                              &
+         ['CH2Cl2    ','CHCl3     ',                                           &
+           'C2Cl4     ','C2H4Cl2   ']
+    
+  ! ELSE IF SOMELOGICAL !!!Also implement option LBC for CHCl3 and C2H4Cl2 and emissions for CH2Cl2 and C2Cl4 ???
+  !   n_boundary_vals_2D = 2
+  !   ALLOCATE(lbc_mmr_2D(rows,n_boundary_vals_2D))
+  !   ALLOCATE(lbc_spec_2D(n_boundary_vals_2D))
+    
+  !   lbc_mmr_2D(:,:) = rmdi
+  !   !  Species with potential lower boundary conditions
+  !   lbc_spec_2D =                                                              &
+  !        ['CH2Cl2    ','CHCl3     ']
+    
+  ELSE
+    n_boundary_vals_2D = 0
+  END IF
+END IF
 
 ! Microplastics species
 microplastic_spec = ['MP_frgmnts','MP_fibres ']

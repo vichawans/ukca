@@ -225,6 +225,16 @@ TYPE :: ukca_config_spec_type
   LOGICAL :: l_ukca_dest_iodine        ! True to include iodine chemistry in DEST chemistry
   LOGICAL :: l_ukca_dest_clvsls_emiss  ! True to use emissions instead of LBC
                                        ! for Cl-VSLS
+  LOGICAL :: l_ukca_include_clvsls     ! True to use LBC for Cl-VSLSs (DEST only)
+  LOGICAL :: l_ukca_fix_clvsls         ! True for fixed LBC for Cl-VSLSs (DEST only)
+
+  INTEGER :: clvsls_fix_year           ! Options for fixed LBC for Cl-VSLSs
+  INTEGER :: ukca_clvsls_specify_method
+  REAL :: userval_ch2cl2(5)
+  REAL :: userval_chcl3(5)
+  REAL :: userval_c2cl4(5)
+  REAL :: userval_c2h4cl2(5)
+  
   
   ! -- Chemistry - Heterogeneous chemistry --
 
@@ -890,6 +900,14 @@ ukca_config%soa_yield_scaling_isop = rmdi
 ukca_config%dry_depvel_so2_scaling = rmdi
 ukca_config%l_ukca_dest_iodine = .FALSE.
 ukca_config%l_ukca_dest_clvsls_emiss = .FALSE.
+ukca_config%l_ukca_include_clvsls = .FALSE.
+ukca_config%l_ukca_fix_clvsls = .FALSE.
+ukca_config%clvsls_fix_year = imdi
+ukca_config%ukca_clvsls_specify_method = imdi
+ukca_config%userval_ch2cl2(5) = rmdi
+ukca_config%userval_chcl3(5) = rmdi
+ukca_config%userval_c2cl4(5) = rmdi
+ukca_config%userval_c2h4cl2(5) = rmdi
 
 ! -- Chemistry - Heterogeneous chemistry --
 ukca_config%l_ukca_het_psc = .FALSE.
@@ -1107,6 +1125,7 @@ SUBROUTINE ukca_get_config(                                                    &
    i_ukca_activation_scheme, i_ukca_nwbins,                                    &
    n_dust_emissions,                                                           &
    i_dust_scheme,                                                              &
+   clvsls_fix_year, ukca_clvsls_specify_method,                                &
    dzsoil_layer1,                                                              &
    timestep,                                                                   &
    max_ageair_reset_height,                                                    &
@@ -1128,6 +1147,7 @@ SUBROUTINE ukca_get_config(                                                    &
    hno3_uptake_coeff,                                                          &
    sigwmin,                                                                    &
    sigma_updraught_scaling,                                                    &
+   userval_ch2cl2, userval_chcl3, userval_c2cl4, userval_c2h4cl2,              &
    l_cal360,                                                                   &
    l_ukca_chem_aero,                                                           &
    l_ukca_mode,                                                                &
@@ -1152,6 +1172,7 @@ SUBROUTINE ukca_get_config(                                                    &
    l_ukca_intph,ph_fit_coeff_a,ph_fit_coeff_b,ph_fit_intercept,                &
    l_ukca_scale_soa_yield_mt,l_ukca_scale_soa_yield_isop,                      &
    l_ukca_dest_iodine, l_ukca_dest_clvsls_emiss,                               &
+   l_ukca_include_clvsls, l_ukca_fix_clvsls,                                   &
    l_ukca_het_psc,                                                             &
    l_ukca_limit_nat,                                                           &
    l_ukca_sa_clim,                                                             &
@@ -1305,6 +1326,8 @@ INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_nwbins
 INTEGER, OPTIONAL, INTENT(OUT) :: n_dust_emissions
 INTEGER, OPTIONAL, INTENT(OUT) :: i_dust_scheme
 INTEGER, OPTIONAL, INTENT(OUT) :: i_primss_method
+INTEGER, OPTIONAL, INTENT(OUT) :: clvsls_fix_year
+INTEGER, OPTIONAL, INTENT(OUT) :: ukca_clvsls_specify_method
 
 REAL, OPTIONAL, INTENT(OUT) :: dzsoil_layer1
 REAL, OPTIONAL, INTENT(OUT) :: timestep
@@ -1331,6 +1354,10 @@ REAL, OPTIONAL, INTENT(OUT) :: ph_fit_coeff_a
 REAL, OPTIONAL, INTENT(OUT) :: ph_fit_coeff_b
 REAL, OPTIONAL, INTENT(OUT) :: ph_fit_intercept
 REAL, OPTIONAL, INTENT(OUT) :: hno3_uptake_coeff
+REAL, OPTIONAL, INTENT(OUT) :: userval_ch2cl2(5)
+REAL, OPTIONAL, INTENT(OUT) :: userval_chcl3(5)
+REAL, OPTIONAL, INTENT(OUT) :: userval_c2cl4(5)
+REAL, OPTIONAL, INTENT(OUT) :: userval_c2h4cl2(5)
 
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_cal360
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_chem_aero
@@ -1362,6 +1389,8 @@ LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_scale_soa_yield_mt
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_scale_soa_yield_isop
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_dest_iodine
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_dest_clvsls_emiss
+LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_include_clvsls
+LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_fix_clvsls
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_het_psc
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_limit_nat
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_sa_clim
@@ -1599,6 +1628,22 @@ IF (PRESENT(l_ukca_dest_iodine))                                               &
   l_ukca_dest_iodine = ukca_config%l_ukca_dest_iodine
 IF (PRESENT(l_ukca_dest_clvsls_emiss))                                         &
   l_ukca_dest_clvsls_emiss = ukca_config%l_ukca_dest_clvsls_emiss
+IF (PRESENT(l_ukca_include_clvsls))                                            &
+  l_ukca_include_clvsls = ukca_config%l_ukca_include_clvsls
+IF (PRESENT(l_ukca_fix_clvsls))                                                &
+     l_ukca_fix_clvsls = ukca_config%l_ukca_fix_clvsls
+IF (PRESENT(clvsls_fix_year))                                                  &
+     clvsls_fix_year = ukca_config%clvsls_fix_year
+IF (PRESENT(ukca_clvsls_specify_method))                                       &
+     ukca_clvsls_specify_method = ukca_config%ukca_clvsls_specify_method
+IF (PRESENT(userval_ch2cl2))                                                   &
+     userval_ch2cl2 = ukca_config%userval_ch2cl2
+IF (PRESENT(userval_chcl3))                                                    &
+     userval_chcl3 = ukca_config%userval_chcl3
+IF (PRESENT(userval_c2cl4))                                                    &
+     userval_c2cl4 = ukca_config%userval_c2cl4
+IF (PRESENT(userval_c2h4cl2))                                                  &
+     userval_c2h4cl2 = ukca_config%userval_c2h4cl2
 
 ! -- Chemistry - Heterogeneous chemistry --
 IF (PRESENT(l_ukca_het_psc)) l_ukca_het_psc = ukca_config%l_ukca_het_psc
