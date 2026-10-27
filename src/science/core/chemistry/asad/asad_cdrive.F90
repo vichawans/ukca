@@ -286,7 +286,7 @@ IF ( method /= 0 ) THEN
     IF ( method == 1 ) THEN
       IF ( gphot ) CALL ukca_photol(prt,n_points)
       IF (ukca_config%l_ukca_het_psc)                                          &
-          CALL ukca_hetero(n_points,have_nat,stratflag)
+          CALL ukca_hetero(n_points,have_nat,stratflag,focr_1d_arr,roc_1d_arr)
       CALL asad_ftoy( gfirst, nitfg, num_iter, n_points, ix, jy, nlev )
       CALL asad_diffun( nl )
       CALL asad_jac( n_points )
@@ -306,7 +306,7 @@ IF ( method /= 0 ) THEN
     ELSE IF ( method == 3 ) THEN
       IF ( gphot ) CALL ukca_photol(prt,n_points)
       IF (ukca_config%l_ukca_het_psc)                                          &
-          CALL ukca_hetero(n_points,have_nat,stratflag)
+          CALL ukca_hetero(n_points,have_nat,stratflag,focr_1d_arr,roc_1d_arr)
       CALL asad_ftoy( gfirst, nitfg, num_iter, n_points, ix, jy, nlev )
 
       CALL asad_spmjpdriv(ix,jy,nlev,n_points,num_iter)
@@ -333,7 +333,7 @@ IF ( method /= 0 ) THEN
     ELSE IF ( method == 5 ) THEN
       IF ( gphot ) CALL ukca_photol(prt,n_points)
       IF (ukca_config%l_ukca_het_psc)                                          &
-           CALL ukca_hetero(n_points,have_nat,stratflag)
+           CALL ukca_hetero(n_points,have_nat,stratflag,focr_1d_arr,roc_1d_arr)
       CALL asad_ftoy( gfirst, nitfg, num_iter, n_points, ix, jy, nlev )
       CALL asad_bedriv(ix, jy, n_points, nlev)
 
@@ -372,7 +372,7 @@ ELSE           ! Method is equal to zero
   method = 0
   IF ( gphot ) CALL ukca_photol(prt,n_points)
   IF ( ukca_config%l_ukca_het_psc )                                            &
-       CALL ukca_hetero(n_points,have_nat,stratflag)
+       CALL ukca_hetero(n_points,have_nat,stratflag,focr_1d_arr,roc_1d_arr)
   CALL asad_ftoy( first_call, nit0, num_iter, n_points, ix, jy, nlev )
   CALL asad_diffun( nl )
   IF ( ukca_config%l_ukca_het_psc ) CALL ukca_solidphase( n_points )

@@ -117,8 +117,8 @@ REAL, INTENT(IN) :: qcf(tot_n_pnts)
 REAL, INTENT(IN) :: qcl(tot_n_pnts)
 REAL, INTENT(IN) :: cloud_frac(tot_n_pnts)
 REAL, INTENT(IN) :: so4_sa(tot_n_pnts)              ! aerosol surface area
-REAL, INTENT(IN) :: focr(row_length,rows,model_levels) ! om1/total or om2/total
-REAL, INTENT(IN) :: roc(row_length,rows,model_levels)  ! om/so4
+REAL, INTENT(IN) :: focr(tot_n_pnts)                ! om1/total or om2/total
+REAL, INTENT(IN) :: roc(tot_n_pnts)                 ! om/so4 mass ratio
 REAL, INTENT(IN) :: zdryrt(theta_field_size,jpdd)   ! dry dep rate
 REAL, INTENT(IN) :: zwetrt(tot_n_pnts,jpdw)         ! wet dep rate
 REAL, INTENT(IN) :: photol_rates(tot_n_pnts,jppj)
@@ -264,7 +264,7 @@ END DO
 !$OMP        nn_h2o2, nn_h2so4, nn_o1d, nn_o3, nn_o3p, nn_oh, nn_so2,          &
 !$OMP        ntp_data, o1d_in_ss, o3p_in_ss, photol_rates,                     &
 !$OMP        pres, q, qcf, qcl, row_length, rows,                              &
-!$OMP        shno3_3d, so4_sa, focr, roc                                       &
+!$OMP        shno3_3d, so4_sa, focr, roc,                                      &
 !$OMP        temp, theta_field_size, tracer,                                   &
 !$OMP        uph2so4inaer, volume,                                             &
 !$OMP        zdryrt, zwetrt)

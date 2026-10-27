@@ -209,8 +209,8 @@ LOGICAL, INTENT(IN) :: stratflag(n_points)
 !         denominator only).
 !  roc  : organic / sulfate mass ratio (>=0). Used by case 1 (the
 !         homogeneous weight-percent dilution). Built from combined OM.
-REAL, INTENT(IN), OPTIONAL :: focr(n_points)
-REAL, INTENT(IN), OPTIONAL :: roc(n_points)
+REAL, INTENT(IN) :: focr(n_points)
+REAL, INTENT(IN) :: roc(n_points)
 
 ! Local variables
 
