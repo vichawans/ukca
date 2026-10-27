@@ -8766,6 +8766,50 @@ asad_flux_defn('DEP',50155,'W',.TRUE.,0,1,                                     &
 ['          ','          ','          ','          '])                         &
 ]
 
+! add_noy_diags
+TYPE(asad_flux_defn), PARAMETER, PUBLIC ::                                     &
+                         noy_diags(10) = [  
+! tendency in the troposphere
+       asad_flux_defn('NET',50451,'X',.TRUE.,0,1,                              &
+       ['HONO2     ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency whole atmos
+       asad_flux_defn('NET',50452,'X',.FALSE.,0,1,                             &
+       ['HONO2     ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency in the troposphere
+       asad_flux_defn('NET',50453,'X',.TRUE.,0,1,                              &
+       ['NO2       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency whole atmos
+       asad_flux_defn('NET',50454,'X',.FALSE.,0,1,                             &
+       ['NO2       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency in the troposphere
+       asad_flux_defn('NET',50455,'X',.TRUE.,0,1,                              &
+       ['NO        ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency whole atmos
+       asad_flux_defn('NET',50456,'X',.FALSE.,0,1,                             &
+       ['NO        ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency in the troposphere
+       asad_flux_defn('NET',50457,'X',.TRUE.,0,1,                              &
+       ['ClONO2    ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency whole atmos
+       asad_flux_defn('NET',50458,'X',.FALSE.,0,1,                             &
+       ['ClONO2    ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency in the troposphere
+       asad_flux_defn('NET',50459,'X',.TRUE.,0,1,                              &
+       ['N2O5      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+! tendency whole atmos
+       asad_flux_defn('NET',50460,'X',.FALSE.,0,1,                             &
+       ['N2O5      ','          '],                                            &
+       ['          ','          ','          ','          '])                  &
+]
 
 
 PUBLIC :: asad_load_default_fluxes
@@ -8853,6 +8897,7 @@ TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_h2o_budget(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_budget_loss(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_drydep(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_ste(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_noy_diags(:)
 
 INTEGER :: p1                   ! start position in asad_chemical_fluxes array
 INTEGER :: p2                   ! end position in asad_chemical_fluxes array
@@ -9024,6 +9069,14 @@ IF (ukca_config%l_ukca_strattrop) THEN
   IF (ukca_config%l_ukca_emsdrvn_ch4) THEN
     ALLOCATE(aa_ch4_ste(SIZE(asad_ch4_ste)))
     aa_ch4_ste = asad_ch4_ste
+  END IF
+
+  ! add_noy_diags
+  IF (ukca_config%i_ukca_chem_version >= ichem_version_121) THEN
+    IF (ukca_config%l_ukca_chem_aero) THEN
+      ALLOCATE(aa_noy_diags(SIZE(noy_diags)))
+      aa_noy_diags = noy_diags
+    END IF
   END IF
 
 ELSE IF (ukca_config%l_ukca_cristrat) THEN
@@ -9306,7 +9359,8 @@ IF (ALLOCATED(aa_ch4_drydep))                                                  &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_ch4_drydep)
 IF (ALLOCATED(aa_ch4_ste))                                                     &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_ch4_ste)
-
+IF (ALLOCATED(aa_noy_diags))                                                     &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_noy_diags)
 ALLOCATE(asad_chemical_fluxes(n_chemical_fluxes))
 
 ! Initialise for checking
@@ -9449,6 +9503,11 @@ IF (ALLOCATED(aa_ch4_ste)) THEN
   asad_chemical_fluxes(p1:p2) = aa_ch4_ste(:)
   p1 = p2 + 1
 END IF
+IF (ALLOCATED(aa_noy_diags)) THEN
+  p2 = p1 + SIZE(aa_noy_diags) - 1
+  asad_chemical_fluxes(p1:p2) = aa_noy_diags(:)
+  p1 = p2 + 1
+END IF
 
 IF (p2 /= n_chemical_fluxes) THEN
   cmessage = ' n_chemical_fluxes and p2 are different'
@@ -9529,6 +9588,7 @@ IF (ALLOCATED(aa_trop_ox_budget_loss02)) DEALLOCATE(aa_trop_ox_budget_loss02)
 IF (ALLOCATED(aa_trop_ox_budget_loss01)) DEALLOCATE(aa_trop_ox_budget_loss01)
 IF (ALLOCATED(aa_trop_ox_budget_prod02)) DEALLOCATE(aa_trop_ox_budget_prod02)
 IF (ALLOCATED(aa_trop_ox_budget_prod01)) DEALLOCATE(aa_trop_ox_budget_prod01)
+IF (ALLOCATED(aa_noy_diags))             DEALLOCATE(aa_noy_diags)
 
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
