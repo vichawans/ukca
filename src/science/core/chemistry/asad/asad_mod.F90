@@ -557,6 +557,10 @@ IF (method == int_method_NR) THEN
     spfjsize_max = 3000
     maxterms     = 345
     maxfterms    = 300
+  ELSE IF (ukca_config%l_ukca_deststrattrop) THEN
+    spfjsize_max = 1500
+    maxterms     = 160
+    maxfterms    = 100      
   ELSE
     spfjsize_max = 1000
     maxterms     = 160

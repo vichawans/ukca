@@ -109,7 +109,7 @@ INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DE
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
-INTEGER, PARAMETER :: n_bimol_master = 1238 ! number of bimolecular reactions !DEST +26
+INTEGER, PARAMETER :: n_bimol_master = 1246 ! number of bimolecular reactions !DEST +34
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 116 ! number of termolecular reactions
 
@@ -6787,7 +6787,40 @@ ratb_t1(770,'CHBr2Cl   ','OH        ','Br        ','Cl        ','Br        ',  &
 'H2O       ',9.00e-13,  0.00,  420.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! ---- CHBrCl2 ----
 ratb_t1(771,'CHBrCl2   ','OH        ','Br        ','Cl        ','Cl        ',  &
-'H2O       ',9.40e-13,  0.00,  510.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
+'H2O       ',9.40e-13,  0.00,  510.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),   &
+! ------------------------------------------------------------------------------
+!!!! extra reactions to accomodate cfc114, cfc115, hcfc141b, hcfc142b
+!!! -> JPL 2015
+!!! NB1. any branching re O1D reactions omitted for consistency with above - change that later? 
+!!! NB2. OH(Cl) + hcfc141b/hcfc142b omitted for now as they produce ch2cfcl2/ch2cf2cl 
+!
+!----- with O(1D) ---
+! cfc114
+ratb_t1(772,'CF2ClCF2Cl','O(1D)     ','ClO       ','Cl        ','          ',  &
+'          ',1.17e-10,  0.00,  -25.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! cfc115
+ratb_t1(773,'CF2ClCF3  ','O(1D)     ','ClO       ','          ','          ',  &
+'          ',4.64e-11,  0.00,  -30.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! hcfc141b
+ratb_t1(774,'MeCFCl2   ','O(1D)     ','ClO       ','Cl        ','          ',  &
+'          ',1.79e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! hcfc142b
+ratb_t1(775,'MeCF2Cl   ','O(1D)     ','ClO       ','          ','          ',  &
+'          ',1.30e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+!----- with OH ---
+! cfc114
+ratb_t1(776,'CF2ClCF2Cl','OH        ','ClO       ','Cl        ','          ',  &
+'          ',1.00e-11,  0.00, 6200.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! cfc115
+ratb_t1(777,'CF2ClCF3  ','OH        ','ClO       ','          ','          ',  &
+'          ',1.00e-11,  0.00, 6200.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! hcfc141b + oh -> ch2cfcl2 +h2o
+ratb_t1(778,'MeCFCl2   ','OH        ','Cl        ','Cl        ','H2O       ',  &
+'          ',1.25e-12,  0.00, 1600.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! hcfc142b + oh -> ch2cf2cl +h2o
+ratb_t1(779,'MeCF2Cl   ','OH        ','Cl        ','H2O       ','          ',  &
+'          ',1.30e-12,  0.00, 1770.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
+
 ] 
      
 !----------------------------------------------------------------------
