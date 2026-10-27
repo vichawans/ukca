@@ -1118,79 +1118,82 @@ ratj_t1(20,'Me2CO     ','PHOTON    ','MeCO3     ','MeOO      ','          ',   &
                                                               0,0,107),        &
 ! The naming of 'jacetone' is probably inconsistent with FAST-JX. Error?
 ratj_t1(20,'Me2CO     ','PHOTON    ','MeCO3     ','MeOO      ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jacetone  ',t,0,0,107) ,          &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jacetone  ',t,0,0,107),           &
 ! 21 missing in A
 ratj_t1(21,'n-PrOOH   ','PHOTON    ','EtCHO     ','HO2       ','OH        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',t+st,0,0,107) ,       &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',t+st+dest,0,0,107),   &
 ratj_t1(21,'n-PrOOH   ','PHOTON    ','HO2       ','EtCHO     ','OH        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti,0,0,107) ,         &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti,0,0,107),          &
 ! 22 missing in A
 ratj_t1(22,'i-PrOOH   ','PHOTON    ','Me2CO     ','HO2       ','OH        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',t+st+r+cs,0,0,107) ,  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',t+st+r+cs+dest,       &
+                                                              0,0,107),        &
 ratj_t1(22,'i-PrOOH   ','PHOTON    ','HO2       ','Me2CO     ','OH        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti,0,0,107) ,         &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti,0,0,107),          &
 ! 23
 ! reaction missing in tropospheric chemistry scheme
 ratj_t1(23,'MeCOCH2OOH','PHOTON    ','MeCO3     ','HCHO      ','OH        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',st,0,0,107) ,         &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',st+dest,0,0,107),     &
 ratj_t1(23,'MeCOCH2OOH','PHOTON    ','HCHO      ','MeCO3     ','OH        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti,0,0,107) ,         &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti,0,0,107),          &
 ! 24 - Note no CRI photolysis of PPAN-> Added for FT
 ratj_t1(24,'PPAN      ','PHOTON    ','EtCO3     ','NO2       ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpan      ',ti+t+st+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpan      ',ti+t+st+cs+dest,      &
+                                                              0,0,107),        &
 ! 25
 ratj_t1(25,'MeONO2    ','PHOTON    ','HO2       ','HCHO      ','NO2       ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmena     ',ti+t+st+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmena     ',ti+t+st+cs+dest,      &
+                                                              0,0,107),        &
 ! 26 Different products in TI and ST versus R.
 ratj_t1(26,'ISOOH     ','PHOTON    ','OH        ','MACR      ','HCHO      ',   &
-     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti+st,0,0,107) ,      &
+     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti+st+dest,0,0,107),  &
 ratj_t1(26,'ISOOH     ','PHOTON    ','OH        ','MVK      ','HCHO      ',    &
      'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',r,0,0,107) ,          &
 ! 27
 ratj_t1(27,'ISON      ','PHOTON    ','NO2       ','MACR      ','HCHO      ',   &
-     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jiprn     ',ti+st,0,0,107) ,      &
+     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jiprn     ',ti+st+dest,0,0,107),  &
 ! 28
 ratj_t1(28,'MACR      ','PHOTON    ','MeCO3     ','HCHO      ','CO        ',   &
-     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jmacr     ',ti+st,0,0,107) ,      &
+     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jmacr     ',ti+st+dest,0,0,107),  &
 ! 29
 ratj_t1(29,'MPAN      ','PHOTON    ','MACRO2    ','NO2       ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpan      ',ti+st,0,0,107) ,      &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpan      ',ti+st+dest,0,0,107),  &
 ! 30
 ratj_t1(30,'MACROOH   ','PHOTON    ','OH        ','HO2       ','OH        ',   &
-     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jmacro    ',ti+st,0,0,107) ,      &
+     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jmacro    ',ti+st+dest,0,0,107),  &
 ! 31
 ratj_t1(31,'MACROOH   ','PHOTON    ','HACET     ','CO        ','MGLY      ',   &
-     'HCHO      ', 0.0,0.0,0.0,0.0, 100.000,'jmacro    ',ti+st,0,0,107) ,      &
+     'HCHO      ', 0.0,0.0,0.0,0.0, 100.000,'jmacro    ',ti+st+dest,0,0,107),  &
 ! 32
 ratj_t1(32,'HACET     ','PHOTON    ','MeCO3     ','HCHO      ','HO2       ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhacet    ',ti+st,0,0,107) ,      &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhacet    ',ti+st+dest,0,0,107),  &
 ! 33
 ratj_t1(33,'MGLY      ','PHOTON    ','MeCO3     ','CO        ','HO2       ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmkal     ',ti+st+r,0,0,107) ,    &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmkal     ',ti+st+r+dest,0,0,107),&
 ! 34
 ratj_t1(34,'NALD      ','PHOTON    ','HCHO      ','CO        ','NO2       ',   &
-     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jaceta    ',ti+st,0,0,107) ,      &
+     'HO2       ', 0.0,0.0,0.0,0.0, 100.000,'jaceta    ',ti+st+dest,0,0,107),  &
 ! 35
 ratj_t1(35,'MeCO3H    ','PHOTON    ','MeOO      ','OH        ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmeco3h   ',ti+st,0,0,107) ,      &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmeco3h   ',ti+st+dest,0,0,107),  &
 ! 35 - Same as MeOOH in CRI
 ratj_t1(35,'MeCO3H    ','PHOTON    ','MeOO      ','OH        ','          ',   &
      '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',cs,0,0,107),          &
 ! 36
 ratj_t1(36,'BrCl      ','PHOTON    ','Br        ','Cl        ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbrcl     ',s+st+cs,0,0,107) ,    &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbrcl     ',s+st+cs+dest,0,0,107),&
 ! 37
 ratj_t1(37,'BrO       ','PHOTON    ','Br        ','O(3P)     ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbro      ',s+st+cs,0,0,107) ,    &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbro      ',s+st+cs+dest,0,0,107),&
 ! 38
 ratj_t1(38,'BrONO2    ','PHOTON    ','Br        ','NO3       ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbrna     ',s+st+cs,0,0,107) ,    &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbrna     ',s+st+cs+dest,0,0,107),&
 ! 39
 ratj_t1(39,'BrONO2    ','PHOTON    ','BrO       ','NO2       ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbrnb     ',s+st+cs,0,0,107) ,    &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbrnb     ',s+st+cs+dest,0,0,107),&
 ! 40
 ratj_t1(40,'O2        ','PHOTON    ','O(3P)     ','O(1D)     ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jo2b      ',s+st+cs,0,0,107) ,    &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jo2b      ',s+st+cs+dest,0,0,107),&
 ! 41
 ratj_t1(41,'OClO      ','PHOTON    ','O(3P)     ','ClO       ','          ',   &
      '          ', 0.0,0.0,0.0,0.0, 100.000,'joclo     ',s+st+cs,0,0,107) ,    &
