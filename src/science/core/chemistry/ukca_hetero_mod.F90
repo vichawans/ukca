@@ -1039,8 +1039,8 @@ REAL, INTENT(OUT) :: gam3arr(kchmlev, 8)   ! uptake coefficients
 ! blend (cases 2/3); and organic/sulphate mass ratio (>=0) for the
 ! homogeneous weight-percent dilution (case 1). Pre-scaled by the
 ! driver; both optional.
-REAL, INTENT(IN), OPTIONAL :: focr(kchmlev)
-REAL, INTENT(IN), OPTIONAL :: roc(kchmlev)
+REAL, INTENT(IN) :: focr(kchmlev)
+REAL, INTENT(IN) :: roc(kchmlev)
 
 REAL, PARAMETER :: r_vol=0.082             ! gas constant/vol (atm K-1 M-1)
 
@@ -1207,8 +1207,8 @@ DO jl=kstart, kend
   !*********************************************************************
   focr_b = 0.0
   roc_b = 0.0
-  IF (PRESENT(focr)) focr_b = MIN(MAX(focr(jl), 0.0), 1.0)
-  IF (PRESENT(roc))  roc_b = MAX(roc(jl), 0.0)
+  focr_b = MIN(MAX(focr(jl), 0.0), 1.0)
+  roc_b = MAX(roc(jl), 0.0)
 
   !*********************************************************************
   ! VS: CASE 2 ONLY (Solomon et al. 2023 Dilution). Organic mass dilutes
