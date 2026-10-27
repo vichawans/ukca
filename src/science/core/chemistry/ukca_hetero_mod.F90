@@ -503,7 +503,8 @@ IF (ukca_config%i_ukca_hetconfig == 0) THEN
   ! =====================================================================
 
 ELSE ! New config
-
+  ukca_config%i_ukca_hetconfig = 3
+  PRINT *, 'ukca_config%i_ukca_hetconfig =', ukca_config%i_ukca_hetconfig 
   ! Calculate non-constant gammas
   IF ( ukca_config%i_ukca_hetconfig == 2 ) THEN
     CALL ukca_br_gamma(1,n_points,n_points,zt(1:n_points),zhbr(1:n_points),    &
@@ -523,6 +524,7 @@ ELSE ! New config
   ! for i_ukca_hetconfig == 3 (Solomon coeff) or == 4 (Solomon coeff + Br)
   ELSE IF (ukca_config%i_ukca_hetconfig == 3 .OR.
           ukca_config%i_ukca_hetconfig == 4) THEN
+    PRINT *, 'SOLOMON CALLING'
     CALL ukca_solomon_liquid_aerosol(1,n_points,n_points,                      &
                                  zt(1:n_points),zh2o(1:n_points),              &
                                  zhcl(1:n_points),zclono2(1:n_points),         &
@@ -1099,7 +1101,7 @@ RETURN
 END SUBROUTINE ukca_shi_liquid_aerosol
 
 !-------------------------------------------------------------------------
-
+! VS added this section
 !===========================================================================
 SUBROUTINE ukca_solomon_liquid_aerosol(kstart,kend,kchmlev,t,th2o,             &
                                    thcl,tcnit,gam3arr)
@@ -1126,6 +1128,10 @@ SUBROUTINE ukca_solomon_liquid_aerosol(kstart,kend,kchmlev,t,th2o,             &
 
 USE ukca_config_constants_mod, ONLY: boltzmann
 USE asad_mod,                  ONLY: peps
+USE ukca_mode_setup            ONLY: nmodes, nmodes_sol                        &
+                                     cp_su, cp_bc, cp_oc, cp_so,
+                                     mm
+                                     
 IMPLICIT NONE
 
 INTEGER, INTENT(IN) :: kchmlev             ! no. of chem. levels
