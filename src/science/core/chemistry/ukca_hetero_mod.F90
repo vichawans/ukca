@@ -513,7 +513,7 @@ ELSE ! New config
 
   ! Calculate uptake coefficients on SA using formulation of Shi et al. 2001
   ! for i_ukca_hetconfig == 1 (Shi coeff) or == 2 (Shi coeff + Br)
-  IF (ukca_config%i_ukca_hetconfig == 1 .OR.                                 & 
+  IF (ukca_config%i_ukca_hetconfig == 1 .OR.                                   & 
       ukca_config%i_ukca_hetconfig == 2) THEN
     CALL ukca_shi_liquid_aerosol(1,n_points,n_points,                          &
                                  zt(1:n_points),zh2o(1:n_points),              &
@@ -522,7 +522,7 @@ ELSE ! New config
 
   ! Calculate uptake coefficient on SA using formula of Solomon et al. 2023
   ! for i_ukca_hetconfig == 3 (Solomon coeff) or == 4 (Solomon coeff + Br)
-  ELSE IF (ukca_config%i_ukca_hetconfig == 3 .OR.
+  ELSE IF (ukca_config%i_ukca_hetconfig == 3 .OR.                              &
           ukca_config%i_ukca_hetconfig == 4) THEN
     PRINT *, 'SOLOMON CALLING'
     CALL ukca_solomon_liquid_aerosol(1,n_points,n_points,                      &
