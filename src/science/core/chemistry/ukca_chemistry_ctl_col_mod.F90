@@ -103,8 +103,6 @@ USE errormessagelength_mod, ONLY: errormessagelength
 
 USE asad_cdrive_mod, ONLY: asad_cdrive
 
-
-
 !!!! Note: LFRIC-specific pre-processor directives used in this module are
 !!!! inappropriate in UKCA and should be removed but must be retained while
 !!!! LFRic uses the UM version of ukca_um_legacy_mod which does not contain
@@ -232,7 +230,6 @@ REAL :: y_full(model_levels,jpspec)
 LOGICAL :: l_autotune_local
 LOGICAL :: stratflag(model_levels)
 LOGICAL :: have_nat1d(model_levels)
-
 
 INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
 INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
@@ -489,7 +486,7 @@ DO i=1,rows
 
         ! Initialise za for current chunk, following reallocation
         za(:)=0.0
-        za(1:chunk_size) = so4_sa(j,i,kcs:kce) 
+        za(1:chunk_size) = so4_sa(j,i,kcs:kce)
 
         ! Initialise sph2o for current chunk
         sph2o(:) = 0.0

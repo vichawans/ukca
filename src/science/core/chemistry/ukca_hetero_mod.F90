@@ -95,8 +95,6 @@ USE ukca_constants,  ONLY: pi, m_clono2, m_hocl, m_brono2, m_hobr, m_n2o5,     &
                            m_h2o, m_hno3
 USE ukca_config_specification_mod, ONLY: ukca_config
 
-!--VS seg_pvol_save for pvol
-
 IMPLICIT NONE
 
 ! Subroutine interface
@@ -201,10 +199,6 @@ REAL :: mm_arr(13) ! relevent molar mass for each reaction
 
 REAL :: amu        ! atomic mass unit (kg)
 
-!--VS Add temp local variables
-INTEGER :: i
-LOGICAL :: l_ukca_strat_so4_sa_unmix
-
 INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
 INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
 REAL(KIND=jprb)               :: zhook_handle
@@ -230,9 +224,6 @@ IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 !! coefficient requires calculation are indentified by values greater than one
 !! in the following arrays. The value refers to the index in the array
 !! gam_calc returned by the routine ukca_br_gamma
-
-!--VS Add sulfate aerosol separation if use GLOMAP SAD + l_ukca_sa_clim=False + l_ukca_strat_sa_unmix
-l_ukca_strat_so4_sa_unmix = .false.
 
 !! uptake coefficient on PSC type 1 (NAT)
 gam1 = [ 0.2,     & ! ClONO2 + HCl     (JPL 15-10)

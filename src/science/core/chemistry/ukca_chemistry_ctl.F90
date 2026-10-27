@@ -413,7 +413,6 @@ DO k=1,model_levels
     END IF
   END IF
 
-
   CALL asad_cdrive(cdot,                                                       &
                    zftr,                                                       &
                    pres(kcs:kce),                                              &
