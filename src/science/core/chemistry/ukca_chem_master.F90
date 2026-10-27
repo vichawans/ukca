@@ -111,7 +111,7 @@ INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
 INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
-INTEGER, PARAMETER :: n_ratt_master = 116 ! number of termolecular reactions
+INTEGER, PARAMETER :: n_ratt_master = 118 ! number of termolecular reactions !DEST +2
 
 ! Start and end ranges for each section of arrays. Makes adding extra reactions
 ! to multi-table arrays easier
@@ -2044,7 +2044,13 @@ ratt_t1(50,'RU10AO2   ','m         ','OH        ','m         ',     0.0,       &
 !  T051
 ! updates for 121 - include for st - see also T042, replaces B201
 ratt_t1(51,'DMS       ','OH        ','SO2       ','MeOO      ',     0.0,       &
-  5.70e-39,  0.00, -5270, 4.50e-29,  0.00, -5610, 1.00, 2.00,st+dest,a,0,121)  &
+  5.70e-39,  0.00, -5270, 4.50e-29,  0.00, -5610, 1.00, 2.00,st+dest,a,0,121), &
+!
+!!! Additional termolecular reations for DEST
+ratt_t1(52,'Cl        ','C2Cl4     ','Cl        ','Cl        ',     0.6,       &
+  1.40e-28, -8.50, 0.00,  4.00e-11, -1.20, 0.0, 1.0, 4.0, dest,0,0,107),       &
+ratt_t1(53,'Cl        ','NO2       ','ClNO2     ','          ',     0.6,       &
+  1.80e-31, -2.00, 0.00,  1.00e-10, -1.00, 0.0, 0.0, 0.0, dest,0,0,107)        &
 ]
 
 !----------------------------------------------------------------------

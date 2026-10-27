@@ -427,8 +427,8 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
             'C2H6      ','C3H8      ','Me2CO     ','MeCHO     ',               &
             'C5H8      ','MeOH      ','NO_aircrft']
       n_chem_tracers = 96         ! No chem tracers !DEST: 71+25
-      nr_therm       = 271        ! thermal reactions LS: 220 - 9 (defined differently for DEST)
-                                  ! + 59 (DEST)
+      nr_therm       = 273        ! thermal reactions LS: 220 - 9 (defined differently for DEST)
+                                  ! + 59 (bimol DEST) + 2 (termol DEST)
       nr_phot        = 55         ! photolytic (ATA)
 
       IF (ukca_config%l_ukca_dest_iodine) THEN
@@ -460,11 +460,11 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       END IF
       n_chem_tracers = 96         ! No chem tracers !DEST: 71+25
       IF (ukca_config%l_ukca_trophet) THEN
-        nr_therm     = 292        ! thermal reactions, LS 241-9 (defined differently for DEST)
-                                  ! + 59 (DEST)
+        nr_therm     = 294        ! thermal reactions, LS 241-9 (defined differently for DEST)
+                                  ! + 59 (bimol DEST) + 2 (termol DEST)
       ELSE
-        nr_therm     = 290        ! thermal reactions, LS 239-9 (defined differently for DEST)
-                                  ! + 59 (DEST)
+        nr_therm     = 292        ! thermal reactions, LS 239-9 (defined differently for DEST)
+                                  ! + 59 (bimol DEST) + 2 (termol DEST)
       END IF
       nr_phot        = 59         ! photolytic (ATA)
 
