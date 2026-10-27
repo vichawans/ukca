@@ -261,7 +261,7 @@ USE ukca_time_mod,   ONLY: i_year, i_month, i_day, i_hour, i_minute,           &
 
 !--VS Add sarea module
 USE ukca_sarea_field_mod, ONLY: sarea_su
-USE ukca_calc_aesro_mass_totals_mod, ONLY: ukca_calc_aero_mass_totals
+USE ukca_calc_aero_mass_mod, ONLY: ukca_calc_aero_mass
 
 IMPLICIT NONE
 

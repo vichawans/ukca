@@ -8778,6 +8778,56 @@ asad_flux_defn('RXN',50994,'H',.FALSE.,0,4,                                    &
 ['HONO2     ','HONO2     ','          ','          '])                         &
 ]
 
+!--VS Add 
+! Heterogeneous reactions in the stratospehere and PSC1 and PSC2
+TYPE(asad_flux_defn), PARAMETER :: strat_het_strattrop(15) = [                 &
+asad_flux_defn('RXN',50451,'H',.FALSE.,0,4,                                    & !RATH1
+['ClONO2    ','H2O       '],                                                   &
+['HOCl      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50452,'H',.FALSE.,0,4,                                    & !RATH2
+['ClONO2    ','HCl       '],                                                   &
+['Cl        ','Cl        ','HONO2     ','          ']),                        &
+asad_flux_defn('RXN',50453,'H',.FALSE.,0,4,                                    & !RATH3
+['HOCl      ','HCl       '],                                                   &
+['Cl        ','Cl        ','H2O       ','          ']),                        &
+asad_flux_defn('RXN',50454,'H',.FALSE.,0,4,                                    & !RATH4
+['N2O5      ','H2O       '],                                                   &
+['HONO2     ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50455,'H',.FALSE.,0,4,                                    & !RATH5
+['N2O5      ','HCl       '],                                                   &
+['Cl        ','NO2       ','HONO2     ','          ']),                        &
+asad_flux_defn('RXN',50456,'H',.FALSE.,0,4,                                    & !RATH6
+['ClONO2    ','HBr       '],                                                   &
+['BrCl      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50457,'H',.FALSE.,0,4,                                    & !RATH7
+['HOCl      ','HBr       '],                                                   &
+['BrCl      ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50458,'H',.FALSE.,0,4,                                    & !RATH8
+['HOBr      ','HCl       '],                                                   &
+['BrCl      ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50459,'H',.FALSE.,0,4,                                    & !RATH9
+['BrONO2    ','HCl       '],                                                   &
+['BrCl      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50460,'H',.FALSE.,0,4,                                    & !RATH10
+['BrONO2    ','H2O       '],                                                   &
+['HOBr      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50461,'H',.FALSE.,0,4,                                    & !RATH11
+['HOBr      ','HBr       '],                                                   &
+['Br        ','Br        ','H2O       ','          ']),                        &
+asad_flux_defn('RXN',50462,'H',.FALSE.,0,4,                                    & !RATH12
+['BrONO2    ','HBr       '],                                                   &
+['Br        ','Br        ','HONO2     ','          ']),                        &
+asad_flux_defn('RXN',50463,'H',.FALSE.,0,5,                                    & !RATH13
+['N2O5      ','HBr       '],                                                   &
+['Br        ','NO2       ','HONO2     ','          ']),                        &
+asad_flux_defn('PSC',50464,'1',.FALSE.,0,1,                                    & !PSC1
+['XXX       ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('PSC',50465,'2',.FALSE.,0,1,                                    & !PSC2
+['XXX       ','          '],                                                   &
+['          ','          ','          ','          '])                         &
+]
+
 
 PUBLIC :: asad_load_default_fluxes
 
@@ -8865,6 +8915,7 @@ TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_budget_loss(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_drydep(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_ste(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_het_chem_strattrop(:) !Yao
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_strat_het_strattrop(:) !--VS
 
 INTEGER :: p1                   ! start position in asad_chemical_fluxes array
 INTEGER :: p2                   ! end position in asad_chemical_fluxes array
@@ -8985,9 +9036,14 @@ IF (ukca_config%l_ukca_strattrop) THEN
       aa_aerosol_chem = asad_aerosol_chem_strattrop
     END IF
   END IF
+
   ! aa_het_chem_strattrop
   ALLOCATE(aa_het_chem_strattrop(SIZE(het_chem_strattrop)))
   aa_het_chem_strattrop = het_chem_strattrop
+
+! aa_strat_het_strattrop
+  ALLOCATE(aa_strat_het_strattrop(SIZE(strat_het_strattrop)))
+  aa_strat_het_strattrop = strat_het_strattrop
 
   ! aa_rco2no2_pan_prod
   ALLOCATE(aa_rco2no2_pan_prod(SIZE(asad_rco2no2_pan_prod)))
@@ -9324,6 +9380,8 @@ IF (ALLOCATED(aa_ch4_ste))                                                     &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_ch4_ste)
 IF (ALLOCATED(aa_het_chem_strattrop))                                          &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_het_chem_strattrop)
+IF (ALLOCATED(aa_strat_het_strattrop))                                          &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_strat_het_strattrop)
 
 ALLOCATE(asad_chemical_fluxes(n_chemical_fluxes))
 
@@ -9472,6 +9530,11 @@ IF (ALLOCATED(aa_het_chem_strattrop)) THEN
   asad_chemical_fluxes(p1:p2) = aa_het_chem_strattrop(:)
   p1 = p2 + 1
 END IF
+IF (ALLOCATED(aa_strat_het_strattrop)) THEN
+  p2 = p1 + SIZE(aa_strat_het_strattrop) - 1
+  asad_chemical_fluxes(p1:p2) = aa_strat_het_strattrop(:)
+  p1 = p2 + 1
+END IF
 
 IF (p2 /= n_chemical_fluxes) THEN
   cmessage = ' n_chemical_fluxes and p2 are different'
@@ -9525,6 +9588,7 @@ IF (printstatus > PrStatus_Normal) THEN
 END IF
 
 ! Deallocate the generic arrays
+IF (ALLOCATED(aa_strat_het_strattrop))   DEALLOCATE(aa_strat_het_strattrop)
 IF (ALLOCATED(aa_het_chem_strattrop))    DEALLOCATE(aa_het_chem_strattrop)
 IF (ALLOCATED(aa_ch4_ste))               DEALLOCATE(aa_ch4_ste)
 IF (ALLOCATED(aa_ch4_drydep))            DEALLOCATE(aa_ch4_drydep)

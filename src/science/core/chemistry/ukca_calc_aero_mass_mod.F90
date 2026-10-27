@@ -21,25 +21,24 @@
 !
 ! ######################################################################
 
-MODULE ukca_calc_aero_mass_totals_mod
-
+MODULE ukca_calc_aero_mass_mod
 IMPLICIT NONE
 PRIVATE
 
-CHARACTER(LEN=*), PARAMETER :: ModuleName='UKCA_CALC_AERO_MASS_TOTALS_MOD'
+CHARACTER(LEN=*), PARAMETER :: ModuleName='UKCA_CALC_AERO_MASS_MOD'
 
-PUBLIC :: ukca_calc_aero_mass_totals
+PUBLIC :: ukca_calc_aero_mass
 
 CONTAINS
 
-SUBROUTINE ukca_calc_aero_mass_totals(tracer, n_chemistry_tracers,            &
-                                      glomap_variables_local,                 &
+SUBROUTINE ukca_calc_aero_mass(tracer, n_chemistry_tracers,            &
                                       row_length, rows, model_levels,         &
                                       so4_total_mmr, om1_total_mmr,            &
                                       om2_total_mmr, aero_total_mmr)
 
 USE ukca_mode_setup,               ONLY: nmodes, cp_su, cp_oc, cp_so,         &
                                         glomap_variables_type
+USE ukca_config_specification_mod,           ONLY: glomap_variables
 USE ukca_mode_tracer_maps_mod,     ONLY: mmr_index
 USE parkind1,                      ONLY: jprb, jpim
 USE yomhook,                       ONLY: lhook, dr_hook
@@ -81,9 +80,9 @@ CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_CALC_AERO_MASS_TOTALS'
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 
-component => glomap_variables_local%component
-mode      => glomap_variables_local%mode
-ncp       => glomap_variables_local%ncp
+component => glomap_variables%component
+mode      => glomap_variables%mode
+ncp       => glomap_variables%ncp
 
 so4_total_mmr(:,:,:) = 0.0
 om1_total_mmr(:,:,:) = 0.0
@@ -144,6 +143,6 @@ END DO
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 
-END SUBROUTINE ukca_calc_aero_mass_totals
+END SUBROUTINE ukca_calc_aero_mass
 
-END MODULE ukca_calc_aero_mass_totals_mod
+END MODULE ukca_calc_aero_mass_mod
