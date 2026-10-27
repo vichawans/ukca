@@ -1018,15 +1018,15 @@ IF (ukca_config%i_ukca_hetorg_case >0) THEN
   END IF
   IF (ukca_config%l_ukca_strat_so4_sa_unmix) THEN
     WRITE(cmessage,'(A)')                                                      &
-       ' i_ukca_hetorg_case can only be active (>0) when'
-       ' l_ukca_strat_so4_sa_unmix is False'
+       ' i_ukca_hetorg_case can only be active (>0) when'                      &
+       // newline // ' l_ukca_strat_so4_sa_unmix is False'
     errcode = 65
     CALL ereport(routinename,errcode,cmessage)
   END IF
   IF (ukca_config%i_ukca_hetconfig/=1 .OR. ukca_config%i_ukca_hetconfig/=2) THEN
     WRITE(cmessage,'(A)')                                                      &
-       ' i_ukca_hetorg_case can only be active (>0) when'
-       ' i_ukca_hetconfig is 1 or 2 (Shi scheme activated)'
+       ' i_ukca_hetorg_case can only be active (>0) when'                      &
+       // newline // ' i_ukca_hetconfig is 1 or 2 (Shi scheme activated)'
     errcode = 66
     CALL ereport(routinename,errcode,cmessage)
   END IF

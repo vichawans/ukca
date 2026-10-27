@@ -238,7 +238,7 @@ TYPE :: ukca_config_spec_type
   LOGICAL :: l_ukca_strat_so4_sa_unmix ! True to use surface area density
                                        ! from sulfate aerosol ONLY from GLOMAP 
                                        ! for heterogeneous PSC chem.
-  LOGICAL :: i_ukca_hetorg_case        ! 0 = default (organic carbon aerosols
+  INTEGER :: i_ukca_hetorg_case        ! 0 = default (organic carbon aerosols
                                        ! do not change het. rxn. behaviour);
                                        ! 1 = Solomon solubility case; 
                                        ! 2 = Solomon dilution case;
@@ -1292,7 +1292,7 @@ INTEGER, OPTIONAL, INTENT(OUT) :: nlev_above_trop_o3_env
 INTEGER, OPTIONAL, INTENT(OUT) :: nlev_ch4_stratloss
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_topboundary
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_hetconfig
-LOGICAL, OPTIONAL, INTENT(OUT) :: i_ukca_hetorg_case
+INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_hetorg_case
 INTEGER, OPTIONAL, INTENT(OUT) :: i_inferno_emi
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_dms_flux
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_light_param

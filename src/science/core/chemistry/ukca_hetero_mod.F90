@@ -1023,6 +1023,8 @@ SUBROUTINE ukca_shi_liquid_aerosol(kstart,kend,kchmlev,t,th2o,                 &
 
 USE ukca_config_constants_mod, ONLY: boltzmann
 USE asad_mod,                  ONLY: peps
+USE ukca_config_specification_mod, ONLY: ukca_config
+
 IMPLICIT NONE
 
 INTEGER, INTENT(IN) :: kchmlev             ! no. of chem. levels
