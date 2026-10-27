@@ -1011,22 +1011,26 @@ rath_t1(18,'HO2       ','          ','H2O2      ','          ','          ',   &
 ratj_defs_master(1:100)=[                                                      &
 ! 1
 ratj_t1(1,'EtOOH     ','PHOTON    ','MeCHO     ','HO2       ','OH        ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 2
 ratj_t1(2,'H2O2      ','PHOTON    ','OH        ','OH        ','          ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jh2o2     ',ti+s+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jh2o2     ',ti+s+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 3
 ! This should produce H+ CHO -> H + HO2 + CO in ST scheme.
 ratj_t1(3,'HCHO      ','PHOTON    ','HO2       ','HO2       ','CO        ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhchoa    ',ti+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhchoa    ',ti+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! CS2
 ratj_t1(3,'HCHO      ','PHOTON    ','HO2       ','HO2       ','CO        ',    &
      '          ', 0.0,0.0,0.0,0.0, 100.000,'jforma    ',cs,0,0,119),          &
 ratj_t1(3,'HCHO      ','PHOTON    ','H         ','CO        ','HO2       ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhchoa    ',s,0,0,107) ,          &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhchoa    ',s,0,0,107),           &
 ! 4
 ratj_t1(4,'HCHO      ','PHOTON    ','H2        ','CO        ','          ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jhchob    ',ti+s+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jhchob    ',ti+s+t+st+r+cs_dest,    &
+                                                              0,0,107),        &
 ! CS2
 ratj_t1(4,'HCHO      ','PHOTON    ','H2        ','CO        ','          ',    &
      '          ', 0.0,0.0,0.0,0.0, 100.0,'jformb    ',cs,0,0,119),            &
@@ -1034,69 +1038,84 @@ ratj_t1(4,'HCHO      ','PHOTON    ','H2        ','CO        ','          ',    &
 ! In S and ST, branching is assumed following JPL 2011. Update T, TI, and R?
 ! Added photolysis of HO2NO2 for CRI-Strat.
 ratj_t1(5,'HO2NO2    ','PHOTON    ','HO2       ','NO2       ','          ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpna67    ',st+cs,0,0,107) ,      &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpna67    ',st+cs+dest,0,0,107),  &
 ratj_t1(5,'HO2NO2    ','PHOTON    ','NO2       ','HO2       ','          ',    &
      '          ', 0.0,0.0,0.0,0.0, 100.000,'jpna67    ',s,0,0,107) ,          &
 ratj_t1(5,'HO2NO2    ','PHOTON    ','HO2       ','NO2       ','          ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpna      ',ti+t+r,0,0,107) ,     &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jpna      ',ti+t+r,0,0,107),      &
 ! 6
 ratj_t1(6,'HONO2     ','PHOTON    ','OH        ','NO2       ','          ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhono2    ',ti+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhono2    ',ti+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ratj_t1(6,'HONO2     ','PHOTON    ','NO2       ','OH        ','          ',    &
      '          ', 0.0,0.0,0.0,0.0, 100.000,'jhono2    ',s,0,0,107) ,          &
 ! 7
 ratj_t1(7,'MeCHO     ','PHOTON    ','MeOO      ','HO2       ','CO        ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jaceta    ',ti+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jaceta    ',ti+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 8
 ! Missing in R (And CRI, Added for CRI-Strat).
 ratj_t1(8,'MeCHO     ','PHOTON    ','CH4       ','CO        ','          ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jacetb    ',ti+t+st+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jacetb    ',ti+t+st+cs+dest,      &
+                                                              0,0,107),        &
 ! 9
 ! THIS REACTION IS MISSING IN THE TROPOSPHERIC CHEMISTRY SCHEME.
 ratj_t1(9,'MeOOH     ','PHOTON    ','HO2       ','HCHO      ','OH        ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti+st+r+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',ti+st+r+cs+dest,
+                                                              0,0,107) , &
 ratj_t1(9,'MeOOH     ','PHOTON    ','HCHO      ','HO2       ','OH        ',    &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',s,0,0,107) ,          &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmhp      ',s,0,0,107),           &
 ! 10
 ratj_t1(10,'N2O5      ','PHOTON    ','NO3       ','NO2       ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jn2o5     ',ti+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jn2o5     ',ti+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ratj_t1(10,'N2O5      ','PHOTON    ','NO2       ','NO3       ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jn2o5     ',s,0,0,107) ,          &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jn2o5     ',s,0,0,107),           &
 ! 11
 ratj_t1(11,'NO2       ','PHOTON    ','NO        ','O(3P)     ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jno2      ',ti+s+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jno2      ',ti+s+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 12
 ratj_t1(12,'NO3       ','PHOTON    ','NO        ','O2        ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jno3a     ',ti+s+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jno3a     ',ti+s+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 13
 ratj_t1(13,'NO3       ','PHOTON    ','NO2       ','O(3P)     ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jno3b     ',ti+s+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jno3b     ',ti+s+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 14
 ! Missing in R, Added to CRI-Strat
 ratj_t1(14,'O2        ','PHOTON    ','O(3P)     ','O(3P)     ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jo2       ',ti+s+t+st+cs,0,0,107),  &
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jo2       ',ti+s+t+st+cs+dest,      &
+                                                              0,0,107),        &
 ! 15
 ratj_t1(15,'O3        ','PHOTON    ','O2        ','O(1D)     ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jo3a      ',ti+s+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jo3a      ',ti+s+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 16
 ratj_t1(16,'O3        ','PHOTON    ','O2        ','O(3P)     ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jo3b      ',ti+s+t+st+r+cs,0,0,107),&
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jo3b      ',ti+s+t+st+r+cs+dest,    &
+                                                              0,0,107),        &
 ! 17
 ratj_t1(17,'PAN       ','PHOTON    ','MeCO3     ','NO2       ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.0,'jpan      ',ti+t+st+r+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.0,'jpan      ',ti+t+st+r+cs+dest,      &
+                                                              0,0,107),        &
 ! 18
 ! HONO not modelled in R
 ratj_t1(18,'HONO      ','PHOTON    ','OH        ','NO        ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhono     ',ti+t+st+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jhono     ',ti+t+st+cs+dest,      &
+                                                              0,0,107),        &
 ! 19
 ratj_t1(19,'EtCHO     ','PHOTON    ','EtOO      ','HO2       ','CO        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jetcho    ',ti+t+st+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jetcho    ',ti+t+st+cs+dest,      &
+                                                              0,0,107),        &
 ! CS2
 ratj_t1(19,'EtCHO     ','PHOTON    ','EtOO      ','HO2       ','CO        ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jprpal    ',cs,0,0,119) ,         &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jprpal    ',cs,0,0,119),          &
 ! 20
 ratj_t1(20,'Me2CO     ','PHOTON    ','MeCO3     ','MeOO      ','          ',   &
-     '          ', 0.0,0.0,0.0,0.0, 100.000,'jaceto    ',ti+st+r+cs,0,0,107) , &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jaceto    ',ti+st+r+cs+dest,      &
+                                                              0,0,107),        &
 ! The naming of 'jacetone' is probably inconsistent with FAST-JX. Error?
 ratj_t1(20,'Me2CO     ','PHOTON    ','MeCO3     ','MeOO      ','          ',   &
      '          ', 0.0,0.0,0.0,0.0, 100.000,'jacetone  ',t,0,0,107) ,          &
