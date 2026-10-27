@@ -109,7 +109,7 @@ INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DE
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
-INTEGER, PARAMETER :: n_bimol_master = 1269 ! number of bimolecular reactions !DEST +56
+INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 116 ! number of termolecular reactions
 
@@ -6787,7 +6787,7 @@ ratb_t1(770,'CHBr2Cl   ','OH        ','Br        ','Cl        ','Br        ',  &
 'H2O       ',9.00e-13,  0.00,  420.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! ---- CHBrCl2 ----
 ratb_t1(771,'CHBrCl2   ','OH        ','Br        ','Cl        ','Cl        ',  &
-'H2O       ',9.40e-13,  0.00,  510.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),   &
+'H2O       ',9.40e-13,  0.00,  510.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! ------------------------------------------------------------------------------
 !!!! extra reactions to accomodate cfc114, cfc115, hcfc141b, hcfc142b
 !!! -> JPL 2015
@@ -6902,8 +6902,20 @@ ratb_t1(801,'O(1D)     ','HBr       ','H         ','BrO       ','          ',  &
 '          ',3.00e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! JPL2015, omitts quenching channel so that k334=0.75*k(JPL2015)
 ratb_t1(802,'Cl2       ','O(1D)     ','Cl        ','ClO       ','          ',  &
-'          ',2.03e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)  &
-] 
+'          ',2.03e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+!
+! Extra Cl + VOCs reactions; DEST
+!
+! JPL2015
+ratb_t1(803,'Cl        ','C2H6      ','HCl       ','EtOO      ','          ',  &
+'          ',7.20e-11,  0.00,   70.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015
+ratb_t1(804,'Cl        ','C3H8      ','HCl       ','iPrOO     ','          ',  &
+'          ',6.54e-11,  0.00,  -60.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015
+ratb_t1(805,'Cl        ','C3H8      ','HCl       ','nPrOO     ','          ',  &
+'          ',8.12e-11,  0.00,   90.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
+]
      
 !----------------------------------------------------------------------
 ! NOTES: CheST Bimolecular Reactions
