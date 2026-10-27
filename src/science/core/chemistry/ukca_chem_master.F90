@@ -322,8 +322,9 @@ chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  40
 chch_t1(40,'EtOO      ',1,'SS        ','          ',0,0,t+r,0,0,107),          &
 !  40 ; Select 'OO' type EtOO in ST mechanism if RN or RP == T
-chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),       &
-chch_t1(40,'EtOO      ',1,'OO        ','          ',0,0,st+cs+dest,rn+rp,0,107),    &
+chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
+chch_t1(40,'EtOO      ',1,'OO        ','          ',0,0,st+cs+dest,
+                                                                rn+rp,0,107),   &
 !  41 DD: 18,WD: 18,
 chch_t1(41,'EtOOH     ',1,'TR        ','          ',1,1,ti+t+st+r+cs,          &
                                                               0,0,107),        &
