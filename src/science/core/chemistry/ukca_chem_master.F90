@@ -106,7 +106,7 @@ INTEGER, PARAMETER :: di = 2048   ! DEST + iodine
 
 ! Define size of master chemistry
 INTEGER, PARAMETER :: n_chch_master = 406 ! number of known species !DEST +31 DEST_I +18
-INTEGER, PARAMETER :: n_het_master  =  21 ! number of heterogeneous reactions
+INTEGER, PARAMETER :: n_het_master  =  23 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 165 ! number of dry deposition reactions !DEST +3
 INTEGER, PARAMETER :: n_wet_master  = 168 ! number of wet deposition reactions !DEST +8
 INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
@@ -1111,7 +1111,7 @@ rath_t1(18,'HO2       ','          ','H2O2      ','          ','          ',   &
 '          ', 0.500, 0.000, 0.000, 0.000, ti+st+dest,th,0,107)  ]
 
 !
-! alternative products of Reactions 2,3,5 for DEST
+! alternative products of Reactions 2,3,5,11,12 for DEST
 !
 rath_t1(19,'ClONO2    ','HCl       ','Cl2       ','HO2NO2    ','          ',   &
 '          ', 0.000, 0.000, 0.000, 0.000, dest,hp,0,107),                      &
@@ -1119,7 +1119,10 @@ rath_t1(20,'HOCl      ','HCl       ','Cl2       ','H2O       ','           ',  &
 '          ', 0.000, 0.000, 0.000, 0.000, dest,hp,0,107),                      &
 rath_t1(21,'N2O5      ','HCl       ','ClNO2     ','HONO2     ','           ',  &
 '          ', 0.000, 0.000, 0.000, 0.000, dest,hp,0,107),                      &
-
+rath_t1(22,'HOBr      ','HBr       ','Br2       ','H2O       ','          ',   &
+'          ', 0.000, 0.000, 0.000, 0.000, dest,eh,0,111),                      &
+rath_t1(23,'BrONO2    ','HBr       ','Br2       ','HONO2     ','          ',   &
+'          ', 0.000, 0.000, 0.000, 0.000, dest,eh,0,111),                      &
 ! ----------------------------------------------------------------------
 
 
