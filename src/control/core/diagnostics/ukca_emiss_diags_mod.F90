@@ -541,6 +541,42 @@ IF (sf(item, section)) THEN
                  emdiags%em_chbrcl2 (:,:), row_length, rows)
 END IF
 
+!---------------------------------------------------------------------
+! Sec 50, item 320: CH2Cl2 surface emissions
+item = get_emdiag_stash ('CH2Cl2    ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_ch2cl2 (:,:), row_length, rows)
+END IF
+
+!---------------------------------------------------------------------
+! Sec 50, item 321: CHCl3 surface emissions
+item = get_emdiag_stash ('CHCl3     ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_chcl3 (:,:), row_length, rows)
+END IF
+
+!---------------------------------------------------------------------
+! Sec 50, item 322: C2Cl4 surface emissions
+item = get_emdiag_stash ('C2Cl4     ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_c2cl4 (:,:), row_length, rows)
+END IF
+
+!---------------------------------------------------------------------
+! Sec 50, item 323: C2H4Cl2 surface emissions
+item = get_emdiag_stash ('C2H4Cl2   ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_c2h4cl2 (:,:), row_length, rows)
+END IF
+
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 
 RETURN

@@ -121,13 +121,18 @@ IF (l_first) THEN
   emdiags%l_em_etcho   = .FALSE.
   emdiags%l_em_hoch2cho= .FALSE.
   emdiags%l_em_mek     = .FALSE.
-  ! DEST emission logicals
+  ! DEST emission logicals (Br-VSLS)
   emdiags%l_em_chbr3  = .FALSE.
   emdiags%l_em_ch2br2 = .FALSE.
   emdiags%l_em_ch2brcl= .FALSE.
   emdiags%l_em_chbr2cl= .FALSE.
-  emdiags%l_em_chbrcl2= .FALSE. 
-
+  emdiags%l_em_chbrcl2= .FALSE.
+  ! DEST emission logicals (Cl-VSLS)
+  emdiags%l_em_ch2cl2 = .FALSE.
+  emdiags%l_em_chcl3  = .FALSE.
+  emdiags%l_em_c2cl4  = .FALSE.
+  emdiags%l_em_c2h4cl2 = .FALSE.
+  
   l_first             = .FALSE.
 END IF
 
@@ -597,6 +602,50 @@ CASE ('CHBrCl2   ')
     END IF
   END IF
 
+CASE ('CH2Cl2    ')
+  IF (emdiags%l_em_ch2cl2) THEN
+    emdiags%em_ch2cl2 (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_ch2cl2 (row_length, rows))
+      emdiags%em_ch2cl2 (:,:) = em_diags (:,:,1)
+      emdiags%l_em_ch2cl2     = .TRUE.
+    END IF
+  END IF
+
+CASE ('CHCl3     ')
+  IF (emdiags%l_em_chcl3) THEN
+    emdiags%em_chcl3 (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_chcl3 (row_length, rows))
+      emdiags%em_chcl3 (:,:) = em_diags (:,:,1)
+      emdiags%l_em_chcl3     = .TRUE.
+    END IF
+  END IF
+
+CASE ('C2Cl4     ')
+  IF (emdiags%l_em_c2cl4) THEN
+    emdiags%em_c2cl4 (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_c2cl4 (row_length, rows))
+      emdiags%em_c2cl4 (:,:) = em_diags (:,:,1)
+      emdiags%l_em_c2cl4     = .TRUE.
+    END IF
+  END IF
+ 
+CASE ('C2H4Cl2   ')
+  IF (emdiags%l_em_c2h4cl2) THEN
+    emdiags%em_c2h4cl2 (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_c2h4cl2 (row_length, rows))
+      emdiags%em_c2h4cl2 (:,:) = em_diags (:,:,1)
+      emdiags%l_em_c2h4cl2     = .TRUE.
+    END IF
+  END IF
+ 
 CASE DEFAULT
     ! Report error unless this is an aerosol emission (BC_fossil:, etc)
   IF (.NOT. ANY(aero_ems_species == diag_name))  ierr = 1

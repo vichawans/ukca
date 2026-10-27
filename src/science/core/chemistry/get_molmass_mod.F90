@@ -52,7 +52,8 @@ USE ukca_constants,  ONLY: m_br, m_brcl, m_bro, m_brono2, m_c, m_c2h4,         &
                            m_benzene, m_etoh, m_etcho, m_mek, m_hcooh,         &
                            m_meco2h, m_hoch2cho, m_mp, m_chbr3, m_ch2brcl,     &
                            m_chbr2cl, m_chbrcl2, m_cf2clcf2cl, m_cf2clcf3,     &
-                           m_mecfcl2, m_mecf2cl, m_cf3br
+                           m_mecfcl2, m_mecf2cl, m_cf3br, m_ch2cl2, m_chcl3,   &
+                           m_c2cl4, m_c2h4cl2
 
 USE ereport_mod,     ONLY: ereport
 USE parkind1,        ONLY: jpim,  jprb     ! DrHook
@@ -313,6 +314,18 @@ CASE ('CHBr2Cl   ')
 
 CASE ('CHBrCl2   ')
   get_molmass = m_chbrcl2
+
+CASE ('CH2Cl2    ')
+  get_molmass = m_ch2cl2
+
+CASE ('CHCl3     ')
+  get_molmass = m_chcl3
+
+CASE ('C2Cl4     ')
+  get_molmass = m_c2cl4
+
+CASE ('C2H4Cl2   ')
+  get_molmass = m_c2h4cl2
 
   ! -----------------------------------------
   !   Others (report warning)

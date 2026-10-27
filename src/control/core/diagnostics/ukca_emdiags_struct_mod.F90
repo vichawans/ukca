@@ -65,13 +65,18 @@ TYPE :: emdiags_struct
   LOGICAL :: l_em_etcho
   LOGICAL :: l_em_hoch2cho
   LOGICAL :: l_em_mek
-  ! Logicals for DEST emission species
+  ! Logicals for DEST emission species (Br-VSLS)
   LOGICAL :: l_em_chbr3
   LOGICAL :: l_em_ch2br2
   LOGICAL :: l_em_ch2brcl
   LOGICAL :: l_em_chbr2cl
   LOGICAL :: l_em_chbrcl2
-
+  ! Logicals for DEST emission species (Cl-VSLS)
+  LOGICAL :: l_em_ch2cl2
+  LOGICAL :: l_em_chcl3
+  LOGICAL :: l_em_c2cl4
+  LOGICAL :: l_em_c2h4cl2
+ 
   ! Pointers to hold emission diagnostics
   REAL, POINTER :: em_no     (:,:)
   REAL, POINTER :: em_ch4    (:,:)
@@ -109,12 +114,17 @@ TYPE :: emdiags_struct
   REAL, POINTER :: em_etcho   (:,:)
   REAL, POINTER :: em_hoch2cho(:,:)
   REAL, POINTER :: em_mek     (:,:)
-  ! Pointers for DEST emissions
+  ! Pointers for DEST emissions Br-VSLS
   REAL, POINTER :: em_chbr3  (:,:)
   REAL, POINTER :: em_ch2br2 (:,:)
   REAL, POINTER :: em_ch2brcl(:,:)
   REAL, POINTER :: em_chbr2cl(:,:)
-  REAL, POINTER :: em_chbrcl2(:,:)  
+  REAL, POINTER :: em_chbrcl2(:,:)
+  ! Pointers for DEST emissions Cl-VSLS
+  REAL, POINTER :: em_ch2cl2 (:,:)
+  REAL, POINTER :: em_chcl3  (:,:)
+  REAL, POINTER :: em_c2cl4  (:,:)
+  REAL, POINTER :: em_c2h4cl2(:,:)
 END TYPE emdiags_struct
 
 END MODULE ukca_emdiags_struct_mod
