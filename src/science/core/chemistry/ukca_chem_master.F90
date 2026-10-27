@@ -323,51 +323,53 @@ chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 chch_t1(40,'EtOO      ',1,'SS        ','          ',0,0,t+r,0,0,107),          &
 !  40 ; Select 'OO' type EtOO in ST mechanism if RN or RP == T
 chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
-chch_t1(40,'EtOO      ',1,'OO        ','          ',0,0,st+cs+dest,
-                                                                rn+rp,0,107),   &
+chch_t1(40,'EtOO      ',1,'OO        ','          ',0,0,st+cs+dest,            &
+                                                                rn+rp,0,107),  &
 !  41 DD: 18,WD: 18,
-chch_t1(41,'EtOOH     ',1,'TR        ','          ',1,1,ti+t+st+r+cs,          &
+chch_t1(41,'EtOOH     ',1,'TR        ','          ',1,1,ti+t+st+r+cs+dest,     &
                                                               0,0,107),        &
 !  42 DD: 19,
 ! No dry deposition for MeCHO in R and T schemes
 chch_t1(42,'MeCHO     ',1,'TR        ','          ',0,0,r+t,0,0,107),          &
-chch_t1(42,'MeCHO     ',1,'TR        ','          ',1,0,ti+st+cs,0,0,107),     &
+chch_t1(42,'MeCHO     ',1,'TR        ','          ',1,0,ti+st+cs+dest,0,0,107),&
 !  43
 chch_t1(43,'MeCO3     ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  43
 chch_t1(43,'MeCO3     ',1,'SS        ','          ',0,0,t+r,0,0,107),          &
 !  43 ; Select 'OO' type MeCO3 in ST mechanism if RN or RP == T
-chch_t1(43,'MeCO3     ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
+chch_t1(43,'MeCO3     ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
 !  43                 (70)
-chch_t1(43,'MeCO3     ',1,'OO        ','          ',0,0,st+cs,rn+rp,0,107),    &
+chch_t1(43,'MeCO3     ',1,'OO        ','          ',0,0,st+cs+dest,            &
+                                                                rn+rp,0,107),  &
 !  44 DD: 20,
-chch_t1(44,'PAN       ',1,'TR        ','          ',1,0,ti+t+st+r+cs,          &
+chch_t1(44,'PAN       ',1,'TR        ','          ',1,0,ti+t+st+r+cs+dest,     &
                                                               0,0,107),        &
 !  45
-chch_t1(45,'C3H8      ',1,'TR        ','          ',0,0,ti+t+st+r+cs,          &
+chch_t1(45,'C3H8      ',1,'TR        ','          ',0,0,ti+t+st+r+cs+dest,     &
                                                               0,0,107),        &
 !  46
 chch_t1(46,'n-PrOO    ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  46
 chch_t1(46,'n-PrOO    ',1,'SS        ','          ',0,0,t,0,0,107),            &
 !  46 ; Select 'OO' type n-PrOO in ST mechanism if RN or RP == T
-chch_t1(46,'n-PrOO    ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
-chch_t1(46,'n-PrOO    ',1,'OO        ','          ',0,0,st,rn+rp,0,107),       &
+chch_t1(46,'n-PrOO    ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
+chch_t1(46,'n-PrOO    ',1,'OO        ','          ',0,0,st+dest,rn+rp,0,107),  &
 !  47
 chch_t1(47,'i-PrOO    ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  47
 chch_t1(47,'i-PrOO    ',1,'SS        ','          ',0,0,t+r,0,0,107),          &
 !  47 ; Select 'OO' type i-PrOO in ST mechanism if RN or RP == T
-chch_t1(47,'i-PrOO    ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
+chch_t1(47,'i-PrOO    ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
 !                     (80)
-chch_t1(47,'i-PrOO    ',1,'OO        ','          ',0,0,st+cs,rn+rp,0,107),    &
+chch_t1(47,'i-PrOO    ',1,'OO        ','          ',0,0,st+cs+dest,            &
+                                                                rn+rp,0,107),  &
 !  48 DD: 21,WD: 19,
-chch_t1(48,'n-PrOOH   ',1,'TR        ','          ',1,1,ti+t+st,0,0,107),      &
+chch_t1(48,'n-PrOOH   ',1,'TR        ','          ',1,1,ti+t+st+dest,0,0,107), &
 !  49 DD: 22,WD: 20,
-chch_t1(49,'i-PrOOH   ',1,'TR        ','          ',1,1,ti+t+st+r+cs,          &
+chch_t1(49,'i-PrOOH   ',1,'TR        ','          ',1,1,ti+t+st+r+cs+dest,     &
                                                               0,0,107),        &
 !  50 DD: 23,
-chch_t1(50,'EtCHO     ',1,'TR        ','          ',1,0,ti+t+st,0,0,107),      &
+chch_t1(50,'EtCHO     ',1,'TR        ','          ',1,0,ti+t+st+dest,0,0,107), &
 !  50
 chch_t1(50,'EtCHO     ',1,'TR        ','          ',1,0,cs,0,0,107),           &
 !  51
