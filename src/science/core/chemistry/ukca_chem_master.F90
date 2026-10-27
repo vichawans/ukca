@@ -445,7 +445,7 @@ chch_t1(70,'MeCO2H    ',1,'TR        ','          ',1,1,cs,0,0,107),           &
 !  71 DD: 37,
 ! Dry deposition for H2 in R scheme but not in other schemes
 ! H2 is prescribed at the surface. Could it become interactive?
-chch_t1(71,'H2        ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+chch_t1(71,'H2        ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  71                 (120)
 chch_t1(71,'H2        ',1,'TR        ','          ',1,0,r,0,0,107),            &
 !  71
@@ -453,38 +453,39 @@ chch_t1(71,'H2        ',1,'CT        ','          ',0,0,ti+t,0,0,107),         &
 !  72 DD: 38,WD: 30,
 ! No dry deposition for MeOH in R scheme. No emissions of MeOH in other schemes.
 ! Note MeOH is emitted as NVOC in ST with aerosols.
-chch_t1(72,'MeOH      ',1,'TR        ','          ',1,1,ti+st,0,0,107),        &
+chch_t1(72,'MeOH      ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 chch_t1(72,'MeOH      ',1,'TR        ','          ',0,1,r,0,0,107),            &
 !  72
 chch_t1(72,'MeOH      ',1,'TR        ','          ',1,1,cs,0,0,107),           &
 !  73
-chch_t1(73,'CO2       ',1,'CT        ','          ',0,0,ti+t+s+st+cs,          &
+chch_t1(73,'CO2       ',1,'CT        ','          ',0,0,ti+t+s+st+cs+dest,          &
                                                              0,ci,107),        &
 !  73
 ! Stratospheric chemical schemes are enabled to take 3D CO2 as input
-chch_t1(73,'CO2       ',1,'CF        ','          ',0,0,s+st+cs,ci,0,111),     &
+chch_t1(73,'CO2       ',1,'CF        ','          ',0,0,s+st+cs+dest,ci,0,111),&
 !  74
-chch_t1(74,'O2        ',1,'CT        ','          ',0,0,ti+s+t+st+cs,          &
+chch_t1(74,'O2        ',1,'CT        ','          ',0,0,ti+s+t+st+cs+dest,     &
                                                               0,0,107),        &
 !  75
-chch_t1(75,'N2        ',1,'CT        ','          ',0,0,ti+s+t+st+cs,          &
+chch_t1(75,'N2        ',1,'CT        ','          ',0,0,ti+s+t+st+cs+dest,     &
                                                               0,0,107),        &
 !  76
-chch_t1(76,'DMS       ',1,'TR        ','          ',0,0,ti+s+st+ol+r+cs,       &
+chch_t1(76,'DMS       ',1,'TR        ','          ',0,0,ti+s+st+ol+r+cs+dest,  &
                                                                  a,0,107),     &
 !  77 DD: 39,WD: 31,
-chch_t1(77,'SO2       ',1,'TR        ','          ',1,1,ti+s+st+ol+r+cs,       &
+chch_t1(77,'SO2       ',1,'TR        ','          ',1,1,ti+s+st+ol+r+cs+dest,  &
                                                                  a,0,107),     &
 !  78 DD: 40,
-chch_t1(78,'H2SO4     ',1,'TR        ','          ',1,0,ti+s+st+ol+r+cs,       &
+chch_t1(78,'H2SO4     ',1,'TR        ','          ',1,0,ti+s+st+ol+r+cs+dest,  &
                                                                  a,0,107),     &
 !  79 DD: 41,
-chch_t1(79,'MSA       ',1,'TR        ','          ',0,0,s+st+r+cs,a,0,107),    &
+chch_t1(79,'MSA       ',1,'TR        ','          ',0,0,s+st+r+cs+dest,        &
+                                                              a,0,107),        &
 chch_t1(79,'MSA       ',1,'TR        ','          ',1,0,ti,a,0,107),           &
 !  80 DD: 42,WD: 32,
 ! No dry deposition for DMSO in R scheme.
 chch_t1(80,'DMSO      ',1,'TR        ','          ',0,1,r,a,0,107),            &
-chch_t1(80,'DMSO      ',1,'TR        ','          ',1,1,ti+st+ol+cs,a,0,107),  &
+chch_t1(80,'DMSO      ',1,'TR        ','          ',1,1,ti+st+ol+cs+dest,a,0,107),  &
 !  81 DD: 43,WD: 33,
 chch_t1(81,'NH3       ',1,'TR        ','          ',1,1,ti+st+r+cs,a,0,107),   &
 !  82
