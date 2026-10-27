@@ -115,7 +115,7 @@ INTEGER, PARAMETER            :: sw_phases  = 8
 !      Variables taken from parm_CTM (for fast-JX code v5.3+)
 
 INTEGER, PARAMETER :: wx_ = 18   ! Max number of wavelength bins
-INTEGER, PARAMETER :: x_  = 100  ! Max no. of cross sections to be read
+INTEGER, PARAMETER :: x_  = 110  ! Max no. of cross sections to be read
 INTEGER, PARAMETER :: a_ = 40    ! Max no. of aerosol/cloud mie data sets
 
 ! Variables taken from parm_MIE (for fast-JX code v5.3+)

@@ -90,6 +90,21 @@ REAL :: adbrm (jpwav)
 REAL :: acs2  (jpwav)
 REAL :: ah2so4(jpwav)
 REAL :: aso3  (jpwav)
-
+!DEST
+REAL :: af114 (jpwav)
+REAL :: af115 (jpwav)
+REAL :: ah141b(jpwav)
+REAL :: ah142b(jpwav)
+REAL :: adclm (jpwav)
+REAL :: atclm (jpwav)
+REAL :: adcle (jpwav)
+REAL :: atrcl (jpwav)
+REAL :: acocl2(jpwav)
+REAL :: aclno2(jpwav)
+REAL :: abvsl1(jpwav)
+REAL :: abvsl2(jpwav)
+REAL :: abvsl3(jpwav)
+REAL :: acl2  (jpwav)
+REAL :: abr2  (jpwav)
 
 END MODULE ukca_crossec_mod

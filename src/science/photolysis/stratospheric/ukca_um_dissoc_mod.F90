@@ -79,6 +79,26 @@ REAL, ALLOCATABLE, SAVE :: ajdbrm (:)
 REAL, ALLOCATABLE, SAVE :: ajcs2  (:)
 REAL, ALLOCATABLE, SAVE :: ajh2so4(:)
 REAL, ALLOCATABLE, SAVE :: ajso3  (:)
+!
+! DEST
+REAL, ALLOCATABLE, SAVE :: ajf114 (:)
+REAL, ALLOCATABLE, SAVE :: ajf115 (:)
+REAL, ALLOCATABLE, SAVE :: ajh141b(:)
+REAL, ALLOCATABLE, SAVE :: ajh142b(:)
+REAL, ALLOCATABLE, SAVE :: ajdclm (:)
+REAL, ALLOCATABLE, SAVE :: ajtclm (:)
+REAL, ALLOCATABLE, SAVE :: ajdcle (:)
+REAL, ALLOCATABLE, SAVE :: ajtrcl (:)
+!
+REAL, ALLOCATABLE, SAVE :: ajcocl2(:)
+REAL, ALLOCATABLE, SAVE :: ajclno2(:)
+!
+REAL, ALLOCATABLE, SAVE :: ajbvsl1(:)
+REAL, ALLOCATABLE, SAVE :: ajbvsl2(:)
+REAL, ALLOCATABLE, SAVE :: ajbvsl3(:)
+!
+REAL, ALLOCATABLE, SAVE :: ajcl2  (:)
+REAL, ALLOCATABLE, SAVE :: ajbr2  (:)
 
 CHARACTER(LEN=*), PARAMETER, PRIVATE :: ModuleName='UKCA_UM_DISSOC_MOD'
 
@@ -160,6 +180,22 @@ IF (.NOT. ALLOCATED(ajdbrm )) ALLOCATE(ajdbrm (theta_field_size))
 IF (.NOT. ALLOCATED(ajcs2  )) ALLOCATE(ajcs2  (theta_field_size))
 IF (.NOT. ALLOCATED(ajh2so4)) ALLOCATE(ajh2so4(theta_field_size))
 IF (.NOT. ALLOCATED(ajso3  )) ALLOCATE(ajso3  (theta_field_size))
+! DEST
+IF (.NOT. ALLOCATED(ajf114 )) ALLOCATE(ajf114 (theta_field_size))
+IF (.NOT. ALLOCATED(ajf115 )) ALLOCATE(ajf115 (theta_field_size))
+IF (.NOT. ALLOCATED(ajh141b)) ALLOCATE(ajh141b(theta_field_size))
+IF (.NOT. ALLOCATED(ajh142b)) ALLOCATE(ajh142b(theta_field_size))
+IF (.NOT. ALLOCATED(ajdclm )) ALLOCATE(ajdclm (theta_field_size))
+IF (.NOT. ALLOCATED(ajtclm )) ALLOCATE(ajtclm (theta_field_size))
+IF (.NOT. ALLOCATED(ajdcle )) ALLOCATE(ajdcle (theta_field_size))
+IF (.NOT. ALLOCATED(ajtrcl )) ALLOCATE(ajtrcl (theta_field_size))
+IF (.NOT. ALLOCATED(ajcocl2)) ALLOCATE(ajcocl2(theta_field_size))
+IF (.NOT. ALLOCATED(ajclno2)) ALLOCATE(ajclno2(theta_field_size))
+IF (.NOT. ALLOCATED(ajbvsl1)) ALLOCATE(ajbvsl1(theta_field_size))
+IF (.NOT. ALLOCATED(ajbvsl2)) ALLOCATE(ajbvsl2(theta_field_size))
+IF (.NOT. ALLOCATED(ajbvsl3)) ALLOCATE(ajbvsl3(theta_field_size))
+IF (.NOT. ALLOCATED(ajcl2  )) ALLOCATE(ajcl2  (theta_field_size))
+IF (.NOT. ALLOCATED(ajbr2  )) ALLOCATE(ajbr2  (theta_field_size))
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 RETURN

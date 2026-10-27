@@ -101,7 +101,10 @@ USE ukca_tbjs_mod, ONLY:     tabj2a   , tabj2b   , tabj3    ,                  &
        tabjcofcl, tabjch4  , tabjcos  , tabjco2  ,                             &
        tabjhono , tabjmena , tabjchbr3, tabjdbrm , tabjcs2  ,                  &
        tabjh2so4, tabjso3  , tabpres  , tabang,    tabt     ,                  &
-       tabo3,     sao3c
+       tabo3,     sao3c    , tabjf114 , tabjf115 , tabjh141b,                  &
+       tabjh142b, tabjdclm , tabjtclm , tabjdcle , tabjtrcl ,                  &
+       tabjcocl2, tabjclno2, tabjbvsl1, tabjbvsl2, tabjbvsl3,                  &
+       tabjcl2  , tabjbr2
 USE ukca_crossec_mod, ONLY: accl4, acl2o2, amcfm, acnita,                      &
     acnitb, aco2 , af11 , af113, af12 , af22 , ah2o , ah2o2,                   &
     ahcl , ahno3, ahocl, ach3cl, an2o , an2o5, ano  ,                          &
@@ -109,7 +112,11 @@ USE ukca_crossec_mod, ONLY: accl4, acl2o2, amcfm, acnita,                      &
     abro , ahobr, aoclo, ac2oa, ac2ob, amhp , ao2sr, ao3  ,                    &
     apna , acof2, acofcl, ach3br, af12b1, af13b1, scs  , qeno2,                &
     qeo1d, quanta, ach4 , wavenm, ahono, aocs ,                                &
-    amena, achbr3, adbrm, acs2 , ah2so4, aso3
+    amena, achbr3, adbrm, acs2 , ah2so4, aso3 ,                                &
+    af114 , af115 , ah141b,                                                    &
+    ah142b, adclm , atclm, adcle , atrcl ,                                     &
+    acocl2, aclno2, abvsl1 , abvsl2 , abvsl3 ,                                 &
+    acl2  , abr2
 USE ukca_parpho_mod, ONLY: jplevp1, jplev, jpchi,                              &
                            jpwav, jplo, jphi, jptem, jpo3p
 
@@ -125,11 +132,21 @@ USE acsccl4_mod, ONLY: acsccl4
 USE acsf11_mod, ONLY: acsf11
 USE acsf12_mod, ONLY: acsf12
 USE acsf22_mod, ONLY: acsf22
+!DEST
+USE acsf113_mod, ONLY: acsf113
+USE acsf114_mod, ONLY: acsf114
+USE acsf1211_mod, ONLY: acsf1211
+USE acsf1301_mod, ONLY: acsf1301
+USE acsmcfm_mod, ONLY: acsmcfm
+USE acsh141b_mod, ONLY: acsh141b
+USE acsh142b_mod, ONLY: acsh142b
+!
 USE acsmc_mod, ONLY: acsmc
 USE quanto12_mod, ONLY: quanto12
 USE acso3_mod, ONLY: acso3
 USE acshno3_mod, ONLY: acshno3
 USE acscnit_mod, ONLY: acscnit
+USE acsbnit_mod, ONLY: acsbnit !DEST
 USE acsh2o2_mod, ONLY: acsh2o2
 USE acsbrcl_mod, ONLY: acsbrcl
 USE acsno2_mod, ONLY: acsno2
@@ -396,6 +413,22 @@ DO jo=1,jpo3p
   tabjcs2  (:,:,:,jo)=0.0
   tabjh2so4(:,:,:,jo)=0.0
   tabjso3  (:,:,:,jo)=0.0
+!DEST
+  tabjf114 (:,:,:,jo)=0.0
+  tabjf115 (:,:,:,jo)=0.0
+  tabjh141b(:,:,:,jo)=0.0
+  tabjh142b(:,:,:,jo)=0.0
+  tabjdclm (:,:,:,jo)=0.0
+  tabjtclm (:,:,:,jo)=0.0
+  tabjdcle (:,:,:,jo)=0.0
+  tabjtrcl (:,:,:,jo)=0.0
+  tabjcocl2(:,:,:,jo)=0.0
+  tabjclno2(:,:,:,jo)=0.0
+  tabjbvsl1(:,:,:,jo)=0.0
+  tabjbvsl2(:,:,:,jo)=0.0
+  tabjbvsl3(:,:,:,jo)=0.0
+  tabjcl2  (:,:,:,jo)=0.0
+  tabjbr2  (:,:,:,jo)=0.0
 
   !     Lyman alpha photolysis
   CALL lymana(tspo2,tabj2b,tabjh2o,tabjch4,quanta_in,jo)
@@ -421,6 +454,18 @@ DO jo=1,jpo3p
 
     !        F22 (CHF2Cl)
     CALL acsf22 (tabt(jt),jpwav,wavenm,af22)
+    !!! DEST
+    ! F113 and F114
+    CALL acsf113 (tabt(jt),jpwav,wavenm,af113)
+    CALL acsf114 (tabt(jt),jpwav,wavenm,af114)
+    ! MeCCl3
+    CALL acsmcfm (tabt(jt),jpwav,wavenm,amcfm)
+    ! H141b and H142b
+    CALL acsh141b (tabt(jt),jpwav,wavenm,ah141b)
+    CALL acsh142b (tabt(jt),jpwav,wavenm,ah142b)
+    ! HALONS 1211 and 1301
+    CALL acsf1211 (tabt(jt),jpwav,wavenm,af12b1)
+    CALL acsf1301 (tabt(jt),jpwav,wavenm,af13b1)
 
     !        CH3Cl
     CALL acsmc  (tabt(jt),jpwav,wavenm,ach3cl)
@@ -437,6 +482,9 @@ DO jo=1,jpo3p
     !        ClONO2
     CALL acscnit(tabt(jt),wavenm,acnita, acnitb)
 
+    !        BrONO2
+    CALL acsbnit(tabt(jt),wavenm,abrno3)
+    
     !        H2O2
     CALL acsh2o2(tabt(jt),jpwav,wavenm,ah2o2)
 
@@ -545,7 +593,22 @@ DO jo=1,jpo3p
           tabjcs2  (jl,jc,jt,jo)=tabjcs2  (jl,jc,jt,jo) + qu*acs2  (jw)
           tabjh2so4(jl,jc,jt,jo)=tabjh2so4(jl,jc,jt,jo) + qu*ah2so4(jw)
           tabjso3  (jl,jc,jt,jo)=tabjso3  (jl,jc,jt,jo) + qu*aso3  (jw)
-
+          !DEST
+          tabjf114 (jl,jc,jt,jo)=tabjf114 (jl,jc,jt,jo) + qu*af114 (jw)
+          tabjf115 (jl,jc,jt,jo)=tabjf115 (jl,jc,jt,jo) + qu*af115 (jw)
+          tabjh141b(jl,jc,jt,jo)=tabjh141b(jl,jc,jt,jo) + qu*ah141b(jw)
+          tabjh142b(jl,jc,jt,jo)=tabjh142b(jl,jc,jt,jo) + qu*ah142b(jw)
+          tabjdclm (jl,jc,jt,jo)=tabjdclm (jl,jc,jt,jo) + qu*adclm (jw)
+          tabjtclm (jl,jc,jt,jo)=tabjtclm (jl,jc,jt,jo) + qu*atclm (jw)
+          tabjdcle (jl,jc,jt,jo)=tabjdcle (jl,jc,jt,jo) + qu*adcle (jw)
+          tabjtrcl (jl,jc,jt,jo)=tabjtrcl (jl,jc,jt,jo) + qu*atrcl (jw)
+          tabjcocl2(jl,jc,jt,jo)=tabjcocl2(jl,jc,jt,jo) + qu*acocl2(jw)
+          tabjclno2(jl,jc,jt,jo)=tabjclno2(jl,jc,jt,jo) + qu*aclno2(jw)
+          tabjbvsl1(jl,jc,jt,jo)=tabjbvsl1(jl,jc,jt,jo) + qu*abvsl1(jw)
+          tabjbvsl2(jl,jc,jt,jo)=tabjbvsl2(jl,jc,jt,jo) + qu*abvsl2(jw)
+          tabjbvsl3(jl,jc,jt,jo)=tabjbvsl3(jl,jc,jt,jo) + qu*abvsl3(jw)
+          tabjcl2  (jl,jc,jt,jo)=tabjcl2  (jl,jc,jt,jo) + qu*acl2  (jw)
+          tabjbr2  (jl,jc,jt,jo)=tabjbr2  (jl,jc,jt,jo) + qu*abr2  (jw)
         END DO
 
 

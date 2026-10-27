@@ -76,7 +76,10 @@ USE ukca_um_dissoc_mod,   ONLY: aj2a, aj2b, aj3, aj3a, ajbrcl, ajbrno3, ajbro, &
                                 ajf22, ajh2o, ajh2o2, ajh2so4, ajhcl, ajhobr,  &
                                 ajhocl, ajhno3, ajmcfm, ajmhp, ajn2o,          &
                                 ajn2o5, ajno, ajno2, ajno31, ajno32, ajoclo,   &
-                                ajpna, ajso3
+                                ajpna, ajso3, ajf114, ajf115, ajh141b,         &
+                                ajh142b, ajdclm, ajtclm, ajdcle, ajtrcl,       &
+                                ajcocl2, ajclno2, ajbvsl1, ajbvsl2, ajbvsl3,   &
+                                ajcl2, ajbr2
 
 IMPLICIT NONE
 
@@ -161,6 +164,22 @@ INTEGER, SAVE :: ichbr3=0
 INTEGER, SAVE :: ics2=0
 INTEGER, SAVE :: ih2so4=0
 INTEGER, SAVE :: iso3=0
+! DEST
+INTEGER, SAVE :: icfc114=0
+INTEGER, SAVE :: icfc115=0
+INTEGER, SAVE :: ih141b=0
+INTEGER, SAVE :: ih142b=0
+INTEGER, SAVE :: ich2cl2=0
+INTEGER, SAVE :: ichcl3=0
+INTEGER, SAVE :: ic2h4cl2=0
+INTEGER, SAVE :: ic2cl4=0
+INTEGER, SAVE :: iclno2=0
+INTEGER, SAVE :: icocl2=0
+INTEGER, SAVE :: ich2brcl=0
+INTEGER, SAVE :: ichbr2cl=0
+INTEGER, SAVE :: ichbrcl2=0
+INTEGER, SAVE :: icl2=0
+INTEGER, SAVE :: ibr2=0
 
 ! Local time variable
 INTEGER :: i_month
@@ -346,7 +365,7 @@ IF (firstcall) THEN
     CASE ('MeBr      ')
       imebr = k
 
-      ! CCl4   + h nu -> 4 Cl
+      ! CCl4   + h nu -> 2 Cl + COCl
     CASE ('CCl4      ')
       iccl4 = k
 
@@ -402,9 +421,16 @@ IF (firstcall) THEN
     CASE ('CHBr3     ')
       ichbr3 = k
 
-      ! CH2Br2 + h nu -> H2O + 2Br
+      ! CH2Br2 + h nu -> 2Br
     CASE ('CH2Br2    ')
       idbrm = k
+!!! DEST extra Br-VSLSs:
+    CASE ('CH2BrCl   ')
+      ich2brcl = k
+    CASE ('CHBr2Cl   ')
+      ichbr2cl = k
+    CASE ('CHBrCl2   ')
+      ichbrcl2 = k
 
       ! CS2 + h nu -> COS + SO2
     CASE ('CS2     ')
@@ -415,6 +441,42 @@ IF (firstcall) THEN
       ! SO3 + h nu -> SO2 + O(3P)
     CASE ('SO3     ')
       iso3 = k
+!!! DEST
+    CASE ('CF2ClCF2Cl')
+      icfc114 = k
+    
+    CASE ('CF2ClCF3  ')
+      icfc115 = k
+	
+    CASE ('MeCFCl2   ')
+      ih141b = k
+       
+    CASE ('MeCF2Cl   ')
+      ih142b = k   
+	   
+    CASE ('CH2Cl2    ')
+      ich2cl2 = k
+     
+    CASE ('CHCl3     ')
+      ichcl3 = k
+   
+    CASE ('C2H4Cl2   ')
+      ic2h4cl2 = k
+   
+    CASE ('C2Cl4     ')
+      ic2cl4 = k
+   
+    CASE ('COCl2     ')
+      icocl2 = k
+  
+    CASE ('ClNO2     ')
+      iclno2 = k
+
+    CASE ('Cl2       ')
+      icl2 = k
+  
+    CASE ('Br2       ')
+      ibr2 = k
 
     END SELECT
   END DO
@@ -622,7 +684,7 @@ DO i=1,rows
     ! MeBr   + h nu -> Br
     IF (imebr > 0)   photrates(j,i,imebr) = ajch3br(l)
 
-    ! CCl4   + h nu -> 4 Cl
+    ! CCl4   + h nu -> 2 Cl + COCl2
     IF (iccl4 > 0)   photrates(j,i,iccl4) = ajccl4(l)
 
     ! CF2ClCFCl2+h nu->3 Cl
@@ -658,7 +720,7 @@ DO i=1,rows
     ! CHBr3 +h nu   -> HBr + 2Br
     IF (ichbr3 > 0)  photrates(j,i,ichbr3) = ajchbr3(l)
 
-    ! CH2Br2 +h nu  -> H2O + 2Br
+    ! CH2Br2 +h nu  -> 2Br
     IF (idbrm > 0)   photrates(j,i,idbrm) = ajdbrm(l)
 
     ! CS2 +h nu     -> COS + SO2
@@ -668,6 +730,26 @@ DO i=1,rows
     ! SO3 +h nu     -> SO2 + O(3P)
     IF (iso3 > 0)    photrates(j,i,iso3) = ajso3(l)
 
+    !!! DEST
+    IF (icfc114 > 0)    photrates(j,i,icfc114) = ajf114(l)
+    IF (icfc115 > 0)    photrates(j,i,icfc115) = ajf115(l)
+    IF (ih141b > 0)     photrates(j,i,ih141b) = ajh141b(l)
+    IF (ih142b > 0)     photrates(j,i,ih142b) = ajh142b(l)
+  
+    IF (ich2cl2 > 0)    photrates(j,i,ich2cl2) = ajdclm(l)
+    IF (ichcl3 > 0)     photrates(j,i,ichcl3) = ajtclm(l)     
+    IF (ic2h4cl2 > 0)   photrates(j,i,ic2h4cl2) = ajdcle(l)
+    IF (ic2cl4 > 0)     photrates(j,i,ic2cl4) = ajtrcl(l)
+
+    IF (icocl2 > 0)     photrates(j,i,icocl2) = ajcocl2(l)
+    IF (iclno2 > 0)     photrates(j,i,iclno2) = ajclno2(l)
+
+    IF (ich2brcl > 0)   photrates(j,i,ich2brcl) = ajbvsl1(l)
+    IF (ichbr2cl > 0)   photrates(j,i,ichbr2cl) = ajbvsl2(l)
+    IF (ichbrcl2 > 0)   photrates(j,i,ichbrcl2) = ajbvsl3(l)
+ 
+    IF (icl2 > 0)       photrates(j,i,icl2) = ajcl2(l)
+    IF (ibr2 > 0)       photrates(j,i,ibr2) = ajbr2(l)
   END DO
 END DO
 

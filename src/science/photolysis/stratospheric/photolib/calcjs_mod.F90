@@ -43,7 +43,10 @@ USE ukca_um_dissoc_mod, ONLY: ajhno3, ajpna,  ajh2o2, aj2a,  aj2b, aj3,        &
        ajf113, ajf22,  ajch3cl, ajc2oa, ajc2ob, ajmhp,  ajch3br,               &
        ajmcfm,ajch4,  ajf12b1,ajf13b1, ajcof2, ajcofcl, ajco2,                 &
        ajcos,  ajhono, ajmena, ajchbr3, ajdbrm, ajcs2, ajh2so4,                &
-       ajso3
+       ajso3, ajf114 , ajf115 , ajh141b,                                       &
+       ajh142b, ajdclm , ajtclm, ajdcle , ajtrcl ,                             &
+       ajcocl2, ajclno2, ajbvsl1 , ajbvsl2 , ajbvsl3 ,                         &
+       ajcl2  , ajbr2
 USE photol_constants_mod, ONLY: pi => const_pi
 
 USE ukca_tbjs_mod,  ONLY:    tabj2a   , tabj2b   , tabj3    ,                  &
@@ -57,7 +60,10 @@ USE ukca_tbjs_mod,  ONLY:    tabj2a   , tabj2b   , tabj3    ,                  &
        tabjcofcl, tabjch4  , tabjcos  , tabjco2  ,                             &
        tabjhono , tabjmena , tabjchbr3, tabjdbrm , tabjcs2  ,                  &
        tabjh2so4, tabjso3  , tabpres,   tabang,    tabt     ,                  &
-       tabo3, sao3c
+       tabo3, sao3c, tabjf114 , tabjf115 , tabjh141b,                          &
+       tabjh142b, tabjdclm , tabjtclm , tabjdcle , tabjtrcl ,                  &
+       tabjcocl2, tabjclno2, tabjbvsl1, tabjbvsl2, tabjbvsl3 ,                 &
+       tabjcl2  , tabjbr2
 USE ukca_parpho_mod, ONLY: jplev, jpchi, jps90, jpchin,                        &
                            jptem, jpo3p, jps90,                                &
                            szamax, tmin, tmax, o3min, o3max
@@ -1228,7 +1234,278 @@ DO ih=ihmin,ihmax
       + w14(ih)*tabjch4  (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
       + w15(ih)*tabjch4  (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
       + w16(ih)*tabjch4  (jx_0  ,jyp1_0,jzp1_0,jop1_0)
-
+! DEST 
+! DEST 1
+    ajf114  (ih) = &
+      w1 (ih)*tabjf114 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjf114 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjf114 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjf114 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjf114 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjf114 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjf114 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjf114 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjf114 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjf114 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjf114 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjf114 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjf114 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjf114 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjf114 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjf114 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 2 
+    ajf115  (ih) = &
+      w1 (ih)*tabjf115 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjf115 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjf115 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjf115 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjf115 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjf115 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjf115 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjf115 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjf115 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjf115 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjf115 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjf115 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjf115 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjf115 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjf115 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjf115 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 3
+    ajh141b (ih) = &
+      w1 (ih)*tabjh141b (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjh141b (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjh141b (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjh141b (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjh141b (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjh141b (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjh141b (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjh141b (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjh141b (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjh141b (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjh141b (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjh141b (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjh141b (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjh141b (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjh141b (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjh141b (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 4
+    ajh142b (ih) = &
+      w1 (ih)*tabjh142b (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjh142b (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjh142b (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjh142b (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjh142b (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjh142b (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjh142b (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjh142b (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjh142b (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjh142b (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjh142b (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjh142b (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjh142b (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjh142b (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjh142b (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjh142b (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 5
+    ajdclm  (ih) = &
+      w1 (ih)*tabjdclm (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjdclm (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjdclm (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjdclm (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjdclm (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjdclm (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjdclm (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjdclm (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjdclm (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjdclm (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjdclm (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjdclm (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjdclm (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjdclm (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjdclm (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjdclm (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 6
+    ajtclm  (ih) = &
+      w1 (ih)*tabjtclm (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjtclm (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjtclm (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjtclm (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjtclm (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjtclm (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjtclm (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjtclm (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjtclm (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjtclm (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjtclm (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjtclm (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjtclm (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjtclm (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjtclm (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjtclm (jx_0  ,jyp1_0,jzp1_0,jop1_0)    
+! DEST 7
+    ajdcle  (ih) = &
+      w1 (ih)*tabjdcle (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjdcle (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjdcle (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjdcle (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjdcle (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjdcle (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjdcle (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjdcle (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjdcle (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjdcle (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjdcle (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjdcle (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjdcle (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjdcle (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjdcle (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjdcle (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 8
+    ajtrcl  (ih) = &
+      w1 (ih)*tabjtrcl (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjtrcl (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjtrcl (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjtrcl (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjtrcl (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjtrcl (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjtrcl (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjtrcl (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjtrcl (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjtrcl (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjtrcl (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjtrcl (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjtrcl (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjtrcl (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjtrcl (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjtrcl (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 9
+    ajcocl2 (ih) = &
+      w1 (ih)*tabjcocl2 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjcocl2 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjcocl2 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjcocl2 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjcocl2 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjcocl2 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjcocl2 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjcocl2 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjcocl2 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjcocl2 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjcocl2 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjcocl2 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjcocl2 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjcocl2 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjcocl2 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjcocl2 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 10
+    ajclno2 (ih) = &
+      w1 (ih)*tabjclno2 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjclno2 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjclno2 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjclno2 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjclno2 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjclno2 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjclno2 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjclno2 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjclno2 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjclno2 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjclno2 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjclno2 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjclno2 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjclno2 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjclno2 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjclno2 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+ ! DEST 11
+    ajbvsl1 (ih) = &
+      w1 (ih)*tabjbvsl1 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjbvsl1 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjbvsl1 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjbvsl1 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjbvsl1 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjbvsl1 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjbvsl1 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjbvsl1 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjbvsl1 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjbvsl1 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjbvsl1 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjbvsl1 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjbvsl1 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjbvsl1 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjbvsl1 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjbvsl1 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 12
+    ajbvsl2 (ih) = &
+      w1 (ih)*tabjbvsl2 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjbvsl2 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjbvsl2 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjbvsl2 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjbvsl2 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjbvsl2 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjbvsl2 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjbvsl2 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjbvsl2 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjbvsl2 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjbvsl2 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjbvsl2 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjbvsl2 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjbvsl2 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjbvsl2 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjbvsl2 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 13
+    ajbvsl3 (ih) = &
+      w1 (ih)*tabjbvsl3 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjbvsl3 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjbvsl3 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjbvsl3 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjbvsl3 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjbvsl3 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjbvsl3 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjbvsl3 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjbvsl3 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjbvsl3 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjbvsl3 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjbvsl3 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjbvsl3 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjbvsl3 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjbvsl3 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjbvsl3 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+! DEST 14
+    ajcl2   (ih) = &
+      w1 (ih)*tabjcl2 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjcl2 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjcl2 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjcl2 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjcl2 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjcl2 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjcl2 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjcl2 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjcl2 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjcl2 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjcl2 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjcl2 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjcl2 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjcl2 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjcl2 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjcl2 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+!DEST 15
+    ajbr2   (ih) = &
+      w1 (ih)*tabjbr2 (jx_0  ,jy_0  ,jz_0  ,jo_0  )                           &
+      + w2 (ih)*tabjbr2 (jxp1_0,jy_0  ,jz_0  ,jo_0  )                         &
+      + w3 (ih)*tabjbr2 (jxp1_0,jyp1_0,jz_0  ,jo_0  )                         &
+      + w4 (ih)*tabjbr2 (jx_0  ,jyp1_0,jz_0  ,jo_0  )                         &
+      + w5 (ih)*tabjbr2 (jx_0  ,jy_0  ,jzp1_0,jo_0  )                         &
+      + w6 (ih)*tabjbr2 (jxp1_0,jy_0  ,jzp1_0,jo_0  )                         &
+      + w7 (ih)*tabjbr2 (jxp1_0,jyp1_0,jzp1_0,jo_0  )                         &
+      + w8 (ih)*tabjbr2 (jx_0  ,jyp1_0,jzp1_0,jo_0  )                         &
+      + w9 (ih)*tabjbr2 (jx_0  ,jy_0  ,jz_0  ,jop1_0)                         &
+      + w10(ih)*tabjbr2 (jxp1_0,jy_0  ,jz_0  ,jop1_0)                         &
+      + w11(ih)*tabjbr2 (jxp1_0,jyp1_0,jz_0  ,jop1_0)                         &
+      + w12(ih)*tabjbr2 (jx_0  ,jyp1_0,jz_0  ,jop1_0)                         &
+      + w13(ih)*tabjbr2 (jx_0  ,jy_0  ,jzp1_0,jop1_0)                         &
+      + w14(ih)*tabjbr2 (jxp1_0,jy_0  ,jzp1_0,jop1_0)                         &
+      + w15(ih)*tabjbr2 (jxp1_0,jyp1_0,jzp1_0,jop1_0)                         &
+      + w16(ih)*tabjbr2 (jx_0  ,jyp1_0,jzp1_0,jop1_0)
+    
     !     Else darkness
   ELSE
     ajbrno3(ih) = 0.0
@@ -1250,6 +1527,22 @@ DO ih=ihmin,ihmax
     ajcof2 (ih) = 0.0
     ajcofcl(ih) = 0.0
     ajch4  (ih) = 0.0
+    !DEST
+    ajf114 (ih) = 0.0
+    ajf115 (ih) = 0.0
+    ajh141b(ih) = 0.0
+    ajh142b(ih) = 0.0
+    ajdclm (ih) = 0.0
+    ajtclm (ih) = 0.0
+    ajdcle (ih) = 0.0
+    ajtrcl (ih) = 0.0
+    ajcocl2(ih) = 0.0
+    ajclno2(ih) = 0.0
+    ajbvsl1(ih) = 0.0
+    ajbvsl2(ih) = 0.0
+    ajbvsl3(ih) = 0.0
+    ajcl2  (ih) = 0.0
+    ajbr2  (ih) = 0.0
   END IF
 
 END DO

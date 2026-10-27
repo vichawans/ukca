@@ -110,7 +110,7 @@ INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 165 ! number of dry deposition reactions !DEST +3
 INTEGER, PARAMETER :: n_wet_master  = 168 ! number of wet deposition reactions !DEST +8
 INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
-INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
+INTEGER, PARAMETER :: n_ratj_master = 207 ! number of photolysis reactions !DEST +24
 INTEGER, PARAMETER :: n_ratt_master = 118 ! number of termolecular reactions !DEST +2
 
 ! Start and end ranges for each section of arrays. Makes adding extra reactions
@@ -1445,7 +1445,7 @@ ratj_t1(79,'UCARB12   ','PHOTON    ','MeCO3     ','HOCH2CHO  ','CO        ',   &
 
 
 ! Photolysis reactions continued
-ratj_defs_master(101:n_ratj_master)=[                                          &
+ratj_defs_master(101:183)=[                                                    &
 ! 80
 ratj_t1(80,'NUCARB12  ','PHOTON    ','NOA       ','CO        ','HO2       ',   &
      '          ', 1.0,2.0,2.0,0.0, 100.000,'jmacr     ',cs,0,0,107),          &
@@ -1698,7 +1698,95 @@ ratj_t1(158,'CARB3     ','PHOTON    ','CO        ','CO        ','H2        ',  &
      '          ', 0.0,0.0,0.0,0.0, 100.00,'jcb3b     ',cs,0,0,119)            &
 ]
 
+! Photolysis reactions continued
+! Additional photolysis reactions for DEST
+ratj_defs_master(184:n_ratj_master)=[                                          &
+!!! photolysis of the extra long-lived ODS, DEST, copied from vn7.3 CheS+ !!!
+! 159
+ratj_t1(159,'MeCl      ','PHOTON    ','Cl        ','H         ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmecl     ',dest,0,0,107),        &
+! 160
+ratj_t1(160,'CF2ClBr   ','PHOTON    ','Cl        ','Br        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'j1211     ',dest,0,0,107),        &
+! 161
+ratj_t1(161,'CCl4      ','PHOTON    ','COCl2     ','Cl        ','Cl        ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jccl4     ',dest,0,0,107),        &
+! 162
+ratj_t1(162,'CF2ClCFCl2','PHOTON    ','Cl        ','Cl        ','Cl        ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'j113      ',dest,0,0,107),        &
+! 163
+ratj_t1(163,'CHF2Cl    ','PHOTON    ','Cl        ','          ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jh22      ',dest,0,0,107),        &
+! 164
+ratj_t1(164,'MeCCl3    ','PHOTON    ','Cl        ','Cl        ','Cl        ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jmcfm     ',dest,0,0,107),        &
+! 165
+ratj_t1(165,'CF3Br     ','PHOTON    ','Br        ','          ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'j1301     ',dest,0,0,107),        &
+! 166
+ratj_t1(166,'CH2Br2    ','PHOTON    ','Br        ','Br        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jdbm      ',dest,0,0,107),        &
+! 167
+ratj_t1(167,'CHBr3     ','PHOTON    ','Br        ','Br        ','Br        ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jchbr3    ',dest,0,0,107),        &
+!
+!!! EMB photolysis of cf114, cfc115, hcfc141b, hcfc142b
+!!! NB: currently j values the same as for cfc113 - UPDATE THAT LATER!
+! 168
+ratj_t1(168,'CF2ClCF2Cl','PHOTON    ','Cl        ','Cl        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'j114      ',dest,0,0,107),        &
+! 169
+ratj_t1(169,'CF2ClCF3  ','PHOTON    ','Cl        ','          ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'j115      ',dest,0,0,107),        &
+! 170
+ratj_t1(170,'MeCFCl2   ','PHOTON    ','Cl        ','Cl        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jh141b    ',dest,0,0,107),        &
+! 171
+ratj_t1(171,'MeCF2Cl   ','PHOTON    ','Cl        ','          ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jh142b    ',dest,0,0,107),        &        
+!
+!!! EMB photolysis of Cl-VSLSs
+!!! NB: currently j values the same as for cfc113 - UPDATE THAT LATER!
+! 172
+ratj_t1(172,'CH2Cl2    ','PHOTON    ','Cl        ','Cl        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jdclm     ',dest,0,0,107),        &
+! 173
+ratj_t1(173,'CHCl3     ','PHOTON    ','CHCl2O2   ','Cl        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jtclm     ',dest,0,0,107),        &
+! 174
+ratj_t1(174,'C2H4Cl2   ','PHOTON    ','Cl        ','Cl        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jdcle     ',dest,0,0,107),        &
+! 175
+ratj_t1(175,'C2Cl4     ','PHOTON    ','Cl        ','Cl        ','Cl        ',  &
+     'Cl        ', 0.0,0.0,0.0,0.0, 100.000,'jtrcl     ',dest,0,0,107),        &
 
+!!! EMB photolysis of extra intermediates
+!!! NB: currntly j values the same as for cfc113 - UPDATE THAT LATER!
+! 176
+ratj_t1(176,'COCl2     ','PHOTON    ','Cl        ','Cl        ','CO        ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jcocl2    ',dest,0,0,107),        &
+! 177
+ratj_t1(177,'ClNO2     ','PHOTON    ','Cl        ','NO2       ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jclno2    ',dest,0,0,107) ,       &
+!
+!!! EMB photolysis of extra Br-VSLSs
+!!! NB: currntly j values the same as for cfc113 - UPDATE THAT LATER!
+! 178    
+ratj_t1(178,'CH2BrCl   ','PHOTON    ','Cl        ','Br        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbvsl1    ',dest,0,0,107),        &
+! 179        
+ratj_t1(179,'CHBr2Cl   ','PHOTON    ','Cl        ','Br        ','Br        ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbvsl2    ',dest,0,0,107),        &
+! 180     
+ratj_t1(180,'CHBrCl2   ','PHOTON    ','Cl        ','Br        ','Cl        ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbvsl3    ',dest,0,0,107),        &
+! 181   
+ratj_t1(181,'Cl2       ','PHOTON    ','Cl        ','Cl        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jcl2      ',dest,0,0,107),        &
+! 182
+ratj_t1(182,'Br2       ','PHOTON    ','Br        ','Br        ','          ',  &
+     '          ', 0.0,0.0,0.0,0.0, 100.000,'jbr2      ',dest,0,0,107)         &
+]
 ! ----------------------------------------------------------------------
 
 
