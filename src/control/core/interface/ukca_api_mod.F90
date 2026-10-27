@@ -53,6 +53,7 @@ USE ukca_config_specification_mod, ONLY:                                       &
   ukca_chem_strat => i_ukca_chem_strat,                                        &
   ukca_chem_offline => i_ukca_chem_offline,                                    &
   ukca_chem_cristrat => i_ukca_chem_cristrat,                                  &
+  ukca_chem_deststrattrop => i_ukca_chem_deststrattrop,                        &
   ukca_age_reset_by_level => i_age_reset_by_level,                             &
   ukca_age_reset_by_height => i_age_reset_by_height,                           &
   ukca_strat_lbc_off => i_strat_lbc_off,                                       &

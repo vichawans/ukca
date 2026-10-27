@@ -304,7 +304,7 @@ IF (first_pass) THEN
     IF (ukca_config%l_ukca_chem_aero .AND.                                     &
         (ukca_config%l_ukca_offline .OR. ukca_config%l_ukca_offline_be .OR.    &
         ukca_config%l_ukca_strat .OR.                                          &
-       ( (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_strattrop)  .AND. &
+       ( (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_deststrattrop)  .AND. &
          (ukca_config%i_ukca_chem_version < i_chem_version_121)) .OR.          &
          ukca_config%l_ukca_tropisop) .AND. (idmsoh == 0) ) THEN
       errcode = 1

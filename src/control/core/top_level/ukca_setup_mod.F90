@@ -308,6 +308,7 @@ USE ukca_config_specification_mod, ONLY: init_ukca_configuration,              &
     copy_config_vector, ukca_config, glomap_config,                            &
     i_ukca_chem_off, i_ukca_chem_trop, i_ukca_chem_raq,                        &
     i_ukca_chem_offline_be, i_ukca_chem_tropisop, i_ukca_chem_strattrop,       &
+    i_ukca_chem_deststrattrop,                                                 &
     i_ukca_chem_strat, i_ukca_chem_offline, i_ukca_chem_cristrat,              &
     i_age_reset_by_level, i_age_reset_by_height, i_strat_lbc_off,              &
     i_light_param_off, i_light_param_pr,                                       &
@@ -767,7 +768,8 @@ END IF
 
 l_strat_scheme_selected = (ukca_config%i_ukca_chem == i_ukca_chem_strat        &
                       .OR. ukca_config%i_ukca_chem == i_ukca_chem_strattrop    &
-                      .OR. ukca_config%i_ukca_chem == i_ukca_chem_cristrat )
+                      .OR. ukca_config%i_ukca_chem == i_ukca_chem_cristrat     &
+                      .OR. ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop )
 
 IF (ukca_config%i_ukca_chem /= i_ukca_chem_off) THEN
 
@@ -1136,6 +1138,7 @@ IF (ukca_config%i_ukca_chem /= i_ukca_chem_off) THEN
       ukca_config%i_ukca_chem == i_ukca_chem_cristrat .OR.                     &
       ukca_config%i_ukca_chem == i_ukca_chem_offline .OR.                      &
       ukca_config%i_ukca_chem == i_ukca_chem_offline_be .OR.                   &
+      ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop .OR.                &
       ukca_config%l_enable_diag_um) THEN
     IF (PRESENT(l_use_gridbox_volume))                                         &
       ukca_config%l_use_gridbox_volume = l_use_gridbox_volume

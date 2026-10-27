@@ -199,9 +199,9 @@ TYPE :: ukca_config_spec_type
                                        ! certain species in stratospheric
                                        ! schemes
   LOGICAL :: l_ukca_ro2_ntp            ! True to stop transport of peroxy
-                                       ! radicals in StratTrop/CRI scheme
+                                       ! radicals in StratTrop/CRI/DEST scheme
   LOGICAL :: l_ukca_ro2_perm           ! True for RO2-permutation chemistry in
-                                       ! StratTrop/CRI scheme
+                                       ! StratTrop/CRI/DEST scheme
   LOGICAL :: l_ukca_intph              ! True for calculating interactive cloud
                                        ! pH values (F for global value of 5)
   REAL :: ph_fit_coeff_a               ! value for fitting coefficient a of
@@ -1181,7 +1181,8 @@ SUBROUTINE ukca_get_config(                                                    &
    l_fix_ukca_offox_h2o_fac,                                                   &
    l_fix_ukca_h2so4_ystore,                                                    &
    l_ukca_chem, l_ukca_trop, l_ukca_aerchem, l_ukca_raq, l_ukca_raqaero,       &
-   l_ukca_offline_be, l_ukca_tropisop, l_ukca_strattrop, l_ukca_strat,         &
+   l_ukca_offline_be, l_ukca_tropisop, l_ukca_strattrop, l_ukca_deststrattrop, &
+   l_ukca_strat,                                                               &
    l_ukca_offline, l_ukca_cristrat, l_ukca_stratcfc, l_ukca_achem,             &
    l_ukca_nr_aqchem,                                                           &
    l_ukca_advh2o,                                                              &
@@ -1403,6 +1404,7 @@ LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_raqaero
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_offline_be
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_tropisop
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_strattrop
+LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_deststrattrop
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_strat
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_offline
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_cristrat
@@ -1694,6 +1696,7 @@ IF (PRESENT(l_ukca_offline_be))                                                &
   l_ukca_offline_be = ukca_config%l_ukca_offline_be
 IF (PRESENT(l_ukca_tropisop)) l_ukca_tropisop = ukca_config%l_ukca_tropisop
 IF (PRESENT(l_ukca_strattrop)) l_ukca_strattrop = ukca_config%l_ukca_strattrop
+IF (PRESENT(l_ukca_deststrattrop)) l_ukca_deststrattrop = ukca_config%l_ukca_deststrattrop
 IF (PRESENT(l_ukca_strat)) l_ukca_strat = ukca_config%l_ukca_strat
 IF (PRESENT(l_ukca_offline)) l_ukca_offline = ukca_config%l_ukca_offline
 IF (PRESENT(l_ukca_cristrat)) l_ukca_cristrat = ukca_config%l_ukca_cristrat

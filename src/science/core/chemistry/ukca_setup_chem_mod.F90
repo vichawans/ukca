@@ -79,9 +79,7 @@ CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_SETUP_CHEM'
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 
-!!! Test DEST hardcoded switched on LS
 SELECT CASE (ukca_config%i_ukca_chem)
-!SELECT CASE (60)
 
 CASE (i_ukca_chem_off)
   ! Chemistry off completely

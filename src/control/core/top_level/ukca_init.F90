@@ -333,6 +333,7 @@ USE ukca_config_specification_mod, ONLY:                                       &
                                  i_ukca_chem_strat,                            &
                                  i_ukca_chem_offline,                          &
                                  i_ukca_chem_cristrat,                         &
+                                 i_ukca_chem_deststrattrop,                    &
                                  i_age_reset_by_level,                         &
                                  i_age_reset_by_height,                        &
                                  i_light_param_off,                            &
@@ -514,7 +515,8 @@ IF ( ukca_config%i_ukca_chem == i_ukca_chem_strat .OR.                         &
      ukca_config%i_ukca_chem == i_ukca_chem_strattrop .OR.                     &
      ukca_config%i_ukca_chem == i_ukca_chem_tropisop .OR.                      &
      ukca_config%i_ukca_chem == i_ukca_chem_offline .OR.                       &
-     ukca_config%i_ukca_chem == i_ukca_chem_cristrat) THEN
+     ukca_config%i_ukca_chem == i_ukca_chem_cristrat .OR.                      &
+     ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop) THEN
   ! check number of N-R iterations
   IF (ukca_config%nrsteps < 0 .OR. ukca_config%nrsteps > nrsteps_max) THEN
     WRITE(cmessage,'(2(A,1x,I0))') 'NRSTEPS is not in range - 0:',nrsteps_max, &
@@ -556,7 +558,8 @@ IF ( .NOT. (ukca_config%i_ukca_chem == i_ukca_chem_strat .OR.                  &
       ukca_config%i_ukca_chem == i_ukca_chem_strattrop .OR.                    &
       ukca_config%i_ukca_chem == i_ukca_chem_tropisop .OR.                     &
       ukca_config%i_ukca_chem == i_ukca_chem_offline .OR.                      &
-      ukca_config%i_ukca_chem == i_ukca_chem_cristrat)) THEN
+      ukca_config%i_ukca_chem == i_ukca_chem_cristrat .OR.                     &
+      ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop )) THEN
   ! check settings in quasi-Newton step to ensure they are sensible
   IF (ukca_config%l_ukca_asad_columns) THEN
     errcode = 16
@@ -570,7 +573,8 @@ IF ( .NOT. (ukca_config%i_ukca_chem == i_ukca_chem_strat .OR.                  &
       ukca_config%i_ukca_chem == i_ukca_chem_strattrop .OR.                    &
       ukca_config%i_ukca_chem == i_ukca_chem_tropisop .OR.                     &
       ukca_config%i_ukca_chem == i_ukca_chem_offline .OR.                      &
-      ukca_config%i_ukca_chem == i_ukca_chem_cristrat)) THEN
+      ukca_config%i_ukca_chem == i_ukca_chem_cristrat .OR.                     &
+      ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop )) THEN
   IF (ukca_config%l_ukca_debug_asad) THEN
     errcode = 17
     WRITE(cmessage,'(A,L1)')                                                   &
@@ -582,7 +586,8 @@ END IF
 ! Check validity of top boundary option for a stratospheric scheme
 IF ((ukca_config%i_ukca_chem == i_ukca_chem_strattrop .OR.                     &
      ukca_config%i_ukca_chem == i_ukca_chem_strat .OR.                         &
-     ukca_config%i_ukca_chem == i_ukca_chem_cristrat) .AND.                    &
+     ukca_config%i_ukca_chem == i_ukca_chem_cristrat .OR.                      &
+     ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop ) .AND.              &
     (ukca_config%i_ukca_topboundary < 0 .OR.                                   &
      ukca_config%i_ukca_topboundary > 4)) THEN
   WRITE(cmessage,'(A,I0,A)')                                                   &
@@ -603,7 +608,8 @@ END IF
 
 IF ((ukca_config%i_ukca_topboundary == i_top_BC_H2O) .AND.                     &
     (ukca_config%i_ukca_chem /= i_ukca_chem_strat) .AND.                       &
-    (ukca_config%i_ukca_chem /= i_ukca_chem_strattrop)) THEN
+    (ukca_config%i_ukca_chem /= i_ukca_chem_strattrop) .AND.                    &
+    (ukca_config%i_ukca_chem /= i_ukca_chem_deststrattrop)) THEN
   ! Cannot conserve hydrogen because H, OH, or H2 don't exist
   cmessage='Cannot impose top boundary for H2O if H, OH, or H2 do not exist.'
   errcode = 20
@@ -613,7 +619,8 @@ END IF
 IF ((ukca_config%i_ukca_topboundary >= i_top_BC) .AND.                         &
     (ukca_config%i_ukca_chem /= i_ukca_chem_strattrop) .AND.                   &
     (ukca_config%i_ukca_chem /= i_ukca_chem_strat) .AND.                       &
-    (ukca_config%i_ukca_chem /= i_ukca_chem_cristrat)) THEN
+    (ukca_config%i_ukca_chem /= i_ukca_chem_cristrat) .AND.                    &
+    (ukca_config%i_ukca_chem /= i_ukca_chem_deststrattrop)) THEN
   ! Cannot impose top boundary condition for species
   cmessage='Can only impose top boundary for O3, NO and CO in' // newline //   &
            'schemes with stratospheric chemistry'
@@ -632,13 +639,14 @@ END IF
 ! Make sure RO2 transport option is only used with StratTrop mechanism
 IF (ukca_config%l_ukca_ro2_ntp) THEN
   IF ((ukca_config%i_ukca_chem == i_ukca_chem_strattrop) .OR.                  &
-      (ukca_config%i_ukca_chem == i_ukca_chem_cristrat)) THEN
+       (ukca_config%i_ukca_chem == i_ukca_chem_cristrat) .OR.                  &
+       (ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop)) THEN
     IF ( PrintStatus > PrStatus_Normal )                                       &
       CALL umPrint('Transport of peroxy-radicals turned off.',                 &
         src=RoutineName)
   ELSE
     WRITE(cmessage,'(A)')                                                      &
-      ' l_ukca_ro2_ntp can only be T with StratTrop or CRI-Strat chemistry'
+      ' l_ukca_ro2_ntp can only be T with StratTrop, CRI-Strat or DEST chemistry'
     errcode = 23
     CALL ereport(routinename,errcode,cmessage)
   END IF
@@ -655,13 +663,14 @@ END IF
 ! Make sure RO2-permutation reactions are only used with StratTrop
 IF (ukca_config%l_ukca_ro2_perm) THEN
   IF ((ukca_config%i_ukca_chem == i_ukca_chem_strattrop) .OR.                  &
-       (ukca_config%i_ukca_chem == i_ukca_chem_cristrat)) THEN
+       (ukca_config%i_ukca_chem == i_ukca_chem_cristrat) .OR.                  &
+       (ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop)) THEN
     IF ( PrintStatus > PrStatus_Normal )                                       &
       CALL umPrint('RO2-permutation reactions turned on.',                     &
         src=RoutineName)
   ELSE
     WRITE(cmessage,'(A)')                                                      &
-      ' l_ukca_ro2_perm can only be T with StratTrop or CRI-Strat chemistry'
+      ' l_ukca_ro2_perm can only be T with StratTrop, CRI-Strat or DEST chemistry'
     errcode = 25
     CALL ereport(routinename,errcode,cmessage)
   END IF
@@ -704,7 +713,8 @@ IF ( ukca_config%i_ukca_chem == i_ukca_chem_strat      .OR.                    &
      ukca_config%i_ukca_chem == i_ukca_chem_strattrop  .OR.                    &
      ukca_config%i_ukca_chem == i_ukca_chem_tropisop   .OR.                    &
      ukca_config%i_ukca_chem == i_ukca_chem_offline    .OR.                    &
-     ukca_config%i_ukca_chem == i_ukca_chem_cristrat ) THEN
+     ukca_config%i_ukca_chem == i_ukca_chem_cristrat   .OR.                    &
+     ukca_config%i_ukca_chem == i_ukca_chem_deststrattrop ) THEN
   IF ( ukca_config%i_ukca_chem_version < 107 ) THEN
     cmessage = 'Value of i_ukca_chem_version cannot be less than 107.'
     errcode  = 30
@@ -730,7 +740,8 @@ END IF
 IF (ukca_config%l_ukca_het_psc .AND.                                           &
     ukca_config%i_ukca_chem /= i_ukca_chem_strattrop .AND.                     &
     ukca_config%i_ukca_chem /= i_ukca_chem_strat .AND.                         &
-    ukca_config%i_ukca_chem /= i_ukca_chem_cristrat) THEN
+    ukca_config%i_ukca_chem /= i_ukca_chem_cristrat .AND.                      &
+    ukca_config%i_ukca_chem /= i_ukca_chem_deststrattrop ) THEN
   cmessage = 'PSC heterogeneous chemistry requires a scheme with'              &
              // newline // 'stratospheric chemistry'
   errcode  = 33
@@ -741,7 +752,8 @@ END IF
 IF (ukca_config%l_ukca_trophet .AND.                                           &
     ukca_config%i_ukca_chem /= i_ukca_chem_tropisop .AND.                      &
     ukca_config%i_ukca_chem /= i_ukca_chem_strattrop .AND.                     &
-    ukca_config%i_ukca_chem /= i_ukca_chem_cristrat) THEN
+    ukca_config%i_ukca_chem /= i_ukca_chem_cristrat .AND.                      &
+    ukca_config%i_ukca_chem /= i_ukca_chem_deststrattrop ) THEN
   cmessage = 'Tropospheric heterogeneous chemistry requires an N-R scheme with'&
              // newline // 'tropospheric chemistry'
   errcode  = 34
