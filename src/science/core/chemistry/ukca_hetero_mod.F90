@@ -201,14 +201,13 @@ LOGICAL, INTENT(IN) :: have_nat(n_points)
 LOGICAL, INTENT(IN) :: stratflag(n_points)
 
 ! VS: organic-aerosol inputs for the wildfire HCl-solubility scheme.
-! Both are dimensionless and optional so existing call sites compile.
+! Both are dimensionless
+!  roc  : organic / sulfate mass ratio (>=0). Used by case 1, 2, 3.
+!         Built from OM1.
 !  focr : organic mass fraction of TOTAL aerosol, in [0,1]. Used by
-!         cases 2 and 3 (the LLPS mass-fraction blend). For case 2
-!         built from combined OM / total aerosol mass; for case 3 from
-!         WILDFIRE OM / total aerosol mass (background SOA in the
-!         denominator only).
-!  roc  : organic / sulfate mass ratio (>=0). Used by case 1 (the
-!         homogeneous weight-percent dilution). Built from combined OM.
+!         cases 4 and 5 (the LLPS mass-fraction blend). For case 4
+!         built from combined OM1 aerosol mass; for case 5 from
+!         OM2 / total aerosol mass.
 REAL, INTENT(IN) :: focr(n_points)
 REAL, INTENT(IN) :: roc(n_points)
 
@@ -292,11 +291,10 @@ REAL :: psc2sa(n_points)
 
 ! heterogeneous reaction rate
 REAL :: kpsc(n_points, 13) ! reaction rate
-REAL :: rkpsc(n_points, 13) ! reaction rate as bimolecular reaction
 
 REAL :: gam1(13) ! uptake coefficients on ice and NAT
 REAL :: gam2(13) ! uptake coefficients on ice
-REAL :: gam3(13) ! uptake coefficients on sulfate aerosol
+REAL :: gam3(13) ! uptake coefficients on aerosols
 
 ! spatially varying uptake coefficients
 REAL :: gam_calc(n_points, 7) ! for non constant uptake coefficients
@@ -641,20 +639,21 @@ ELSE ! New config
     ! restricting to the stratosphere (the UKCA analogue of the
     ! p < 300 hPa gate in CESM mo_strato_rates). The Shi routine reads
     ! i_ukca_hetorg_case directly (module parameter) and uses zfocr for
-    ! cases 2/3 or zroc for case 1.
-    zfocr(:) = 0.0
-    zroc(:)  = 0.0
+    ! cases 4/5 or zroc for case 1,2,3.
+    zfocr(:) = 0.0 ! Case 4,5
+    zroc(:)  = 0.0 ! Case 1,2,3
     IF (i_ukca_hetorg_case == 4 .OR. i_ukca_hetorg_case == 5) THEN
       ! Stone LLPS cases: organic mass fraction of total aerosol.
-      ! Case 4 uses combined OM, case 5 wildfire OM only - the
-      ! distinction is made here, in the driver, not in the chemistry.
+      ! Case 4 uses OM1, case 5 OM2 only
+      ! the distinction is made here, in the driver, not in the chemistry.
       WHERE (stratflag(1:n_points))
         zfocr(1:n_points) = MIN(MAX(focr(1:n_points)*oc_frac_scale,0.0),1.0)
       END WHERE
     ELSE IF (i_ukca_hetorg_case >= 1 .AND. i_ukca_hetorg_case <= 3) THEN
-      ! Solomon threshold (1), Solomon dilution (2) and Stone
-      ! homogeneous (3): organic/sulfate mass ratio. For case 1 the
-      ! Solomon et al. (2023) Southern Hemisphere mask, if wanted,
+      ! Case 1: Solomon threshold 
+      ! Case 2: Solomon dilution
+      ! Case 3: Stone homogeneous
+      ! For case 1 the Solomon et al. (2023) Southern Hemisphere mask, if wanted,
       ! should be applied by the driver when building roc (set roc=0 in
       ! the NH), since UKCA_HETERO does not carry latitude on the
       ! chemistry vector.
@@ -666,8 +665,8 @@ ELSE ! New config
     CALL ukca_shi_liquid_aerosol(1,n_points,n_points,                          &
                                  zt(1:n_points),zh2o(1:n_points),              &
                                  zhcl(1:n_points),zclono2(1:n_points),         &
-                                 gam3calc(1:n_points,:),                       &
-                                 zfocr(1:n_points), zroc(1:n_points))
+                                 zfocr(1:n_points), zroc(1:n_points),          &
+                                 gam3calc(1:n_points,:))
   END IF
   IF ( gppsc ) THEN     !  If heterogeneous processes are on.
 
@@ -734,12 +733,15 @@ ELSE ! New config
       !              ------- ---------
       !        If required, include the reactions on the sulfate aerosols.
       IF (ukca_config%i_ukca_hetconfig > 0) THEN
+        IF ( jh <= 3 .OR. jh == 8) THEN  ! calculated gamma
+          kpsc(1:n_points ,jh) = kpsc(1:n_points, jh) + c_cf(1:n_points)*      &
+                                 100.0*za(1:n_points) * gam3calc(1:n_points, jh)
+        ELSE IF (jh == 6 .AND. i_ukca_hetorg_case>0) THEN
         ! VS: jh==6 (HOBr+HCl) added for Solomon et al. (2023) scheme;
         ! gam3calc(:,6) is non-zero only at organic-rich points, so base
         ! behaviour (gamma=0 on sulfate) is preserved elsewhere.
-        IF ( jh <= 3 .OR. jh == 6 .OR. jh == 8) THEN  ! calculated gamma
           kpsc(1:n_points ,jh) = kpsc(1:n_points, jh) + c_cf(1:n_points)*      &
-                                 100.0*za(1:n_points) * gam3calc(1:n_points, jh)
+                                 100.0*za(1:n_points) * gam3calc(1:n_points, jh)          
         ELSE                ! reaction uses constant gamma
           kpsc(1:n_points, jh) = kpsc(1:n_points, jh) + c_cf(1:n_points)*      &
                                  100.0*za(1:n_points) * gam3(jh)
@@ -841,13 +843,9 @@ ELSE ! New config
   WHERE ( zh2o > peps )
     rk(:,n_clono2_h2o) = kpsc(:,2) / zh2o
     rk(:,n_brono2_h2o) = kpsc(:,8) / zh2o
-    rkpsc(:,2) = kpsc(:,2) / zh2o
-    rkpsc(:,8) = kpsc(:,8) / zh2o
   ELSE WHERE
     rk(:,n_clono2_h2o) = 0.0
     rk(:,n_brono2_h2o) = 0.0
-    rkpsc(:,2) = 0.0
-    rkpsc(:,8) = 0.0
   END WHERE
 
   ! Yao: Optionally filter N2O5+H2O by stratflag to prevent double-counting.
@@ -959,7 +957,7 @@ END SUBROUTINE ukca_br_gamma
 
 !===========================================================================
 SUBROUTINE ukca_shi_liquid_aerosol(kstart,kend,kchmlev,t,th2o,                 &
-                                   thcl,tcnit,gam3arr,focr,roc)
+                                   thcl,tcnit,focr,roc,gam3arr)
 
 !*********************************************************************
 !subroutine description
@@ -1002,13 +1000,14 @@ SUBROUTINE ukca_shi_liquid_aerosol(kstart,kend,kchmlev,t,th2o,                 &
 !         Cases 4 and 5 are the same code; only the driver's focr
 !         differs (combined OM vs wildfire OM).
 !
-!H_sulf is the Shi et al. (2001) sulfate value, H_hex the HCl
-!solubility in hexanoic acid (IUPAC Solubility Data Series vol. 42), a
-!proxy for aged oxidised organic acids. All treatments reduce smoothly
-!and exactly to standard UKCA Shi chemistry as focr/roc_b -> 0. The
-!HOBr+HCl reaction on liquid aerosol (Waschewsky & Abbatt 1999 rates
-!adjusted to Hanson 2003 solubility) is returned in gam3arr(:,6) where
-!organics are present.
+! H_sulf is the Shi et al. (2001) sulfate value, 
+! H_hex the HCl solubility in hexanoic acid (IUPAC Solubility Data 
+! Series vol. 42), a proxy for aged oxidised organic acids. 
+                                   
+! All treatments reduce smoothly and exactly to standard UKCA Shi chemistry 
+! as focr/roc_b -> 0. The HOBr+HCl reaction (reaction 6) on liquid aerosol 
+! (Waschewsky & Abbatt 1999 rates adjusted to Hanson 2003 solubility) is 
+! returned in gam3arr(:,6) where organics are present.
 !
 !*********************************************************************
 !technical notes and references
@@ -1033,14 +1032,14 @@ REAL, INTENT(IN) :: th2o(kchmlev)          ! number density H2O (cm-3)
 REAL, INTENT(IN) :: thcl(kchmlev)          !                HCl
 REAL, INTENT(IN) :: tcnit(kchmlev)         !                ClONO2
 
-REAL, INTENT(OUT) :: gam3arr(kchmlev, 8)   ! uptake coefficients
-
 ! VS: organic mass fraction of total aerosol, in [0,1], for the LLPS
-! blend (cases 2/3); and organic/sulphate mass ratio (>=0) for the
-! homogeneous weight-percent dilution (case 1). Pre-scaled by the
-! driver; both optional.
-REAL, INTENT(IN) :: focr(kchmlev)
-REAL, INTENT(IN) :: roc(kchmlev)
+! blend (cases 4, 5); and organic/sulphate mass ratio (>=0) for the
+! homogeneous weight-percent dilution (case 1, 2, 3). 
+! Pre-scaled by the driver
+REAL, INTENT(IN) :: focr(kchmlev) ! Case 4, 5 
+REAL, INTENT(IN) :: roc(kchmlev)  ! Case 1, 2, 3
+
+REAL, INTENT(OUT) :: gam3arr(kchmlev, 8)   ! uptake coefficients
 
 REAL, PARAMETER :: r_vol=0.082             ! gas constant/vol (atm K-1 M-1)
 
@@ -1079,8 +1078,8 @@ REAL :: gam_hocl, gam_clono2 ! reaction prob.
 REAL :: small_value
 
 ! VS: organics scheme locals (Solomon 2023 / Stone 2025)
-REAL :: focr_b             ! organic mass fraction at this point
-REAL :: roc_b             ! organic/sulfate mass ratio at this point
+REAL :: focr_b           ! organic mass fraction at this point
+REAL :: roc_b            ! organic/sulfate mass ratio at this point
 REAL :: h_hcl_sulf       ! HCl Henry coeff, sulfate phase (M atm-1)
 REAL :: h_hcl_hex        ! HCl Henry coeff, organic phase  (M atm-1)
 REAL :: wt_org_adj       ! organic-diluted H2SO4 weight percent (%)
@@ -1200,7 +1199,7 @@ DO jl=kstart, kend
   ! fraction of total aerosol (cases 4-5). Both have been scaled and
   ! stratosphere-masked by the driver.
   !
-  ! focr and roc has been scaled in the driver.
+  ! focr and roc has been scaled and bound in the driver.
   ! This step bounds focr and roc_b to their correct ranges again.
   ! focr_b is bound between [0, 1]
   ! rocl_b is bound >=0 
