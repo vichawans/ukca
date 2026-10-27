@@ -140,8 +140,9 @@ IF (PrintStatus >= Prstatus_Oper) THEN
 END IF
 
 ! DEST
-IF ((ukca_config%l_ukca_deststrattrop) .AND. (ukca_config%l_ukca_dest_clvsls_lbc) ) THEN
-
+IF (ukca_config%l_ukca_deststrattrop) THEN
+   !! lbc_mmr_2D(:,:) are set to zero by routine ukca_scenario_Cl_VSLS
+   !! if ukca_config%l_ukca_dest_clvsls_lbc=.False.
   IF (PrintStatus >= Prstatus_DIAG) THEN
     WRITE(umMessage,*) 'n_boundary_vals_2D:',n_boundary_vals_2D,'; lbc_spec_2D:',lbc_spec_2D
     CALL umPrint(umMessage,src='ukca_scenario_ctl_mod')
