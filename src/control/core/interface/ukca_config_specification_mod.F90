@@ -223,6 +223,8 @@ TYPE :: ukca_config_spec_type
   REAL :: dry_depvel_so2_scaling       ! SO2 dry deposition velocity scaling
                                        ! factor
   LOGICAL :: l_ukca_dest_iodine        ! True to include iodine chemistry in DEST chemistry
+  LOGICAL :: l_ukca_dest_clvsls_emiss  ! True to use emissions instead of LBC
+                                       ! for Cl-VSLS
   
   ! -- Chemistry - Heterogeneous chemistry --
 
@@ -887,6 +889,7 @@ ukca_config%l_ukca_scale_soa_yield_isop = .FALSE.
 ukca_config%soa_yield_scaling_isop = rmdi
 ukca_config%dry_depvel_so2_scaling = rmdi
 ukca_config%l_ukca_dest_iodine = .FALSE.
+ukca_config%l_ukca_dest_clvsls_emiss = .FALSE.
 
 ! -- Chemistry - Heterogeneous chemistry --
 ukca_config%l_ukca_het_psc = .FALSE.
@@ -1147,7 +1150,8 @@ SUBROUTINE ukca_get_config(                                                    &
    l_tracer_lumping,                                                           &
    l_ukca_ro2_ntp, l_ukca_ro2_perm,                                            &
    l_ukca_intph,ph_fit_coeff_a,ph_fit_coeff_b,ph_fit_intercept,                &
-   l_ukca_scale_soa_yield_mt,l_ukca_scale_soa_yield_isop, l_ukca_dest_iodine,  &
+   l_ukca_scale_soa_yield_mt,l_ukca_scale_soa_yield_isop,                      &
+   l_ukca_dest_iodine, l_ukca_dest_clvsls_emiss,                               &
    l_ukca_het_psc,                                                             &
    l_ukca_limit_nat,                                                           &
    l_ukca_sa_clim,                                                             &
@@ -1357,6 +1361,7 @@ LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_intph
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_scale_soa_yield_mt
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_scale_soa_yield_isop
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_dest_iodine
+LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_dest_clvsls_emiss
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_het_psc
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_limit_nat
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_sa_clim
@@ -1592,6 +1597,8 @@ IF (PRESENT(dry_depvel_so2_scaling))                                           &
   dry_depvel_so2_scaling = ukca_config%dry_depvel_so2_scaling
 IF (PRESENT(l_ukca_dest_iodine))                                               &
   l_ukca_dest_iodine = ukca_config%l_ukca_dest_iodine
+IF (PRESENT(l_ukca_dest_clvsls_emiss))                                         &
+  l_ukca_dest_clvsls_emiss = ukca_config%l_ukca_dest_clvsls_emiss
 
 ! -- Chemistry - Heterogeneous chemistry --
 IF (PRESENT(l_ukca_het_psc)) l_ukca_het_psc = ukca_config%l_ukca_het_psc
