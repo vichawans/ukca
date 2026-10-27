@@ -105,10 +105,10 @@ INTEGER, PARAMETER :: rm = 1024   ! Used to remove reactions that existed at
 INTEGER, PARAMETER :: di = 2048   ! DEST + iodine
 
 ! Define size of master chemistry
-INTEGER, PARAMETER :: n_chch_master = 402 ! number of known species !DEST +27 DEST_I +18
+INTEGER, PARAMETER :: n_chch_master = 406 ! number of known species !DEST +31 DEST_I +18
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 165 ! number of dry deposition reactions !DEST +3
-INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
+INTEGER, PARAMETER :: n_wet_master  = 164 ! number of wet deposition reactions !DEST +4
 INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 118 ! number of termolecular reactions !DEST +2
@@ -176,7 +176,7 @@ IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 ! dry deposition flag, wet deposition flag, scheme,
 ! selection qualifier, deselection / disqualifier, (UM) version when entered
 ! into the master mechanism.
-chch_defs_master(1:151)=[                                                      &
+chch_defs_master(1:155)=[                                                      &
 !   1
 chch_t1( 1,'O(3P)     ',1,'TR        ','Ox        ',0,0,s+st+cs+dest,0,0,107), &
 !   1
@@ -280,19 +280,27 @@ chch_t1(20,'HO2       ',1,'TR        ','HOx       ',0,1,ti+s+st+cs+dest,       &
 chch_t1(20,'HO2       ',1,'SS        ','HOx       ',0,1,t+r,0,0,107),          &
 chch_t1(20,'HO2       ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
 !  21 VS_note - DEST add new species of Cl which deposits
-chch_t1(21,'Cl        ',1,'TR        ','Clx       ',0,0,s+st+cs+dest,0,0,107), &
+chch_t1(21,'Cl        ',1,'TR        ','Clx       ',0,0,s+st+cs,0,0,107),      &
+! DEST - Cl wet deposits
+chch_t1(21,'Cl        ',1,'TR        ','Clx       ',0,1,dest,0,0,107),         &
 !  22
 chch_t1(22,'Cl2O2     ',1,'TR        ','Clx       ',0,0,s+st+cs+dest,0,0,107), &
 !  23 VS_note - DEST add new species that deposits
-chch_t1(23,'ClO       ',1,'TR        ','Clx       ',0,0,s+st+cs+dest,0,0,107), &
+chch_t1(23,'ClO       ',1,'TR        ','Clx       ',0,0,s+st+cs,0,0,107),      &
+! - ClO wet deposits
+chch_t1(23,'ClO       ',1,'TR        ','Clx       ',0,1,dest,0,0,107),         &
 !  24
 chch_t1(24,'OClO      ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  25 VS_note - DEST add new species that deposits
-chch_t1(25,'Br        ',1,'TR        ','Brx       ',0,0,s+st+cs+dest,0,0,107), &
+chch_t1(25,'Br        ',1,'TR        ','Brx       ',0,0,s+st+cs,0,0,107),      &
+! DEST - Br wet deposits
+chch_t1(25,'Br        ',1,'TR        ','Brx       ',0,1,dest,0,0,107),         &
 !  26
 chch_t1(26,'BrO       ',1,'TR        ','Brx       ',0,0,s+st+cs+dest,0,0,107), &
 !  27 VS_note - DEST add new species that deposits
-chch_t1(27,'BrCl      ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
+chch_t1(27,'BrCl      ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+! DEST - BrCl wet deposits
+chch_t1(27,'BrCl      ',1,'TR        ','          ',0,1,dest,0,0,107),         &
 !  28        WD: 11, VS_note - DEST add new species that dry deposits
 chch_t1(28,'BrONO2    ',1,'TR        ','          ',0,1,s+st+cs,0,0,107),      &
 ! DEST - BrNO2 dry deposits
@@ -526,7 +534,7 @@ chch_t1(92,'HO2S      ',1,'SS        ','          ',0,1,t,0,0,107)             &
 
 
 ! Species definitions continued
-chch_defs_master(152:246)=[                                                    &
+chch_defs_master(156:250)=[                                                    &
 !  93
 chch_t1(93,'s-BuOO    ',1,'SS        ','          ',0,0,r,0,0,107),            &
 !  94
@@ -721,7 +729,7 @@ chch_t1(181,'RU10OOH   ',1,'TR        ','          ',1,1,cs,0,0,107)           &
 ]
 
 
-chch_defs_master(247:n_chch_master)=[                                          &
+chch_defs_master(251:n_chch_master)=[                                          &
 ! 182 DD: 94,WD: 69,
 chch_t1(182,'NRU14OOH  ',1,'TR        ','          ',1,1,cs,0,0,107),          &
 ! 183 DD: 95,WD: 70,
@@ -2674,7 +2682,20 @@ wetdep(119, 'RU12NO3   ',                                                      &
 wetdep(120, 'RU10NO3   ',                                                      &
 [1.84e+05,6.00e+03,0.00e+00,0.00e+00,0.00e+00,0.00e+00],cs,0,0,119),           &
 wetdep(121, 'SEC_ORG_I ',                                                      &
-[0.10e+06,0.12e+02,0.00e+00,0.00e+00,0.00e+00,0.00e+00],st+dest,a,0,132)       &
+[0.10e+06,0.12e+02,0.00e+00,0.00e+00,0.00e+00,0.00e+00],st+dest,a,0,132),      &
+! DEST 122-125
+! WD: 122
+wetdep(122,'Cl        ',&! Sander 2015 (JPL2015)
+[0.23e+01,0.00e+00,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
+! WD: 123
+wetdep(123,'ClO       ',&! Sander 2015 (JPL2015)
+[0.71e+00,0.00e+00,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
+! WD: 124
+wetdep(124,'Br        ',&! Mozurkewich 1986; Schwarz and Dodson 1984
+[0.12e+01,0.00e+00,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
+! WD: 125
+wetdep(125,'BrCl      ',&! Sander 2015 (JPL2015)
+[0.98e+00,0.56e+04,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107)          &
 ]
 
 ! ---------------------------------------------------------------------
