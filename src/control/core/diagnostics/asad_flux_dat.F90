@@ -9504,10 +9504,10 @@ TYPE(asad_flux_defn), PARAMETER :: dest_OH_prod(46) = [                        &
        asad_flux_defn('RXN',50543,'B',.TRUE.,0,4,                              & !ratb(22)
        ['Cl        ','HO2       '],                                            &
        ['ClO       ','OH        ','          ','          ']),                 &
-       asad_flux_defn('RXN',50544,'B',.TRUE.,0,4,                              & !ratb(138)
+       asad_flux_defn('RXN',50544,'B',.TRUE.,1,4,                              & !ratb(138)
        ['O3        ','MACR      '],                                            &
        ['OH        ','MeCO3     ','          ','          ']),                 &
-       asad_flux_defn('RXN',50544,'B',.TRUE.,0,4,                              & !ratb(139)
+       asad_flux_defn('RXN',50544,'B',.TRUE.,2,4,                              & !ratb(139)
        ['O3        ','MACR      '],                                            &
        ['OH        ','MeCO3     ','          ','          ']),                 &
        asad_flux_defn('RXN',50545,'B',.TRUE.,0,4,                              & !ratb(133)
@@ -9653,16 +9653,16 @@ TYPE(asad_flux_defn), PARAMETER :: dest_Ox_loss(67) = [                        &
        asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(186)
        ['OH        ','OClO      '],                                            &
        ['HOCl      ','O2        ','          ','          ']),                 &
-       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(796)
+       asad_flux_defn('RXN',50548,'B',.TRUE.,1,4,                              & !ratb(796)
        ['ClO       ','ClO       '],                                            &
        ['Cl2       ','O2        ','          ','          ']),                 &
-       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(796)
+       asad_flux_defn('RXN',50548,'B',.TRUE.,1,4,                              & !ratb(796)
        ['ClO       ','ClO       '],                                            &
        ['Cl2       ','O2        ','          ','          ']),                 &
-       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(797)
+       asad_flux_defn('RXN',50548,'B',.TRUE.,2,4,                              & !ratb(797)
        ['ClO       ','ClO       '],                                            &
        ['Cl2       ','O2        ','          ','          ']),                 &
-       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(797)
+       asad_flux_defn('RXN',50548,'B',.TRUE.,2,4,                              & !ratb(797)
        ['ClO       ','ClO       '],                                            &
        ['Cl2       ','O2        ','          ','          ']),                 &
        asad_flux_defn('RXN',50549,'H',.TRUE.,0,4,                              & !rath(4)
@@ -9881,16 +9881,16 @@ TYPE(asad_flux_defn), PARAMETER :: dest_Ox_loss_2(48) = [                      &
        asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(135)
        ['O3        ','C5H8      '],                                            &
        ['MeOO      ','HCOOH     ','CO        ','H2O2      ']),                 &
-       asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(136)
+       asad_flux_defn('RXN',50558,'B',.TRUE.,1,6,                              & !ratb(136)
        ['O3        ','MACR      '],                                            &
        ['MGLY      ','HCOOH     ','HO2       ','CO        ']),                 &
-       asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(137)
+       asad_flux_defn('RXN',50558,'B',.TRUE.,2,6,                              & !ratb(137)
        ['O3        ','MACR      '],                                            &
        ['MGLY      ','HCOOH     ','HO2       ','CO        ']),                 &
-       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(138)
+       asad_flux_defn('RXN',50558,'B',.TRUE.,1,4,                              & !ratb(138)
        ['O3        ','MACR      '],                                            &
        ['OH        ','MeCO3     ','          ','          ']),                 &
-       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(139)
+       asad_flux_defn('RXN',50558,'B',.TRUE.,2,4,                              & !ratb(139)
        ['O3        ','MACR      '],                                            &
        ['OH        ','MeCO3     ','          ','          ']),                 &
        asad_flux_defn('RXN',50558,'B',.TRUE.,0,5,                              & !ratb(198)
