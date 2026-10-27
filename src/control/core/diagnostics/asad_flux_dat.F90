@@ -8780,20 +8780,20 @@ asad_flux_defn('RXN',50994,'H',.FALSE.,0,4,                                    &
 
 !--VS Add 
 ! Heterogeneous reactions in the stratospehere and PSC1 and PSC2
-TYPE(asad_flux_defn), PARAMETER :: strat_het_strattrop(15) = [                 &
+TYPE(asad_flux_defn), PARAMETER, PUBLIC :: strat_het_strattrop(15) = [         &
 asad_flux_defn('RXN',50451,'H',.FALSE.,0,4,                                    & !RATH1
 ['ClONO2    ','H2O       '],                                                   &
 ['HOCl      ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50452,'H',.FALSE.,0,4,                                    & !RATH2
+asad_flux_defn('RXN',50452,'H',.FALSE.,0,5,                                    & !RATH2
 ['ClONO2    ','HCl       '],                                                   &
 ['Cl        ','Cl        ','HONO2     ','          ']),                        &
-asad_flux_defn('RXN',50453,'H',.FALSE.,0,4,                                    & !RATH3
+asad_flux_defn('RXN',50453,'H',.FALSE.,0,5,                                    & !RATH3
 ['HOCl      ','HCl       '],                                                   &
 ['Cl        ','Cl        ','H2O       ','          ']),                        &
 asad_flux_defn('RXN',50454,'H',.FALSE.,0,4,                                    & !RATH4
 ['N2O5      ','H2O       '],                                                   &
 ['HONO2     ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50455,'H',.FALSE.,0,4,                                    & !RATH5
+asad_flux_defn('RXN',50455,'H',.FALSE.,0,5,                                    & !RATH5
 ['N2O5      ','HCl       '],                                                   &
 ['Cl        ','NO2       ','HONO2     ','          ']),                        &
 asad_flux_defn('RXN',50456,'H',.FALSE.,0,4,                                    & !RATH6
@@ -8811,10 +8811,10 @@ asad_flux_defn('RXN',50459,'H',.FALSE.,0,4,                                    &
 asad_flux_defn('RXN',50460,'H',.FALSE.,0,4,                                    & !RATH10
 ['BrONO2    ','H2O       '],                                                   &
 ['HOBr      ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50461,'H',.FALSE.,0,4,                                    & !RATH11
+asad_flux_defn('RXN',50461,'H',.FALSE.,0,5,                                    & !RATH11
 ['HOBr      ','HBr       '],                                                   &
 ['Br        ','Br        ','H2O       ','          ']),                        &
-asad_flux_defn('RXN',50462,'H',.FALSE.,0,4,                                    & !RATH12
+asad_flux_defn('RXN',50462,'H',.FALSE.,0,5,                                    & !RATH12
 ['BrONO2    ','HBr       '],                                                   &
 ['Br        ','Br        ','HONO2     ','          ']),                        &
 asad_flux_defn('RXN',50463,'H',.FALSE.,0,5,                                    & !RATH13
