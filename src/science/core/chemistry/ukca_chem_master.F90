@@ -109,7 +109,7 @@ INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DE
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
-INTEGER, PARAMETER :: n_bimol_master = 1212 ! number of bimolecular reactions
+INTEGER, PARAMETER :: n_bimol_master = 1228 ! number of bimolecular reactions !DEST +16
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 116 ! number of termolecular reactions
 
@@ -6389,11 +6389,11 @@ ratb_t1(646,'OH        ','NRU12OOH  ','NOA       ','CO        ','OH        ',  &
 '          ',2.65e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00,cs,0,0,107)      &
 ]
 
-! Start and end bounds for FINAL section of ratb_defs.
-! This one must end on n_bimol_master!
-! Remember to increment n_bimol_master if you add a reaction in any ratb array
+! Start and end bounds for 17th section of ratb_defs.
+! If you add extra reactions to this section, increment n_ratb_e
 n_ratb_s = n_ratb_e+1
-ratb_defs_master(n_ratb_s:n_bimol_master) = [                                  &
+n_ratb_e = n_ratb_s+104 ! before DEST was added n_bimol_master=1212
+ratb_defs_master(n_ratb_s:n_ratb_e) = [                                        &
 ! B647
 ratb_t1(647,'OH        ','HOC2H4OOH ','HOCH2CHO  ','OH        ','          ',  &
 '          ',2.13e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00,cs,0,0,107),     &
@@ -6713,6 +6713,57 @@ ratb_t1(745,'HO2       ','EtCO3     ','OH        ','EtOO      ','CO2       ',  &
                                                               0,0,121)         &
 ]
 
+! Start and end bounds for FINAL section of ratb_defs.
+! This one must end on n_bimol_master!
+! Remember to increment n_bimol_master if you add a reaction in any ratb array
+!
+! Additional reactions for DEST chemical scheme
+n_ratb_s = n_ratb_e+1
+ratb_defs_master(n_ratb_s:n_bimol_master) = [                                  &
+!!! Adding reactions of extra long-lived ODSs with O1D/OH for DEST !!!
+! ---- CFC11/CFC12 +OH ----
+ratb_t1(746,'CFCl3     ','OH        ','Cl        ','Cl        ','ClO       ',  &
+'          ',1.00e-11,  0.00, 9700.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(747,'CF2Cl2    ','OH        ','Cl        ','ClO       ','          ',  &
+'          ',1.00e-11,  0.00,11900.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- MeCl ----
+ratb_t1(748,'MeCl      ','OH        ','Cl        ','H2O       ','          ',  &
+'          ',1.96e-12,  0.00, 1200.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(749,'MeCl      ','O(1D)     ','ClO       ','          ','          ',  &
+'          ',2.34e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- halon 1211 ----
+ratb_t1(750,'CF2ClBr   ','OH        ','Cl        ','BrO       ','          ',  &
+'          ',1.00e-12,  0.00, 3500.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(751,'CF2ClBr   ','O(1D)     ','Cl        ','BrO       ','          ',  &
+'          ',9.75e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- CCl4 ----
+ratb_t1(752,'CCl4      ','OH        ','Cl        ','Cl        ','Cl        ',  &
+'ClO       ',1.00e-11,  0.00, 6200.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(753,'CCl4      ','O(1D)     ','Cl        ','Cl        ','Cl        ',  &
+'ClO       ',2.61e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- CFC113 ----
+ratb_t1(754,'CF2ClCFCl2','O(1D)     ','Cl        ','Cl        ','ClO       ',  &
+'          ',2.09e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, DEST,0,0,107),  &
+ratb_t1(755,'CF2ClCFCl2','OH        ','Cl        ','Cl        ','ClO       ',  &
+'          ',1.00e-11,  0.00, 6200.00, 0.00, 0.00, 0.00, 0.00, DEST,0,0,107),  &
+! ---- HCFC22 ----
+ratb_t1(756,'CHF2Cl    ','OH        ','Cl        ','H2O       ','          ',  &
+'          ',9.20e-13,  0.00, 1560.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(757,'CHF2Cl    ','O(1D)     ','ClO       ','          ','          ',  &
+'          ',7.65e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- MeCCl3 ----
+ratb_t1(758,'MeCCl3    ','OH        ','COCl2     ','Cl        ','H2O       ',  &
+'          ',1.64e-12,  0.00, 1520.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(759,'MeCCl3    ','O(1D)     ','Cl        ','Cl        ','ClO       ',  &
+'          ',2.93e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- halon 1301 ----
+ratb_t1(760,'CF3Br     ','OH        ','Br        ','          ','          ',  &
+'          ',1.00e-12,  0.00, 3600.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(761,'CF3Br     ','O(1D)     ','BrO       ','          ','          ',  &
+'          ',4.50e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
+        
+] 
+     
 !----------------------------------------------------------------------
 ! NOTES: CheST Bimolecular Reactions
 !----------------------------------------------------------------------
