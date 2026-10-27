@@ -121,6 +121,12 @@ IF (l_first) THEN
   emdiags%l_em_etcho   = .FALSE.
   emdiags%l_em_hoch2cho= .FALSE.
   emdiags%l_em_mek     = .FALSE.
+  ! DEST emission logicals
+  emdiags%l_em_chbr3  = .FALSE.
+  emdiags%l_em_ch2br2 = .FALSE.
+  emdiags%l_em_ch2brcl= .FALSE.
+  emdiags%l_em_chbr2cl= .FALSE.
+  emdiags%l_em_chbrcl2= .FALSE. 
 
   l_first             = .FALSE.
 END IF
@@ -535,6 +541,61 @@ CASE ('MEK        ')
     END IF
   END IF
 
+! DEST
+CASE ('CHBr3     ')
+  IF (emdiags%l_em_chbr3) THEN
+    emdiags%em_chbr3 (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_chbr3 (row_length, rows))
+      emdiags%em_chbr3 (:,:) = em_diags (:,:,1)
+      emdiags%l_em_chbr3     = .TRUE.
+    END IF
+  END IF
+
+CASE ('CH2Br2    ')
+  IF (emdiags%l_em_ch2br2) THEN
+    emdiags%em_ch2br2 (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_ch2br2 (row_length, rows))
+      emdiags%em_ch2br2 (:,:) = em_diags (:,:,1)
+      emdiags%l_em_ch2br2     = .TRUE.
+    END IF
+  END IF
+
+CASE ('CH2BrCl   ')
+  IF (emdiags%l_em_ch2brcl) THEN
+    emdiags%em_ch2brcl (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_ch2brcl (row_length, rows))
+      emdiags%em_ch2brcl (:,:) = em_diags (:,:,1)
+      emdiags%l_em_ch2brcl     = .TRUE.
+    END IF
+  END IF
+
+CASE ('CHBr2Cl   ')
+  IF (emdiags%l_em_chbr2cl) THEN
+    emdiags%em_chbr2cl (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_chbr2cl (row_length, rows))
+      emdiags%em_chbr2cl (:,:) = em_diags (:,:,1)
+      emdiags%l_em_chbr2cl     = .TRUE.
+    END IF
+  END IF
+
+CASE ('CHBrCl2   ')
+  IF (emdiags%l_em_chbrcl2) THEN
+    emdiags%em_chbrcl2 (:,:) = em_diags (:,:,1)
+  ELSE
+    IF (sf(item,section)) THEN
+      ALLOCATE (emdiags%em_chbrcl2 (row_length, rows))
+      emdiags%em_chbrcl2 (:,:) = em_diags (:,:,1)
+      emdiags%l_em_chbrcl2     = .TRUE.
+    END IF
+  END IF
 
 CASE DEFAULT
     ! Report error unless this is an aerosol emission (BC_fossil:, etc)

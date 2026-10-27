@@ -50,7 +50,8 @@ USE ukca_constants,  ONLY: m_br, m_brcl, m_bro, m_brono2, m_c, m_c2h4,         &
                            m_nh3, m_no, m_no2, m_oclo, m_ocs, m_oxylene,       &
                            m_so2, m_so4, m_toluene, m_c2h2, m_tbut2ene,        &
                            m_benzene, m_etoh, m_etcho, m_mek, m_hcooh,         &
-                           m_meco2h, m_hoch2cho, m_mp
+                           m_meco2h, m_hoch2cho, m_mp, m_chbr3, m_ch2brcl,     &
+                           m_chbr2cl, m_chbrcl2
 
 USE ereport_mod,     ONLY: ereport
 USE parkind1,        ONLY: jpim,  jprb     ! DrHook
@@ -282,6 +283,20 @@ CASE ('MeCO2H    ')
 
 CASE ('HOCH2CHO  ')
   get_molmass = m_hoch2cho
+
+  ! -----------------------------------------
+  !   Emitted DEST species
+CASE ('CHBr3     ')
+  get_molmass = m_chbr3
+
+CASE ('CH2BrCl   ')
+  get_molmass = m_ch2brcl
+
+CASE ('CHBr2Cl   ')
+  get_molmass = m_chbr2cl
+
+CASE ('CHBrCl2   ')
+  get_molmass = m_chbrcl2
 
   ! -----------------------------------------
   !   Others (report warning)

@@ -418,14 +418,15 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
     ! =======================
   ELSE IF (ukca_config%l_ukca_deststrattrop) THEN
     IF (.NOT. ukca_config%l_ukca_achem) THEN  ! If NOT using aerosol chemistry
-      n_chem_emissions = 10
+      n_chem_emissions = 15 !DEST +5
       n_3d_emissions = 1       ! aircraft NOX
       n_aero_tracers =  0
       ALLOCATE(em_chem_spec(n_chem_emissions+n_3d_emissions))
       em_chem_spec =                                                           &
           ['NO        ','CH4       ','CO        ','HCHO      ',                &
             'C2H6      ','C3H8      ','Me2CO     ','MeCHO     ',               &
-            'C5H8      ','MeOH      ','NO_aircrft']
+            'C5H8      ','MeOH      ','CHBr3     ','CH2Br2    ','CH2BrCl   ',  &
+            'CHBr2Cl   ','CHBrCl2   ','NO_aircrft']
       n_chem_tracers = 96         ! No chem tracers !DEST: 71+25
       nr_therm       = 278        ! thermal reactions LS: 220 - 9 (defined differently for DEST)
                                   ! + 59 (bimol DEST) + 2 (termol DEST) 
@@ -437,7 +438,7 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       END IF
 
     ELSE  ! If using aerosol chemistry
-      n_chem_emissions = 19      ! em_chem_spec below
+      n_chem_emissions = 24      ! em_chem_spec below, DEST+5
       n_3d_emissions   = 4       ! BC, OC, volc SO2 & aircraft NOX
 
       ! add extra allocation for microplastics (i_mode_setup 13)
@@ -446,13 +447,14 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       END IF
 
       ALLOCATE(em_chem_spec(n_chem_emissions+n_3d_emissions))
-      em_chem_spec(1:23) =                                                     &
+      em_chem_spec(1:28) =                                                     &
           ['NO        ','CH4       ','CO        ','HCHO      ',                &
             'C2H6      ','C3H8      ','Me2CO     ','MeCHO     ',               &
             'C5H8      ','BC_fossil ','BC_biofuel','OM_fossil ',               &
             'OM_biofuel','Monoterp  ','MeOH      ','SO2_low   ',               &
-            'SO2_high  ','NH3       ','DMS       ','SO2_nat   ',               &
-            'BC_biomass','OM_biomass','NO_aircrft']
+            'SO2_high  ','NH3       ','DMS       ','CHBr3     ',               &
+            'CH2Br2    ','CH2BrCl   ','CHBr2Cl   ','CHBrCl2   ',               &
+            'SO2_nat   ','BC_biomass','OM_biomass','NO_aircrft']
       IF (ukca_config%i_ukca_chem_version >= ichem_ver132) THEN
         ! Include secondary organic species from isoprene oxidation (SEC_ORG_I)
         n_aero_tracers = 13

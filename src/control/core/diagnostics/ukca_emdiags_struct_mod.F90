@@ -65,7 +65,12 @@ TYPE :: emdiags_struct
   LOGICAL :: l_em_etcho
   LOGICAL :: l_em_hoch2cho
   LOGICAL :: l_em_mek
-
+  ! Logicals for DEST emission species
+  LOGICAL :: l_em_chbr3
+  LOGICAL :: l_em_ch2br2
+  LOGICAL :: l_em_ch2brcl
+  LOGICAL :: l_em_chbr2cl
+  LOGICAL :: l_em_chbrcl2
 
   ! Pointers to hold emission diagnostics
   REAL, POINTER :: em_no     (:,:)
@@ -104,7 +109,12 @@ TYPE :: emdiags_struct
   REAL, POINTER :: em_etcho   (:,:)
   REAL, POINTER :: em_hoch2cho(:,:)
   REAL, POINTER :: em_mek     (:,:)
-
+  ! Pointers for DEST emissions
+  REAL, POINTER :: em_chbr3  (:,:)
+  REAL, POINTER :: em_ch2br2 (:,:)
+  REAL, POINTER :: em_ch2brcl(:,:)
+  REAL, POINTER :: em_chbr2cl(:,:)
+  REAL, POINTER :: em_chbrcl2(:,:)  
 END TYPE emdiags_struct
 
 END MODULE ukca_emdiags_struct_mod

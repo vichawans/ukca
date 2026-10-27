@@ -495,6 +495,52 @@ IF (sf(item, section)) THEN
                  emdiags%em_mek (:,:), row_length, rows)
 END IF
 
+!DEST
+!---------------------------------------------------------------------
+! Sec 50, item 315: CHBr3 surface emissions
+item = get_emdiag_stash ('CHBr3     ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_chbr3 (:,:), row_length, rows)
+END IF
+
+!---------------------------------------------------------------------
+! Sec 50, item 316: CH2Br2 surface emissions
+item = get_emdiag_stash ('CH2Br2    ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_ch2br2 (:,:), row_length, rows)
+END IF
+
+!---------------------------------------------------------------------
+! Sec 50, item 317: CH2BrCl surface emissions
+item = get_emdiag_stash ('CH2BrCl   ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_ch2brcl (:,:), row_length, rows)
+END IF
+
+!---------------------------------------------------------------------
+! Sec 50, item 318: CHBr2Cl surface emissions
+item = get_emdiag_stash ('CHBr2Cl   ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_chbr2cl (:,:), row_length, rows)
+END IF
+
+!---------------------------------------------------------------------
+! Sec 50, item 319: CHBrCl2 surface emissions
+item = get_emdiag_stash ('CHBrCl2   ')
+IF (sf(item, section)) THEN
+  CALL copydiag (stashwork (si(item,section,im_index):                         &
+                 si_last(item,section,im_index)),                              &
+                 emdiags%em_chbrcl2 (:,:), row_length, rows)
+END IF
+
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 
 RETURN
