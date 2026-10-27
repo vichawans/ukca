@@ -8768,7 +8768,7 @@ asad_flux_defn('DEP',50155,'W',.TRUE.,0,1,                                     &
 
 ! add_noy_diags
 TYPE(asad_flux_defn), PARAMETER, PUBLIC ::                                     &
-                         noy_diags(10) = [  
+                         noy_diags(10) = [                                     &
 ! tendency in the troposphere
        asad_flux_defn('NET',50451,'X',.TRUE.,0,1,                              &
        ['HONO2     ','          '],                                            &
@@ -9073,12 +9073,10 @@ IF (ukca_config%l_ukca_strattrop) THEN
 
   ! add_noy_diags
   IF (ukca_config%i_ukca_chem_version >= ichem_version_121) THEN
-    IF (ukca_config%l_ukca_chem_aero) THEN
-      ALLOCATE(aa_noy_diags(SIZE(noy_diags)))
-      aa_noy_diags = noy_diags
-    END IF
+    ALLOCATE(aa_noy_diags(SIZE(noy_diags)))
+    aa_noy_diags = noy_diags
   END IF
-
+  
 ELSE IF (ukca_config%l_ukca_cristrat) THEN
   ! Select the asad diagnostics appropriate for CRI-Strat chemistry and
   ! allocate the generic flux arrays according to the model configuration
