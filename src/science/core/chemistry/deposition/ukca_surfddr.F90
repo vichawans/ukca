@@ -665,7 +665,7 @@ IF (first) THEN
           rsurf(:,n)=tenpointzero
         END IF
       CASE ('HCl       ','HOCl      ','HBr       ','HOBr      ',              &
-            'ClONO2    ','BrONO2    ')
+            'ClONO2    ','BrONO2    ','COCl2     ')
         IF (l_fix_improve_drydep) THEN
           rsurf(:,n)=[ 8.5, 8.4, 13.2, 12.0, 62.3, 12.8, 13.9, 16.0, 19.4 ]
         ELSE
@@ -873,7 +873,7 @@ IF (first) THEN
       CASE ('HNO3      ','HONO2     ','B2ndry    ','A2ndry    ','N2O5      ')
         rsurf(1:6,n)=[ 9.5,8.0,8.0,8.4,8.4,13.2 ]
       CASE ('HCl       ','HOCl      ','HBr       ','HOBr      ',               &
-            'ClONO2    ','BrONO2    ')
+            'ClONO2    ','BrONO2    ','COCl2     ')
         IF (l_fix_improve_drydep) THEN
           rsurf(1:6,n)=[ 9.5,8.0,8.0,8.4,8.4,13.2 ]
         ELSE
@@ -1038,7 +1038,7 @@ IF (first) THEN
       CASE ('HNO3      ','HONO2     ','B2ndry    ','A2ndry    ','N2O5      ')
         rsurf(7:13,n)=[ 12.0,59.1,65.4,12.8,13.9,16.0,19.4 ]
       CASE ('HCl       ','HOCl      ','HBr       ','HOBr      ',               &
-            'ClONO2    ','BrONO2    ')
+            'ClONO2    ','BrONO2    ','COCl2     ')
         IF (l_fix_improve_drydep) THEN
           rsurf(7:13,n)=[ 12.0,59.1,65.4,12.8,13.9,16.0,19.4 ]
         END IF
@@ -1143,7 +1143,7 @@ IF (first) THEN
         rsurf(7:17,n)=[ 13.2,13.2,12.0,12.0,12.0,                              &
                          59.1,65.4,12.8,13.9,16.0,19.4 ]
       CASE ('HCl       ','HOCl      ','HBr       ','HOBr      ',               &
-            'ClONO2    ','BrONO2    ')
+            'ClONO2    ','BrONO2    ','COCl2     ')
         IF (l_fix_improve_drydep) THEN
           rsurf(7:17,n)=[ 13.2,13.2,12.0,12.0,12.0,                            &
                            59.1,65.4,12.8,13.9,16.0,19.4 ]
@@ -1243,7 +1243,7 @@ IF (first) THEN
         rsurf(18:27,n)=[ 19.4,19.4,19.4,19.4,19.4,                             &
                           19.4,19.4,19.4,19.4,19.4 ]
       CASE ('HCl       ','HOCl      ','HBr       ','HOBr      ',               &
-            'ClONO2    ','BrONO2    ')
+            'ClONO2    ','BrONO2    ','COCl2     ')
         IF (l_fix_improve_drydep) THEN
           rsurf(18:27,n)=[ 19.4,19.4,19.4,19.4,19.4,                           &
                             19.4,19.4,19.4,19.4,19.4 ]
@@ -2581,6 +2581,7 @@ DO j = 1, ndepd
             speci(nldepd(j)) == 'ClONO2    ' .OR.                              &
             speci(nldepd(j)) == 'BrONO2    ' .OR.                              &
             speci(nldepd(j)) == 'HBr       ' .OR.                              &
+            speci(nldepd(j)) == 'COCl2     ' .OR.                              &
             speci(nldepd(j))== 'HOBr      ') .AND. (l_fix_improve_drydep))) THEN
 
     IF ( ( .NOT. l_fix_ukca_h2dd_x )                              .OR.         &

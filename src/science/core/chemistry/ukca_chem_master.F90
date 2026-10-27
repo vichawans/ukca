@@ -107,7 +107,7 @@ INTEGER, PARAMETER :: di = 2048   ! DEST + iodine
 ! Define size of master chemistry
 INTEGER, PARAMETER :: n_chch_master = 402 ! number of known species !DEST +27 DEST_I +18
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
-INTEGER, PARAMETER :: n_dry_master  = 164 ! number of dry deposition reactions !DEST +2
+INTEGER, PARAMETER :: n_dry_master  = 165 ! number of dry deposition reactions !DEST +3
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
 INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
@@ -980,9 +980,9 @@ chch_t1(297,'C2H4Cl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 298
 chch_t1(298,'ClNO2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for ClNO2
 ! 299
-! In DEST vn11.0 dry deposition was active for COCl2,
-! but deposition velocities were set to zero. Should this be done here as well?
-chch_t1(299,'COCl2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! Add W+(D?) deposition for COCl2
+! As in DEST vn11.0 dry deposition is active for COCl2
+! with deposition velocities for 2D parameterisation set to zero.
+chch_t1(299,'COCl2     ',1,'TR        ','          ',1,0,dest,0,0,107),        & !!! Add W deposition for COCl2
 ! more long-lived ODSs, for DEST
 ! 300
 chch_t1(300,'CF2ClCF2Cl',1,'TR        ','          ',0,0,dest,0,0,107),        &
@@ -9052,6 +9052,15 @@ depvel_t(164,'BrONO2    ',                                                     &
  0.50,  0.50,  0.50,  0.50,  0.50,  0.50,                                      &
  0.50,  0.50,  0.50,  0.50,  0.50,  0.50,                                      &
  0.50,  0.50,  0.50,  0.50,  0.50,  0.50],                                     &
+ dest,0,0,107),                                                                &
+!
+! 165 COCl2, DEST
+depvel_t(165,'COCl2     ',                                                     &
+[0.00,  0.00,  0.00,  0.00,  0.00,  0.00,                                      &
+ 0.00,  0.00,  0.00,  0.00,  0.00,  0.00,                                      &
+ 0.00,  0.00,  0.00,  0.00,  0.00,  0.00,                                      &
+ 0.00,  0.00,  0.00,  0.00,  0.00,  0.00,                                      &
+ 0.00,  0.00,  0.00,  0.00,  0.00,  0.00],                                     &
  dest,0,0,107)                                                                 &
 ]
 ! ----------------------------------------------------------------------

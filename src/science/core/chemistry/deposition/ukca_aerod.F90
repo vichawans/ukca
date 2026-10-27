@@ -51,6 +51,7 @@ USE ukca_constants,          ONLY:                                             &
     m_bsvoc2,                                                                  &
     m_buooh,                                                                   &
     m_clono2,                                                                  &
+    m_cocl2,                                                                   &
     m_dmso,                                                                    &
     m_etcho,                                                                   &
     m_h2o,                                                                     &
@@ -591,6 +592,8 @@ IF (first) THEN
       d0(j) = d_h2o * SQRT(m_h2o / m_clono2)
     CASE ('BrONO2    ')
       d0(j) = d_h2o * SQRT(m_h2o / m_brono2)
+    CASE ('COCl2     ')
+      d0(j) = d_h2o * SQRT(m_h2o / m_cocl2)
     END SELECT
   END DO
   !
