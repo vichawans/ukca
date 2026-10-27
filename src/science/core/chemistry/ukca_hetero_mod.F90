@@ -658,8 +658,12 @@ ELSE ! New config
       ! should be applied by the driver when building roc (set roc=0 in
       ! the NH), since UKCA_HETERO does not carry latitude on the
       ! chemistry vector.
-      WHERE (stratflag(1:n_points))
+      WHERE (stratflag(1:n_points) .AND. roc(1:n_points) >= 0.0) 
+        ! This is the general case where mmr_so4>=0
         zroc(1:n_points) = MAX(roc(1:n_points)*oc_frac_scale, 0.0)
+      ELSEWHERE (stratflag(1:n_points) .AND. roc(1:n_points) < 0.0)
+        ! This is the specific case where mmr_so4<0 which was set in ukca_main1
+        zroc(1:n_points) = -9999.0
       END WHERE
     END IF
 
@@ -1213,6 +1217,7 @@ DO jl=kstart, kend
   focr_b = MIN(MAX(focr(jl), 0.0), 1.0)
   roc_b = MAX(roc(jl), 0.0)
 
+
   !*********************************************************************
   ! VS: CASE 2 ONLY (Solomon et al. 2023 Dilution). Organic mass dilutes
   ! the sulfate solution, lowering the H2SO4 weight percent. This is
@@ -1233,7 +1238,12 @@ DO jl=kstart, kend
   wt_water = 100.0 - wt_h2so4
 
   IF (l_dilute) THEN
-    wt_h2so4 = 1.0/((1.0/wt_h2so4) + (roc_b/100.0))
+    IF (roc(jl) >= 0.0 ) THEN ! case where mmr_so4 from glomap > 0
+      wt_h2so4 = 1.0/((1.0/wt_h2so4) + (roc_b/100.0))
+    ELSE ! case where mmr_so4 from glomap = 0
+      wt_h2so4 = 0.0
+    END IF
+
     wt_h2so4 = MAX(wt_h2so4, wt_dilute_min)
     wt_org   = wt_h2so4*roc_b
     wt_water = 100.0 - wt_h2so4 - wt_org
@@ -1388,9 +1398,15 @@ DO jl=kstart, kend
     ! keep the undiluted wt_h2so4, matching the CESM implementation.
     ! Rejected by Stone et al.: coagulating sulfate re-acidifies the
     ! mixed particle over time, inverting the multi-year trend.
+    
     IF (roc_b > 0.0) THEN
-      wt_org_adj = 1.0/((1.0/wt_h2so4) + (roc_b/100.0))
-      wt_org_adj = MAX(wt_org_adj, 0.01)
+      IF (roc(jl) >= 0.0 ) THEN ! case where mmr_so4 from glomap > 0
+        wt_org_adj = 1.0/((1.0/wt_h2so4) + (roc_b/100.0))
+      ELSE ! case where mmr_so4 from glomap = 0
+        wt_org_adj = 0.0
+      END IF
+
+      wt_org_adj = MAX(wt_org_adj, wt_dilute_min)
       ah_hcl = EXP(60.51 - (0.095*wt_org_adj) + (0.0077*(wt_org_adj**2.0))     &
                - (1.61e-5*(wt_org_adj**3.0))                                   &
                - ((1.76 + (2.52e-4*(wt_org_adj**2.0)))*(tt**0.5))              &

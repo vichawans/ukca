@@ -2261,8 +2261,12 @@ IF (ukca_config%l_ukca_chem) THEN
 
     IF (ukca_config%i_ukca_hetorg_case >= 1 .AND.                              &
         ukca_config%i_ukca_hetorg_case <= 3) THEN
-      roc = om1_total_mmr / so4_total_mmr
-      write(*,*) '!--VS roc =', sum(roc)
+      WHERE (so4_total_mmr/= 0.0) ! guard for case that denominator = 0
+        roc = om1_total_mmr / so4_total_mmr
+      ELSEWHERE ! This will be used to set wt_h2so4=0 in ukca_hetero
+        roc = -9999.0
+      END WHERE
+      write(*,*) '!--VS roc =', sum(roc, mask=(roc >= 0.0))
     ELSE IF (ukca_config%i_ukca_hetorg_case == 4) THEN
       focr = om1_total_mmr / aero_total_mmr
       write(*,*) '!--VS focr =', sum(focr)
