@@ -648,11 +648,9 @@ ELSE ! New config
       ! Stone LLPS cases: organic mass fraction of total aerosol.
       ! Case 4 uses combined OM, case 5 wildfire OM only - the
       ! distinction is made here, in the driver, not in the chemistry.
-      IF (PRESENT(focr)) THEN
-        WHERE (stratflag(1:n_points))
-          zfocr(1:n_points) = MIN(MAX(focr(1:n_points)*oc_frac_scale,0.0),1.0)
-        END WHERE
-      END IF
+      WHERE (stratflag(1:n_points))
+        zfocr(1:n_points) = MIN(MAX(focr(1:n_points)*oc_frac_scale,0.0),1.0)
+      END WHERE
     ELSE IF (i_ukca_hetorg_case >= 1 .AND. i_ukca_hetorg_case <= 3) THEN
       ! Solomon threshold (1), Solomon dilution (2) and Stone
       ! homogeneous (3): organic/sulfate mass ratio. For case 1 the
@@ -660,11 +658,9 @@ ELSE ! New config
       ! should be applied by the driver when building roc (set roc=0 in
       ! the NH), since UKCA_HETERO does not carry latitude on the
       ! chemistry vector.
-      IF (PRESENT(roc)) THEN
-        WHERE (stratflag(1:n_points))
-          zroc(1:n_points) = MAX(roc(1:n_points)*oc_frac_scale, 0.0)
-        END WHERE
-      END IF
+      WHERE (stratflag(1:n_points))
+        zroc(1:n_points) = MAX(roc(1:n_points)*oc_frac_scale, 0.0)
+      END WHERE
     END IF
 
     CALL ukca_shi_liquid_aerosol(1,n_points,n_points,                          &
