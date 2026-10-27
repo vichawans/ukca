@@ -427,7 +427,7 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
           ['NO        ','CH4       ','CO        ','HCHO      ',                &
             'C2H6      ','C3H8      ','Me2CO     ','MeCHO     ',               &
             'C5H8      ','MeOH      ','NO_aircrft']
-      n_chem_tracers = 71         ! No chem tracers
+      n_chem_tracers = 80         ! No chem tracers !DEST: 71+9
       nr_therm       = 220        ! thermal reactions LS: 220 - 4 = 216??
       nr_phot        = 55         ! photolytic (ATA)
 
@@ -454,7 +454,7 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       ELSE
         n_aero_tracers = 12
       END IF
-      n_chem_tracers = 71         ! No chem tracers
+      n_chem_tracers = 80         ! No chem tracers !DEST: 71+9
       IF (ukca_config%l_ukca_trophet) THEN
         nr_therm     = 241        ! thermal reactions, LS 241-4 = 237 ??
       ELSE

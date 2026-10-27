@@ -152,7 +152,7 @@ SUBROUTINE ukca_calc_cspecies
 USE ukca_constants,  ONLY: c_br, c_brcl, c_bro, c_brono2, c_buoo,              &
     c_buooh, c_c2h4, c_c2h6, c_c3h6, c_c3h8, c_c4h10, c_c5h8, c_ccl4,          &
     c_cf2cl2, c_cf2clbr, c_cf2clcfcl2, c_cf3br, c_cfcl3, c_ch2br2,             &
-    c_ch3oh, c_ch4, c_chf2cl, c_cl, c_cl2o2, c_clo, c_clono2, c_co,            &
+    c_ch3oh, c_ch4, c_chbr3, c_chf2cl, c_cl, c_cl2o2, c_clo, c_clono2, c_co,   &
     c_cos, c_cs2, c_dms, c_dmso, c_etcho, c_etco3, c_etoo, c_etooh,            &
     c_gly, c_h, c_h2, c_h2o, c_h2o2, c_h2s, c_h2so4, c_hacet, c_hbr,           &
     c_hcho, c_hcl, c_hcooh, c_ho2, c_ho2no2, c_hobr, c_hoc2h4o2,               &
@@ -465,6 +465,9 @@ WHERE (advt == 'RAROH14   ') c_species = c_cri
 WHERE (advt == 'RAROH17   ') c_species = c_cri
 WHERE (advt == 'PASSIVE O3') c_species = 1.0
 WHERE (advt == 'AGE OF AIR') c_species = 1.0
+
+! DEST
+WHERE (advt == 'CHBr3     ') c_species = c_chbr3   !for DEST
 
 ! non-advected tracers
 c_na_species=0.0

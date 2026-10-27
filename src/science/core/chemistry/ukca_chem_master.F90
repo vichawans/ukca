@@ -104,7 +104,7 @@ INTEGER, PARAMETER :: rm = 1024   ! Used to remove reactions that existed at
                                   ! later ones
 
 ! Define size of master chemistry
-INTEGER, PARAMETER :: n_chch_master = 357 ! number of known species
+INTEGER, PARAMETER :: n_chch_master = 366 ! number of known species !DEST +9
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
@@ -942,7 +942,26 @@ chch_t1(282,'RU10NO3   ',1,'TR        ','          ',1,1,cs,0,0,119),          &
 ! 283
 chch_t1(283,'MACO3     ',1,'OO        ','          ',0,0,cs,rp,0,119),         &
 ! 284
-chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st+dest,a,0,132)      &
+chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st+dest,a,0,132),     &
+! Unlumping long-lived ODS for DEST
+! 285
+chch_t1(285,'CCl4      ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 286
+chch_t1(286,'CF2ClCFCl2',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 287
+chch_t1(287,'CHF2Cl    ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 288
+chch_t1(288,'MeCCl3    ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 289 
+chch_t1(289,'MeCl      ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 290
+chch_t1(290,'CH2Br2    ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 291
+chch_t1(291,'CF2ClBr   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 292
+chch_t1(292,'CF3Br     ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 293
+chch_t1(293,'CHBr3     ',1,'TR        ','          ',0,0,dest,0,0,107)         &
 ]
 
 

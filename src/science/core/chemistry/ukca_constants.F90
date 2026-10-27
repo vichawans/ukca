@@ -415,6 +415,7 @@ REAL, PARAMETER :: m_mecl       =  50.5
 REAL, PARAMETER :: m_cf2clbr    = 165.5
 REAL, PARAMETER :: m_cf3br      = 149.0
 REAL, PARAMETER :: m_ch2br2     = 173.835
+REAL, PARAMETER :: m_chbr3      = 252.72
 
 ! sulphur containing, etc.
 REAL, PARAMETER :: m_ocs        =  60.0
