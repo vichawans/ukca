@@ -9416,454 +9416,500 @@ asad_flux_defn('RXN',50530,'J',.TRUE.,0,5,                                     &
 
 
 
-TYPE(asad_flux_defn), PARAMETER :: dest_OH_prod(45) = [                        &
-asad_flux_defn('RXN',50551,'B',.TRUE.,0,5,                                     & !ratb(24)
-['Cl        ','HOCl      '],                                                   &
-['Cl        ','Cl        ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50551,'B',.TRUE.,0,4,                                     & !ratb(111)
-['O(1D)     ','HCl       '],                                                   &
-['OH        ','Cl        ','          ','          ']),                        &
-asad_flux_defn('RXN',50551,'B',.TRUE.,0,4,                                     & !ratb(125)
-['O(3P)     ','HCl       '],                                                   &
-['OH        ','Cl        ','          ','          ']),                        &
-asad_flux_defn('RXN',50551,'B',.TRUE.,0,4,                                     & !ratb(127)
-['O(3P)     ','HOCl      '],                                                   &
-['OH        ','ClO       ','          ','          ']),                        &
-asad_flux_defn('RXN',50552,'B',.TRUE.,0,4,                                     & !ratb(108)
-['O(1D)     ','HBr       '],                                                   &
-['OH        ','Br        ','          ','          ']),                        &
-asad_flux_defn('RXN',50552,'B',.TRUE.,0,4,                                     & !ratb(123)
-['O(3P)     ','HBr       '],                                                   &
-['OH        ','Br        ','          ','          ']),                        &
-asad_flux_defn('RXN',50553,'B',.TRUE.,0,4,                                     & !ratb(69)
-['MeBr      ','O(1D)     '],                                                   &
-['Br        ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50553,'B',.TRUE.,0,6,                                     & !ratb(766)
-['CHBr3     ','O(1D)     '],                                                   &
-['Br        ','Br        ','Br        ','OH        ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,5,                                     & !ratj(1)
-['EtOOH     ','PHOTON    '],                                                   &
-['MeCHO     ','HO2       ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,5,                                     & !ratj(9)
-['MeOOH     ','PHOTON    '],                                                   &
-['HO2       ','HCHO      ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,5,                                     & !ratj(21)
-['n-PrOOH   ','PHOTON    '],                                                   &
-['EtCHO     ','HO2       ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,5,                                     & !ratj(22)
-['i-PrOOH   ','PHOTON    '],                                                   &
-['Me2CO     ','HO2       ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,5,                                     & !ratj(23)
-['MeCOCH2OOH','PHOTON    '],                                                   &
-['MeCO3     ','HCHO      ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,6,                                     & !ratj(26)
-['ISOOH     ','PHOTON    '],                                                   &
-['OH        ','MACR      ','HCHO      ','HO2       ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,6,                                     & !ratj(30)
-['MACROOH   ','PHOTON    '],                                                   &
-['OH        ','HO2       ','OH        ','HO2       ']),                        &
-asad_flux_defn('RXN',50554,'J',.TRUE.,0,4,                                     & !ratj(35)
-['MeCO3H    ','PHOTON    '],                                                   &
-['MeOO      ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50555,'J',.TRUE.,0,4,                                     & !ratj(6)
-['HONO2     ','PHOTON    '],                                                   &
-['OH        ','NO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50555,'J',.TRUE.,0,4,                                     & !ratj(18)
-['HONO      ','PHOTON    '],                                                   &
-['OH        ','NO        ','          ','          ']),                        &
-asad_flux_defn('RXN',50555,'J',.TRUE.,0,4,                                     & !ratj(56)
-['HO2NO2    ','PHOTON    '],                                                   &
-['OH        ','NO3       ','          ','          ']),                        &
-asad_flux_defn('RXN',50556,'B',.TRUE.,0,4,                                     & !ratb(106)
-['O(1D)     ','H2O       '],                                                   &
-['OH        ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50557,'B',.TRUE.,0,4,                                     & !ratb(62)
-['HO2       ','O3        '],                                                   &
-['OH        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                                     & !ratb(60)
-['HO2       ','NO        '],                                                   &
-['OH        ','NO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50559,'B',.TRUE.,0,4,                                     & !ratb(122)
-['O(3P)     ','H2O2      '],                                                   &
-['OH        ','HO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50560,'J',.TRUE.,0,4,                                     & !ratj(2)
-['H2O2      ','PHOTON    '],                                                   &
-['OH        ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50561,'J',.TRUE.,0,4,                                     & !ratj(49)
-['HOCl      ','PHOTON    '],                                                   &
-['OH        ','Cl        ','          ','          ']),                        &
-asad_flux_defn('RXN',50562,'J',.TRUE.,0,4,                                     & !ratj(43)
-['HOBr      ','PHOTON    '],                                                   &
-['OH        ','Br        ','          ','          ']),                        &
-asad_flux_defn('RXN',50563,'B',.TRUE.,0,4,                                     & !ratb(22)
-['Cl        ','HO2       '],                                                   &
-['ClO       ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50564,'B',.TRUE.,0,4,                                     & !ratb(138)
-['O3        ','MACR      '],                                                   &
-['OH        ','MeCO3     ','          ','          ']),                        &
-asad_flux_defn('RXN',50564,'B',.TRUE.,0,4,                                     & !ratb(139)
-['O3        ','MACR      '],                                                   &
-['OH        ','MeCO3     ','          ','          ']),                        &
-asad_flux_defn('RXN',50565,'B',.TRUE.,0,4,                                     & !ratb(133)
-['O3        ','C5H8      '],                                                   &
-['HO2       ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(45)
-['H         ','HO2       '],                                                   &
-['OH        ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'J',.TRUE.,0,4,                                     & !ratj(45)
-['H2O       ','PHOTON    '],                                                   &
-['OH        ','H         ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(46)
-['H         ','NO2       '],                                                   &
-['OH        ','NO        ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(47)
-['H         ','O3        '],                                                   &
-['OH        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(56)
-['HO2       ','MeCO3     '],                                                   &
-['OH        ','MeOO      ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'J',.TRUE.,0,5,                                     & !ratj(59)
-['H2SO4     ','PHOTON    '],                                                   &
-['SO3       ','OH        ','H         ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(61)
-['HO2       ','NO3       '],                                                   &
-['OH        ','NO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(103)
-['O(1D)     ','CH4       '],                                                   &
-['OH        ','MeOO      ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(105)
-['O(1D)     ','H2        '],                                                   &
-['OH        ','H         ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(121)
-['O(3P)     ','H2        '],                                                   &
-['OH        ','H         ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,5,                                     & !ratb(124)
-['O(3P)     ','HCHO      '],                                                   &
-['OH        ','CO        ','HO2       ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,4,                                     & !ratb(126)
-['O(3P)     ','HO2       '],                                                   &
-['OH        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,6,                                     & !ratb(205)
-['H2S       ','O(3P)     '],                                                   &
-['OH        ','SO2       ','OH        ','O(3P)     ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,5,                                     & !ratb(745)
-['HO2       ','EtCO3     '],                                                   &
-['OH        ','EtOO      ','CO2       ','          ']),                        &
-asad_flux_defn('RXN',50566,'B',.TRUE.,0,5,                                     & !ratb(763)
-['CH2Br2    ','O(1D)     '],                                                   &
-['Br        ','Br        ','OH        ','          '])                         &
+TYPE(asad_flux_defn), PARAMETER :: dest_OH_prod(46) = [                        &
+       asad_flux_defn('RXN',50531,'B',.TRUE.,0,5,                              & !ratb(24)
+       ['Cl        ','HOCl      '],                                            &
+       ['Cl        ','Cl        ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50531,'B',.TRUE.,0,4,                              & !ratb(111)
+       ['O(1D)     ','HCl       '],                                            &
+       ['OH        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50531,'B',.TRUE.,0,4,                              & !ratb(125)
+       ['O(3P)     ','HCl       '],                                            &
+       ['OH        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50531,'B',.TRUE.,0,4,                              & !ratb(127)
+       ['O(3P)     ','HOCl      '],                                            &
+       ['OH        ','ClO       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50532,'B',.TRUE.,0,4,                              & !ratb(108)
+       ['O(1D)     ','HBr       '],                                            &
+       ['OH        ','Br        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50532,'B',.TRUE.,0,4,                              & !ratb(123)
+       ['O(3P)     ','HBr       '],                                            &
+       ['OH        ','Br        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50533,'B',.TRUE.,0,4,                              & !ratb(69)
+       ['MeBr      ','O(1D)     '],                                            &
+       ['Br        ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50533,'B',.TRUE.,0,5,                              & !ratb(763)
+       ['CH2Br2    ','O(1D)     '],                                            &
+       ['Br        ','Br        ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50533,'B',.TRUE.,0,6,                              & !ratb(766)
+       ['CHBr3     ','O(1D)     '],                                            &
+       ['Br        ','Br        ','Br        ','OH        ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,5,                              & !ratj(1)
+       ['EtOOH     ','PHOTON    '],                                            &
+       ['MeCHO     ','HO2       ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,5,                              & !ratj(9)
+       ['MeOOH     ','PHOTON    '],                                            &
+       ['HO2       ','HCHO      ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,5,                              & !ratj(21)
+       ['n-PrOOH   ','PHOTON    '],                                            &
+       ['EtCHO     ','HO2       ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,5,                              & !ratj(22)
+       ['i-PrOOH   ','PHOTON    '],                                            &
+       ['Me2CO     ','HO2       ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,5,                              & !ratj(23)
+       ['MeCOCH2OOH','PHOTON    '],                                            &
+       ['MeCO3     ','HCHO      ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,6,                              & !ratj(26)
+       ['ISOOH     ','PHOTON    '],                                            &
+       ['OH        ','MACR      ','HCHO      ','HO2       ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,6,                              & !ratj(30)
+       ['MACROOH   ','PHOTON    '],                                            &
+       ['OH        ','HO2       ','OH        ','HO2       ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,6,                              & !ratj(30)
+       ['MACROOH   ','PHOTON    '],                                            &
+       ['OH        ','HO2       ','OH        ','HO2       ']),                 &
+       asad_flux_defn('RXN',50534,'J',.TRUE.,0,4,                              & !ratj(35)
+       ['MeCO3H    ','PHOTON    '],                                            &
+       ['MeOO      ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50535,'J',.TRUE.,0,4,                              & !ratj(6)
+       ['HONO2     ','PHOTON    '],                                            &
+       ['OH        ','NO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50535,'J',.TRUE.,0,4,                              & !ratj(18)
+       ['HONO      ','PHOTON    '],                                            &
+       ['OH        ','NO        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50535,'J',.TRUE.,0,4,                              & !ratj(56)
+       ['HO2NO2    ','PHOTON    '],                                            &
+       ['OH        ','NO3       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50536,'B',.TRUE.,0,4,                              & !ratb(106)
+       ['O(1D)     ','H2O       '],                                            &
+       ['OH        ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50537,'B',.TRUE.,0,4,                              & !ratb(62)
+       ['HO2       ','O3        '],                                            &
+       ['OH        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50538,'B',.TRUE.,0,4,                              & !ratb(60)
+       ['HO2       ','NO        '],                                            &
+       ['OH        ','NO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50539,'B',.TRUE.,0,4,                              & !ratb(122)
+       ['O(3P)     ','H2O2      '],                                            &
+       ['OH        ','HO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50540,'J',.TRUE.,0,4,                              & !ratj(2)
+       ['H2O2      ','PHOTON    '],                                            &
+       ['OH        ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50541,'J',.TRUE.,0,4,                              & !ratj(49)
+       ['HOCl      ','PHOTON    '],                                            &
+       ['OH        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50542,'J',.TRUE.,0,4,                              & !ratj(43)
+       ['HOBr      ','PHOTON    '],                                            &
+       ['OH        ','Br        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50543,'B',.TRUE.,0,4,                              & !ratb(22)
+       ['Cl        ','HO2       '],                                            &
+       ['ClO       ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50544,'B',.TRUE.,0,4,                              & !ratb(138)
+       ['O3        ','MACR      '],                                            &
+       ['OH        ','MeCO3     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50544,'B',.TRUE.,0,4,                              & !ratb(139)
+       ['O3        ','MACR      '],                                            &
+       ['OH        ','MeCO3     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50545,'B',.TRUE.,0,4,                              & !ratb(133)
+       ['O3        ','C5H8      '],                                            &
+       ['HO2       ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(45)
+       ['H         ','HO2       '],                                            &
+       ['OH        ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(45)
+       ['H         ','HO2       '],                                            &
+       ['OH        ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'J',.TRUE.,0,4,                              & !ratj(45)
+       ['H2O       ','PHOTON    '],                                            &
+       ['OH        ','H         ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(46)
+       ['H         ','NO2       '],                                            &
+       ['OH        ','NO        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(47)
+       ['H         ','O3        '],                                            &
+       ['OH        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(56)
+       ['HO2       ','MeCO3     '],                                            &
+       ['OH        ','MeOO      ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'J',.TRUE.,0,5,                              & !ratj(59)
+       ['H2SO4     ','PHOTON    '],                                            &
+       ['SO3       ','OH        ','H         ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(61)
+       ['HO2       ','NO3       '],                                            &
+       ['OH        ','NO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(103)
+       ['O(1D)     ','CH4       '],                                            &
+       ['OH        ','MeOO      ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(105)
+       ['O(1D)     ','H2        '],                                            &
+       ['OH        ','H         ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,4,                              & !ratb(126)
+       ['O(3P)     ','HO2       '],                                            &
+       ['OH        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,6,                              & !ratb(205)
+       ['H2S       ','O(3P)     '],                                            &
+       ['OH        ','SO2       ','OH        ','O(3P)     ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,6,                              & !ratb(205)
+       ['H2S       ','O(3P)     '],                                            &
+       ['OH        ','SO2       ','OH        ','O(3P)     ']),                 &
+       asad_flux_defn('RXN',50546,'B',.TRUE.,0,5,                              & !ratb(745)
+       ['HO2       ','EtCO3     '],                                            &
+       ['OH        ','EtOO      ','CO2       ','          '])                  &
+       ]
+
+
+
+TYPE(asad_flux_defn), PARAMETER :: dest_Ox_loss(67) = [                        &
+       asad_flux_defn('RXN',50547,'B',.TRUE.,0,5,                              & !ratb(6)
+       ['BrO       ','BrO       '],                                            &
+       ['Br        ','Br        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50547,'B',.TRUE.,0,5,                              & !ratb(6)
+       ['BrO       ','BrO       '],                                            &
+       ['Br        ','Br        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50547,'B',.TRUE.,0,5,                              & !ratb(7)
+       ['BrO       ','ClO       '],                                            &
+       ['Br        ','Cl        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50547,'H',.TRUE.,0,4,                              & !rath(8)
+       ['HOBr      ','HCl       '],                                            &
+       ['BrCl      ','H2O       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'B',.TRUE.,0,4,                              & !ratb(9)
+       ['BrO       ','ClO       '],                                            &
+       ['BrCl      ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'H',.TRUE.,0,4,                              & !rath(9)
+       ['BrONO2    ','HCl       '],                                            &
+       ['BrCl      ','HONO2     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'B',.TRUE.,0,4,                              & !ratb(13)
+       ['BrO       ','OH        '],                                            &
+       ['Br        ','HO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'H',.TRUE.,0,4,                              & !rath(22)
+       ['HOBr      ','HBr       '],                                            &
+       ['Br2       ','H2O       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'H',.TRUE.,0,4,                              & !rath(23)
+       ['BrONO2    ','HBr       '],                                            &
+       ['Br2       ','HONO2     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'J',.TRUE.,0,4,                              & !ratj(43)
+       ['HOBr      ','PHOTON    '],                                            &
+       ['OH        ','Br        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'B',.TRUE.,0,4,                              & !ratb(793)
+       ['BrO       ','BrO       '],                                            &
+       ['Br2       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50547,'B',.TRUE.,0,4,                              & !ratb(793)
+       ['BrO       ','BrO       '],                                            &
+       ['Br2       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(1)
+       ['Br        ','Cl2O2     '],                                            &
+       ['BrCl      ','Cl        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(1)
+       ['Br        ','Cl2O2     '],                                            &
+       ['BrCl      ','Cl        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'H',.TRUE.,0,4,                              & !rath(6)
+       ['ClONO2    ','HBr       '],                                            &
+       ['BrCl      ','HONO2     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(7)
+       ['BrO       ','ClO       '],                                            &
+       ['Br        ','Cl        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'H',.TRUE.,0,4,                              & !rath(7)
+       ['HOCl      ','HBr       '],                                            &
+       ['BrCl      ','H2O       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(9)
+       ['BrO       ','ClO       '],                                            &
+       ['BrCl      ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(17)
+       ['Cl        ','Cl2O2     '],                                            &
+       ['Cl        ','Cl        ','Cl        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(17)
+       ['Cl        ','Cl2O2     '],                                            &
+       ['Cl        ','Cl        ','Cl        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'H',.TRUE.,0,4,                              & !rath(19)
+       ['ClONO2    ','HCl       '],                                            &
+       ['Cl2       ','HONO2     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'H',.TRUE.,0,4,                              & !rath(20)
+       ['HOCl      ','HCl       '],                                            &
+       ['Cl2       ','H2O       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(24)
+       ['Cl        ','HOCl      '],                                            &
+       ['Cl        ','Cl        ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(34)
+       ['ClO       ','MeOO      '],                                            &
+       ['Cl        ','HCHO      ','HO2       ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,5,                              & !ratb(36)
+       ['ClO       ','NO3       '],                                            &
+       ['Cl        ','O2        ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50548,'J',.TRUE.,0,4,                              & !ratj(49)
+       ['HOCl      ','PHOTON    '],                                            &
+       ['OH        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'J',.TRUE.,0,5,                              & !ratj(50)
+       ['Cl2O2     ','PHOTON    '],                                            &
+       ['Cl        ','Cl        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'J',.TRUE.,0,5,                              & !ratj(50)
+       ['Cl2O2     ','PHOTON    '],                                            &
+       ['Cl        ','Cl        ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(147)
+       ['OH        ','ClO       '],                                            &
+       ['HCl       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(148)
+       ['OH        ','ClO       '],                                            &
+       ['HO2       ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(186)
+       ['OH        ','OClO      '],                                            &
+       ['HOCl      ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(796)
+       ['ClO       ','ClO       '],                                            &
+       ['Cl2       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(796)
+       ['ClO       ','ClO       '],                                            &
+       ['Cl2       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(797)
+       ['ClO       ','ClO       '],                                            &
+       ['Cl2       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50548,'B',.TRUE.,0,4,                              & !ratb(797)
+       ['ClO       ','ClO       '],                                            &
+       ['Cl2       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'H',.TRUE.,0,4,                              & !rath(4)
+       ['N2O5      ','H2O       '],                                            &
+       ['HONO2     ','HONO2     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'J',.TRUE.,0,4,                              & !ratj(12)
+       ['NO3       ','PHOTON    '],                                            &
+       ['NO        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'J',.TRUE.,0,4,                              & !ratj(12)
+       ['NO3       ','PHOTON    '],                                            &
+       ['NO        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'H',.TRUE.,0,5,                              & !rath(13)
+       ['N2O5      ','HBr       '],                                            &
+       ['Br        ','NO2       ','HONO2     ','          ']),                 &
+       asad_flux_defn('RXN',50549,'H',.TRUE.,0,4,                              & !rath(21)
+       ['N2O5      ','HCl       '],                                            &
+       ['ClNO2     ','HONO2     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(36)
+       ['ClO       ','NO3       '],                                            &
+       ['Cl        ','O2        ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(39)
+       ['EtCO3     ','NO3       '],                                            &
+       ['EtOO      ','CO2       ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(42)
+       ['EtOO      ','NO3       '],                                            &
+       ['MeCHO     ','HO2       ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,4,                              & !ratb(46)
+       ['H         ','NO2       '],                                            &
+       ['OH        ','NO        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,4,                              & !ratb(61)
+       ['HO2       ','NO3       '],                                            &
+       ['OH        ','NO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(72)
+       ['MeCO3     ','NO3       '],                                            &
+       ['MeOO      ','CO2       ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(74)
+       ['MeCOCH2OO ','NO3       '],                                            &
+       ['MeCO3     ','HCHO      ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(81)
+       ['MeOO      ','NO3       '],                                            &
+       ['HO2       ','HCHO      ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,4,                              & !ratb(85)
+       ['N2O5      ','H2O       '],                                            &
+       ['HONO2     ','HONO2     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(92)
+       ['NO2       ','NO3       '],                                            &
+       ['NO        ','NO2       ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(92)
+       ['NO2       ','NO3       '],                                            &
+       ['NO        ','NO2       ','O2        ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,3,                              & !ratb(95)
+       ['NO3       ','C5H8      '],                                            &
+       ['ISON      ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,4,                              & !ratb(96)
+       ['NO3       ','EtCHO     '],                                            &
+       ['HONO2     ','EtCO3     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(97)
+       ['NO3       ','HCHO      '],                                            &
+       ['HONO2     ','HO2       ','CO        ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(98)
+       ['NO3       ','MGLY      '],                                            &
+       ['MeCO3     ','CO        ','HONO2     ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,4,                              & !ratb(99)
+       ['NO3       ','Me2CO     '],                                            &
+       ['HONO2     ','MeCOCH2OO ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,4,                              & !ratb(100)
+       ['NO3       ','MeCHO     '],                                            &
+       ['HONO2     ','MeCO3     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,4,                              & !ratb(184)
+       ['OH        ','NO3       '],                                            &
+       ['HO2       ','NO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(195)
+       ['i-PrOO    ','NO3       '],                                            &
+       ['Me2CO     ','HO2       ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,5,                              & !ratb(197)
+       ['n-PrOO    ','NO3       '],                                            &
+       ['EtCHO     ','HO2       ','NO2       ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,3,                              & !ratb(202)
+       ['DMS       ','NO3       '],                                            &
+       ['SO2       ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,3,                              & !ratb(202)
+       ['DMS       ','NO3       '],                                            &
+       ['SO2       ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,3,                              & !ratb(213)
+       ['Monoterp  ','NO3       '],                                            &
+       ['Sec_Org   ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,3,                              & !ratb(213)
+       ['Monoterp  ','NO3       '],                                            &
+       ['Sec_Org   ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50549,'B',.TRUE.,0,6,                              & !ratb(788)
+       ['CHCl2O2   ','NO3       '],                                            &
+       ['Cl        ','NO2       ','CO        ','HO2       ']),                 &
+       asad_flux_defn('RXN',50550,'B',.TRUE.,0,4,                              & !ratb(118)
+       ['O(3P)     ','BrO       '],                                            &
+       ['O2        ','Br        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50550,'B',.TRUE.,0,4,                              & !ratb(118)
+       ['O(3P)     ','BrO       '],                                            &
+       ['O2        ','Br        ','          ','          '])                  &
 ]
 
-
-
-TYPE(asad_flux_defn), PARAMETER :: dest_Ox_loss(63) = [                        &
-asad_flux_defn('RXN',50567,'B',.TRUE.,0,5,                                     & !ratb(6)
-['BrO       ','BrO       '],                                                   &
-['Br        ','Br        ','O2        ','          ']),                        &
-asad_flux_defn('RXN',50567,'B',.TRUE.,0,5,                                     & !ratb(7)
-['BrO       ','ClO       '],                                                   &
-['Br        ','Cl        ','O2        ','          ']),                        &
-asad_flux_defn('RXN',50567,'H',.TRUE.,0,4,                                     & !rath(8)
-['HOBr      ','HCl       '],                                                   &
-['BrCl      ','H2O       ','          ','          ']),                        &
-asad_flux_defn('RXN',50567,'B',.TRUE.,0,4,                                     & !ratb(9)
-['BrO       ','ClO       '],                                                   &
-['BrCl      ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50567,'H',.TRUE.,0,4,                                     & !rath(9)
-['BrONO2    ','HCl       '],                                                   &
-['BrCl      ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50567,'B',.TRUE.,0,4,                                     & !ratb(13)
-['BrO       ','OH        '],                                                   &
-['Br        ','HO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50567,'H',.TRUE.,0,4,                                     & !rath(22)
-['HOBr      ','HBr       '],                                                   &
-['Br2       ','H2O       ','          ','          ']),                        &
-asad_flux_defn('RXN',50567,'H',.TRUE.,0,4,                                     & !rath(23)
-['BrONO2    ','HBr       '],                                                   &
-['Br2       ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50567,'J',.TRUE.,0,4,                                     & !ratj(43)
-['HOBr      ','PHOTON    '],                                                   &
-['OH        ','Br        ','          ','          ']),                        &
-asad_flux_defn('RXN',50567,'B',.TRUE.,0,4,                                     & !ratb(793)
-['BrO       ','BrO       '],                                                   &
-['Br2       ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,5,                                     & !ratb(1)
-['Br        ','Cl2O2     '],                                                   &
-['BrCl      ','Cl        ','O2        ','          ']),                        &
-asad_flux_defn('RXN',50568,'H',.TRUE.,0,4,                                     & !rath(6)
-['ClONO2    ','HBr       '],                                                   &
-['BrCl      ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,5,                                     & !ratb(7)
-['BrO       ','ClO       '],                                                   &
-['Br        ','Cl        ','O2        ','          ']),                        &
-asad_flux_defn('RXN',50568,'H',.TRUE.,0,4,                                     & !rath(7)
-['HOCl      ','HBr       '],                                                   &
-['BrCl      ','H2O       ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,4,                                     & !ratb(9)
-['BrO       ','ClO       '],                                                   &
-['BrCl      ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,5,                                     & !ratb(17)
-['Cl        ','Cl2O2     '],                                                   &
-['Cl        ','Cl        ','Cl        ','          ']),                        &
-asad_flux_defn('RXN',50568,'H',.TRUE.,0,4,                                     & !rath(19)
-['ClONO2    ','HCl       '],                                                   &
-['Cl2       ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'H',.TRUE.,0,4,                                     & !rath(20)
-['HOCl      ','HCl       '],                                                   &
-['Cl2       ','H2O       ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,5,                                     & !ratb(24)
-['Cl        ','HOCl      '],                                                   &
-['Cl        ','Cl        ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,5,                                     & !ratb(34)
-['ClO       ','MeOO      '],                                                   &
-['Cl        ','HCHO      ','HO2       ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,5,                                     & !ratb(36)
-['ClO       ','NO3       '],                                                   &
-['Cl        ','O2        ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50568,'J',.TRUE.,0,4,                                     & !ratj(49)
-['HOCl      ','PHOTON    '],                                                   &
-['OH        ','Cl        ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'J',.TRUE.,0,5,                                     & !ratj(50)
-['Cl2O2     ','PHOTON    '],                                                   &
-['Cl        ','Cl        ','O2        ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,4,                                     & !ratb(147)
-['OH        ','ClO       '],                                                   &
-['HCl       ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,4,                                     & !ratb(148)
-['OH        ','ClO       '],                                                   &
-['HO2       ','Cl        ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,4,                                     & !ratb(186)
-['OH        ','OClO      '],                                                   &
-['HOCl      ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,4,                                     & !ratb(796)
-['ClO       ','ClO       '],                                                   &
-['Cl2       ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50568,'B',.TRUE.,0,4,                                     & !ratb(797)
-['ClO       ','ClO       '],                                                   &
-['Cl2       ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'H',.TRUE.,0,4,                                     & !rath(4)
-['N2O5      ','H2O       '],                                                   &
-['HONO2     ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'J',.TRUE.,0,4,                                     & !ratj(12)
-['NO3       ','PHOTON    '],                                                   &
-['NO        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'H',.TRUE.,0,5,                                     & !rath(13)
-['N2O5      ','HBr       '],                                                   &
-['Br        ','NO2       ','HONO2     ','          ']),                        &
-asad_flux_defn('RXN',50569,'H',.TRUE.,0,2,                                     & !rath(17)
-['N2O5      ','          '],                                                   &
-['HONO2     ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'H',.TRUE.,0,4,                                     & !rath(21)
-['N2O5      ','HCl       '],                                                   &
-['ClNO2     ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(36)
-['ClO       ','NO3       '],                                                   &
-['Cl        ','O2        ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(39)
-['EtCO3     ','NO3       '],                                                   &
-['EtOO      ','CO2       ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(42)
-['EtOO      ','NO3       '],                                                   &
-['MeCHO     ','HO2       ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,4,                                     & !ratb(46)
-['H         ','NO2       '],                                                   &
-['OH        ','NO        ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,4,                                     & !ratb(61)
-['HO2       ','NO3       '],                                                   &
-['OH        ','NO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(72)
-['MeCO3     ','NO3       '],                                                   &
-['MeOO      ','CO2       ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(74)
-['MeCOCH2OO ','NO3       '],                                                   &
-['MeCO3     ','HCHO      ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(81)
-['MeOO      ','NO3       '],                                                   &
-['HO2       ','HCHO      ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,4,                                     & !ratb(85)
-['N2O5      ','H2O       '],                                                   &
-['HONO2     ','HONO2     ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(92)
-['NO2       ','NO3       '],                                                   &
-['NO        ','NO2       ','O2        ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,3,                                     & !ratb(95)
-['NO3       ','C5H8      '],                                                   &
-['ISON      ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,4,                                     & !ratb(96)
-['NO3       ','EtCHO     '],                                                   &
-['HONO2     ','EtCO3     ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(97)
-['NO3       ','HCHO      '],                                                   &
-['HONO2     ','HO2       ','CO        ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(98)
-['NO3       ','MGLY      '],                                                   &
-['MeCO3     ','CO        ','HONO2     ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,4,                                     & !ratb(99)
-['NO3       ','Me2CO     '],                                                   &
-['HONO2     ','MeCOCH2OO ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,4,                                     & !ratb(100)
-['NO3       ','MeCHO     '],                                                   &
-['HONO2     ','MeCO3     ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,4,                                     & !ratb(184)
-['OH        ','NO3       '],                                                   &
-['HO2       ','NO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(195)
-['i-PrOO    ','NO3       '],                                                   &
-['Me2CO     ','HO2       ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,5,                                     & !ratb(197)
-['n-PrOO    ','NO3       '],                                                   &
-['EtCHO     ','HO2       ','NO2       ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,3,                                     & !ratb(202)
-['DMS       ','NO3       '],                                                   &
-['SO2       ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,3,                                     & !ratb(213)
-['Monoterp  ','NO3       '],                                                   &
-['Sec_Org   ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50569,'B',.TRUE.,0,6,                                     & !ratb(788)
-['CHCl2O2   ','NO3       '],                                                   &
-['Cl        ','NO2       ','CO        ','HO2       ']),                        &
-asad_flux_defn('RXN',50570,'B',.TRUE.,0,4,                                     & !ratb(118)
-['O(3P)     ','BrO       '],                                                   &
-['O2        ','Br        ','          ','          ']),                        &
-asad_flux_defn('RXN',50571,'B',.TRUE.,0,4,                                     & !ratb(119)
-['O(3P)     ','ClO       '],                                                   &
-['Cl        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50571,'B',.TRUE.,0,4,                                     & !ratb(131)
-['O(3P)     ','OClO      '],                                                   &
-['O2        ','ClO       ','          ','          ']),                        &
-asad_flux_defn('RXN',50572,'B',.TRUE.,0,4,                                     & !ratb(128)
-['O(3P)     ','NO2       '],                                                   &
-['NO        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50572,'B',.TRUE.,0,4,                                     & !ratb(129)
-['O(3P)     ','NO3       '],                                                   &
-['O2        ','NO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50573,'B',.TRUE.,0,4,                                     & !ratb(106)
-['O(1D)     ','H2O       '],                                                   &
-['OH        ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50574,'B',.TRUE.,0,4,                                     & !ratb(62)
-['HO2       ','O3        '],                                                   &
-['OH        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50575,'B',.TRUE.,0,4,                                     & !ratb(185)
-['OH        ','O3        '],                                                   &
-['HO2       ','O2        ','          ','          '])                         &
+TYPE(asad_flux_defn), PARAMETER :: dest_Ox_loss_2(48) = [                      &
+       asad_flux_defn('RXN',50551,'B',.TRUE.,0,4,                              & !ratb(119)
+       ['O(3P)     ','ClO       '],                                            &
+       ['Cl        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50551,'B',.TRUE.,0,4,                              & !ratb(119)
+       ['O(3P)     ','ClO       '],                                            &
+       ['Cl        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50551,'B',.TRUE.,0,4,                              & !ratb(131)
+       ['O(3P)     ','OClO      '],                                            &
+       ['O2        ','ClO       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50551,'B',.TRUE.,0,4,                              & !ratb(131)
+       ['O(3P)     ','OClO      '],                                            &
+       ['O2        ','ClO       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50552,'B',.TRUE.,0,4,                              & !ratb(128)
+       ['O(3P)     ','NO2       '],                                            &
+       ['NO        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50552,'B',.TRUE.,0,4,                              & !ratb(128)
+       ['O(3P)     ','NO2       '],                                            &
+       ['NO        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50552,'B',.TRUE.,0,4,                              & !ratb(129)
+       ['O(3P)     ','NO3       '],                                            &
+       ['O2        ','NO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50552,'B',.TRUE.,0,4,                              & !ratb(129)
+       ['O(3P)     ','NO3       '],                                            &
+       ['O2        ','NO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50553,'B',.TRUE.,0,4,                              & !ratb(69)
+       ['MeBr      ','O(1D)     '],                                            &
+       ['Br        ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50553,'B',.TRUE.,0,4,                              & !ratb(108)
+       ['O(1D)     ','HBr       '],                                            &
+       ['OH        ','Br        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50553,'B',.TRUE.,0,4,                              & !ratb(123)
+       ['O(3P)     ','HBr       '],                                            &
+       ['OH        ','Br        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50553,'B',.TRUE.,0,5,                              & !ratb(763)
+       ['CH2Br2    ','O(1D)     '],                                            &
+       ['Br        ','Br        ','OH        ','          ']),                 &
+       asad_flux_defn('RXN',50553,'B',.TRUE.,0,6,                              & !ratb(766)
+       ['CHBr3     ','O(1D)     '],                                            &
+       ['Br        ','Br        ','Br        ','OH        ']),                 &
+       asad_flux_defn('RXN',50554,'B',.TRUE.,0,4,                              & !ratb(111)
+       ['O(1D)     ','HCl       '],                                            &
+       ['OH        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50554,'B',.TRUE.,0,4,                              & !ratb(125)
+       ['O(3P)     ','HCl       '],                                            &
+       ['OH        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50554,'B',.TRUE.,0,4,                              & !ratb(127)
+       ['O(3P)     ','HOCl      '],                                            &
+       ['OH        ','ClO       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50555,'B',.TRUE.,0,4,                              & !ratb(106)
+       ['O(1D)     ','H2O       '],                                            &
+       ['OH        ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50556,'B',.TRUE.,0,4,                              & !ratb(62)
+       ['HO2       ','O3        '],                                            &
+       ['OH        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50557,'B',.TRUE.,0,4,                              & !ratb(185)
+       ['OH        ','O3        '],                                            &
+       ['HO2       ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'T',.TRUE.,0,4,                              & !ratt(4)
+       ['O(1D)     ','N2        '],                                            &
+       ['N2O       ','m         ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'H',.TRUE.,0,3,                              & !rath(15)
+       ['SO2       ','O3        '],                                            &
+       ['NULL1     ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'H',.TRUE.,0,3,                              & !rath(16)
+       ['SO2       ','O3        '],                                            &
+       ['NULL2     ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(47)
+       ['H         ','O3        '],                                            &
+       ['OH        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(101)
+       ['O(1D)     ','CH4       '],                                            &
+       ['HCHO      ','H2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,5,                              & !ratb(102)
+       ['O(1D)     ','CH4       '],                                            &
+       ['HCHO      ','HO2       ','HO2       ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(103)
+       ['O(1D)     ','CH4       '],                                            &
+       ['OH        ','MeOO      ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(105)
+       ['O(1D)     ','H2        '],                                            &
+       ['OH        ','H         ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(113)
+       ['O(1D)     ','N2O       '],                                            &
+       ['N2        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(114)
+       ['O(1D)     ','N2O       '],                                            &
+       ['NO        ','NO        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(117)
+       ['O(1D)     ','O3        '],                                            &
+       ['O2        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(117)
+       ['O(1D)     ','O3        '],                                            &
+       ['O2        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(122)
+       ['O(3P)     ','H2O2      '],                                            &
+       ['OH        ','HO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(126)
+       ['O(3P)     ','HO2       '],                                            &
+       ['OH        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(130)
+       ['O(3P)     ','O3        '],                                            &
+       ['O2        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(130)
+       ['O(3P)     ','O3        '],                                            &
+       ['O2        ','O2        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(132)
+       ['O(3P)     ','OH        '],                                            &
+       ['O2        ','H         ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(133)
+       ['O3        ','C5H8      '],                                            &
+       ['HO2       ','OH        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(134)
+       ['O3        ','C5H8      '],                                            &
+       ['MACR      ','HCHO      ','MACRO2    ','MeCO3     ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(135)
+       ['O3        ','C5H8      '],                                            &
+       ['MeOO      ','HCOOH     ','CO        ','H2O2      ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(136)
+       ['O3        ','MACR      '],                                            &
+       ['MGLY      ','HCOOH     ','HO2       ','CO        ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(137)
+       ['O3        ','MACR      '],                                            &
+       ['MGLY      ','HCOOH     ','HO2       ','CO        ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(138)
+       ['O3        ','MACR      '],                                            &
+       ['OH        ','MeCO3     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(139)
+       ['O3        ','MACR      '],                                            &
+       ['OH        ','MeCO3     ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,5,                              & !ratb(198)
+       ['CS2       ','O(3P)     '],                                            &
+       ['CO        ','SO2       ','SO2       ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,6,                              & !ratb(205)
+       ['H2S       ','O(3P)     '],                                            &
+       ['OH        ','SO2       ','OH        ','O(3P)     ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,4,                              & !ratb(207)
+       ['COS       ','O(3P)     '],                                            &
+       ['CO        ','SO2       ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,3,                              & !ratb(209)
+       ['SO2       ','O3        '],                                            &
+       ['SO3       ','          ','          ','          ']),                 &
+       asad_flux_defn('RXN',50558,'B',.TRUE.,0,3,                              & !ratb(212)
+       ['Monoterp  ','O3        '],                                            &
+       ['Sec_Org   ','          ','          ','          '])                  &
 ]
 
-TYPE(asad_flux_defn), PARAMETER :: dest_Ox_loss_2(38) = [                        &
-asad_flux_defn('RXN',50576,'T',.TRUE.,0,4,                                     & !ratt(4)
-['O(1D)     ','N2        '],                                                   &
-['N2O       ','m         ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'H',.TRUE.,0,3,                                     & !rath(15)
-['SO2       ','O3        '],                                                   &
-['NULL1     ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'H',.TRUE.,0,3,                                     & !rath(16)
-['SO2       ','O3        '],                                                   &
-['NULL2     ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(47)
-['H         ','O3        '],                                                   &
-['OH        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(69)
-['MeBr      ','O(1D)     '],                                                   &
-['Br        ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(101)
-['O(1D)     ','CH4       '],                                                   &
-['HCHO      ','H2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,5,                                     & !ratb(102)
-['O(1D)     ','CH4       '],                                                   &
-['HCHO      ','HO2       ','HO2       ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(103)
-['O(1D)     ','CH4       '],                                                   &
-['OH        ','MeOO      ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(105)
-['O(1D)     ','H2        '],                                                   &
-['OH        ','H         ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(108)
-['O(1D)     ','HBr       '],                                                   &
-['OH        ','Br        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(111)
-['O(1D)     ','HCl       '],                                                   &
-['OH        ','Cl        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(113)
-['O(1D)     ','N2O       '],                                                   &
-['N2        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(114)
-['O(1D)     ','N2O       '],                                                   &
-['NO        ','NO        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(117)
-['O(1D)     ','O3        '],                                                   &
-['O2        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(121)
-['O(3P)     ','H2        '],                                                   &
-['OH        ','H         ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(122)
-['O(3P)     ','H2O2      '],                                                   &
-['OH        ','HO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(123)
-['O(3P)     ','HBr       '],                                                   &
-['OH        ','Br        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,5,                                     & !ratb(124)
-['O(3P)     ','HCHO      '],                                                   &
-['OH        ','CO        ','HO2       ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(125)
-['O(3P)     ','HCl       '],                                                   &
-['OH        ','Cl        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(126)
-['O(3P)     ','HO2       '],                                                   &
-['OH        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(127)
-['O(3P)     ','HOCl      '],                                                   &
-['OH        ','ClO       ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(130)
-['O(3P)     ','O3        '],                                                   &
-['O2        ','O2        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(132)
-['O(3P)     ','OH        '],                                                   &
-['O2        ','H         ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(133)
-['O3        ','C5H8      '],                                                   &
-['HO2       ','OH        ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,6,                                     & !ratb(134)
-['O3        ','C5H8      '],                                                   &
-['MACR      ','HCHO      ','MACRO2    ','MeCO3     ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,6,                                     & !ratb(135)
-['O3        ','C5H8      '],                                                   &
-['MeOO      ','HCOOH     ','CO        ','H2O2      ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,6,                                     & !ratb(136)
-['O3        ','MACR      '],                                                   &
-['MGLY      ','HCOOH     ','HO2       ','CO        ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,6,                                     & !ratb(137)
-['O3        ','MACR      '],                                                   &
-['MGLY      ','HCOOH     ','HO2       ','CO        ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(138)
-['O3        ','MACR      '],                                                   &
-['OH        ','MeCO3     ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(139)
-['O3        ','MACR      '],                                                   &
-['OH        ','MeCO3     ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,5,                                     & !ratb(198)
-['CS2       ','O(3P)     '],                                                   &
-['CO        ','SO2       ','SO2       ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,3,                                     & !ratb(203)
-['DMS       ','O(3P)     '],                                                   &
-['SO2       ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(205)
-['H2S       ','O(3P)     '],                                                   &
-['OH        ','SO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,4,                                     & !ratb(207)
-['COS       ','O(3P)     '],                                                   &
-['CO        ','SO2       ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,3,                                     & !ratb(209)
-['SO2       ','O3        '],                                                   &
-['SO3       ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,3,                                     & !ratb(212)
-['Monoterp  ','O3        '],                                                   &
-['Sec_Org   ','          ','          ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,5,                                     & !ratb(763)
-['CH2Br2    ','O(1D)     '],                                                   &
-['Br        ','Br        ','OH        ','          ']),                        &
-asad_flux_defn('RXN',50576,'B',.TRUE.,0,6,                                     & !ratb(766)
-['CHBr3     ','O(1D)     '],                                                   &
-['Br        ','Br        ','Br        ','OH        '])                         &
-]
 PUBLIC :: asad_load_default_fluxes
 
 CHARACTER(LEN=*), PARAMETER, PRIVATE :: ModuleName='ASAD_FLUX_DAT'
