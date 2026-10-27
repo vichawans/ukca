@@ -8766,6 +8766,179 @@ asad_flux_defn('DEP',50155,'W',.TRUE.,0,1,                                     &
 ['          ','          ','          ','          '])                         &
 ]
 
+! DEST
+! Heterogeneous reactions in the stratospehere and PSC1 and PSC2
+! 
+TYPE(asad_flux_defn), PARAMETER :: dest_strat_het_fluxes(15) = [               &
+asad_flux_defn('RXN',50451,'H',.FALSE.,0,4,                                    & !RATH1
+['ClONO2    ','H2O       '],                                                   &
+['HOCl      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50452,'H',.FALSE.,0,4,                                    & !RATH19
+['ClONO2    ','HCl       '],                                                   &
+['Cl2       ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50453,'H',.FALSE.,0,4,                                    & !RATH20
+['HOCl      ','HCl       '],                                                   &
+['Cl2       ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50454,'H',.FALSE.,0,4,                                    & !RATH4
+['N2O5      ','H2O       '],                                                   &
+['HONO2     ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50455,'H',.FALSE.,0,4,                                    & !RATH21
+['N2O5      ','HCl       '],                                                   &
+['ClNO2     ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50456,'H',.FALSE.,0,4,                                    & !RATH6
+['ClONO2    ','HBr       '],                                                   &
+['BrCl      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50457,'H',.FALSE.,0,4,                                    & !RATH7
+['HOCl      ','HBr       '],                                                   &
+['BrCl      ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50458,'H',.FALSE.,0,4,                                    & !RATH8
+['HOBr      ','HCl       '],                                                   &
+['BrCl      ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50459,'H',.FALSE.,0,4,                                    & !RATH9
+['BrONO2    ','HCl       '],                                                   &
+['BrCl      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50460,'H',.FALSE.,0,4,                                    & !RATH10
+['BrONO2    ','H2O       '],                                                   &
+['HOBr      ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50461,'H',.FALSE.,0,4,                                    & !RATH11
+['HOBr      ','HBr       '],                                                   &
+['Br2       ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50462,'H',.FALSE.,0,4,                                    & !RATH12
+['BrONO2    ','HBr       '],                                                   &
+['Br2       ','HONO2     ','          ','          ']),                        &
+asad_flux_defn('RXN',50463,'H',.FALSE.,0,5,                                    & !RATH13
+['N2O5      ','HBr       '],                                                   &
+['Br        ','NO2       ','HONO2     ','          ']),                        &
+asad_flux_defn('PSC',50464,'1',.FALSE.,0,1,                                    & !PSC1
+['XXX       ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('PSC',50465,'2',.FALSE.,0,1,                                    & !PSC2
+['XXX       ','          '],                                                   &
+['          ','          ','          ','          '])                         &
+]
+
+! DEST
+! Halocarbon wet deposition
+! 
+TYPE(asad_flux_defn), PARAMETER :: dest_halocarbon_wetdep(8) = [               &
+asad_flux_defn('DEP',50466,'W',.FALSE.,0,1,                                    &
+['Cl        ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50467,'W',.FALSE.,0,1,                                    &
+['ClO       ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50468,'W',.FALSE.,0,1,                                    &
+['Cl2       ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50469,'W',.FALSE.,0,1,                                    &
+['ClNO2     ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50470,'W',.FALSE.,0,1,                                    &
+['COCl2     ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50471,'W',.FALSE.,0,1,                                    &
+['Br        ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50472,'W',.FALSE.,0,1,                                    &
+['Br2       ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50473,'W',.FALSE.,0,1,                                    &
+['BrCl      ','          '],                                                   &
+['          ','          ','          ','          '])                         &
+]
+
+
+! DEST
+! Halocarbon dry deposition
+! 
+TYPE(asad_flux_defn), PARAMETER :: dest_halocarbon_drydep(7) = [               &
+asad_flux_defn('DEP',50474,'D',.FALSE.,0,1,                                    &
+['ClONO2    ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50475,'D',.FALSE.,0,1,                                    &
+['BrONO2    ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50476,'D',.FALSE.,0,1,                                    &
+['COCl2     ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50477,'D',.FALSE.,0,1,                                    &
+['HCl       ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50478,'D',.FALSE.,0,1,                                    &
+['HOCl      ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50479,'D',.FALSE.,0,1,                                    &
+['HBr       ','          '],                                                   &
+['          ','          ','          ','          ']),                        &
+asad_flux_defn('DEP',50480,'D',.FALSE.,0,1,                                    &
+['HOBr      ','          '],                                                   &
+['          ','          ','          ','          '])                         &
+]
+
+! DEST
+! Cl-VSLSs reactions
+TYPE(asad_flux_defn), PARAMETER, PUBLIC :: dest_halocarbon_rxn_fluxes(20) = [  &
+asad_flux_defn('RXN',50481,'B',.FALSE.,0,4,                                    & !ratb(780)
+['CH2Cl2    ','OH        '],                                                   &
+['CHCl2O2   ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50482,'B',.FALSE.,0,5,                                    & !ratb(781)
+['CHCl3     ','OH        '],                                                   &
+['COCl2     ','Cl        ','H2O       ','          ']),                        &
+asad_flux_defn('RXN',50483,'B',.FALSE.,0,5,                                    & !ratb(782)
+['C2H4Cl2   ','OH        '],                                                   &
+['Cl        ','Cl        ','H2O       ','          ']),                        &
+asad_flux_defn('RXN',50484,'B',.FALSE.,0,4,                                    & !ratb(783)
+['CH2Cl2    ','Cl        '],                                                   &
+['CHCl2O2   ','HCl       ','          ','          ']),                        &
+asad_flux_defn('RXN',50485,'B',.FALSE.,0,5,                                    & !ratb(784)
+['CHCl3     ','Cl        '],                                                   &
+['COCl2     ','Cl        ','HCl       ','          ']),                        &
+asad_flux_defn('RXN',50486,'B',.FALSE.,0,5,                                    & !ratb(785)
+['C2H4Cl2   ','Cl        '],                                                   &
+['Cl        ','Cl        ','HCl       ','          ']),                        &
+asad_flux_defn('RXN',50487,'B',.FALSE.,0,4,                                    & !ratb(786)
+['C2Cl4     ','OH        '],                                                   &
+['COCl2     ','Cl        ','          ','          ']),                        &
+asad_flux_defn('RXN',50488,'B',.FALSE.,0,6,                                    & !ratb(787)
+['CHCl2O2   ','NO        '],                                                   &
+['Cl        ','NO2       ','CO        ','HO2       ']),                        &
+asad_flux_defn('RXN',50489,'B',.FALSE.,0,6,                                    & !ratb(788)
+['CHCl2O2   ','NO3       '],                                                   &
+['Cl        ','NO2       ','CO        ','HO2       ']),                        &
+asad_flux_defn('RXN',50490,'B',.FALSE.,0,4,                                    & !ratb(789)
+['CHCl2O2   ','HO2       '],                                                   &
+['COCl2     ','H2O       ','          ','          ']),                        &
+asad_flux_defn('RXN',50491,'B',.FALSE.,0,6,                                    & !ratb(790)
+['CHCl2O2   ','HO2       '],                                                   &
+['HO2       ','CO        ','Cl        ','HOCl      ']),                        &
+asad_flux_defn('RXN',50492,'B',.FALSE.,0,6,                                    & !ratb(791)
+['CHCl2O2   ','MeOO      '],                                                   &
+['Cl        ','HO2       ','CO        ','HCHO      ']),                        &
+asad_flux_defn('RXN',50493,'B',.FALSE.,0,5,                                    & !ratb(792)
+['CHCl2O2   ','MeOO      '],                                                   &
+['COCl2     ','HCHO      ','HO2       ','          ']),                        &
+asad_flux_defn('RXN',50494,'B',.FALSE.,0,5,                                    & !ratb(800)
+['COCl2     ','O(1D)     '],                                                   &
+['CO        ','ClO       ','Cl        ','          ']),                        &
+asad_flux_defn('RXN',50495,'T',.FALSE.,0,4,                                    & !ratt(52)
+['Cl        ','C2Cl4     '],                                                   &
+['Cl        ','Cl        ','          ','          ']),                        &
+asad_flux_defn('RXN',50496,'J',.FALSE.,0,5,                                    & !ratj(36)
+['BrCl      ','PHOTON    '],                                                   &
+['Br        ','Cl        ','          ','          ']),                        &
+asad_flux_defn('RXN',50497,'J',.FALSE.,0,5,                                    & !ratj(48)
+['HCl       ','PHOTON    '],                                                   &
+['H         ','Cl        ','          ','          ']),                        &
+asad_flux_defn('RXN',50498,'J',.FALSE.,0,5,                                    & !ratj(51)
+['CFCl3     ','PHOTON    '],                                                   &
+['Cl        ','Cl        ','Cl        ','          ']),                        &
+asad_flux_defn('RXN',50499,'J',.FALSE.,0,5,                                    & !ratj(181) 
+['Cl2       ','PHOTON    '],                                                   &
+['Cl        ','Cl        ','          ','          ']),                        &
+asad_flux_defn('RXN',50500,'J',.FALSE.,0,5,                                    & !ratj(182)
+['Br2       ','PHOTON    '],                                                   &
+['Br        ','Br        ','          ','          '])                         &
+]
 
 
 PUBLIC :: asad_load_default_fluxes
@@ -8853,6 +9026,10 @@ TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_h2o_budget(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_budget_loss(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_drydep(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_ste(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_strat_het_fluxes(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_halocarbon_wetdep(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_halocarbon_drydep(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_halocarbon_rxn_fluxes(:)
 
 INTEGER :: p1                   ! start position in asad_chemical_fluxes array
 INTEGER :: p2                   ! end position in asad_chemical_fluxes array
@@ -9026,6 +9203,24 @@ IF (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_deststrattrop) THEN
     ALLOCATE(aa_ch4_ste(SIZE(asad_ch4_ste)))
     aa_ch4_ste = asad_ch4_ste
   END IF
+
+  ! DEST fluxes
+  IF (ukca_config%l_ukca_deststrattrop) THEN
+    ! aa_dest_strat_het_fluxes
+    ALLOCATE(aa_dest_strat_het_fluxes(SIZE(dest_strat_het_fluxes)))
+    aa_dest_strat_het_fluxes = dest_strat_het_fluxes
+    ! aa_dest_halocarbon_wetdep
+    ALLOCATE(aa_dest_halocarbon_wetdep(SIZE(dest_halocarbon_wetdep)))
+    aa_dest_halocarbon_wetdep = dest_halocarbon_wetdep
+    ! aa_dest_halocarbon_drydep
+    ALLOCATE(aa_dest_halocarbon_drydep(SIZE(dest_halocarbon_drydep)))
+    aa_dest_halocarbon_drydep = dest_halocarbon_drydep
+    ! aa_dest_halocarbon_rxn_fluxes
+    ALLOCATE(aa_dest_halocarbon_rxn_fluxes(SIZE(dest_halocarbon_rxn_fluxes)))
+    aa_dest_halocarbon_rxn_fluxes = dest_halocarbon_rxn_fluxes
+  END IF
+
+
 
 ELSE IF (ukca_config%l_ukca_cristrat) THEN
   ! Select the asad diagnostics appropriate for CRI-Strat chemistry and
@@ -9307,7 +9502,14 @@ IF (ALLOCATED(aa_ch4_drydep))                                                  &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_ch4_drydep)
 IF (ALLOCATED(aa_ch4_ste))                                                     &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_ch4_ste)
-
+IF (ALLOCATED(aa_dest_strat_het_fluxes))                                       &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_strat_het_fluxes)
+IF (ALLOCATED(aa_dest_halocarbon_wetdep))                                      &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_halocarbon_wetdep)
+IF (ALLOCATED(aa_dest_halocarbon_drydep))                                      &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_halocarbon_drydep)
+IF (ALLOCATED(aa_dest_halocarbon_rxn_fluxes))                                  &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_halocarbon_rxn_fluxes)
 ALLOCATE(asad_chemical_fluxes(n_chemical_fluxes))
 
 ! Initialise for checking
@@ -9450,6 +9652,26 @@ IF (ALLOCATED(aa_ch4_ste)) THEN
   asad_chemical_fluxes(p1:p2) = aa_ch4_ste(:)
   p1 = p2 + 1
 END IF
+IF (ALLOCATED(aa_dest_strat_het_fluxes)) THEN
+  p2 = p1 + SIZE(aa_dest_strat_het_fluxes) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_strat_het_fluxes(:)
+  p1 = p2 + 1
+END IF
+IF (ALLOCATED(aa_dest_halocarbon_wetdep)) THEN
+  p2 = p1 + SIZE(aa_dest_halocarbon_wetdep) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_halocarbon_wetdep(:)
+  p1 = p2 + 1
+END IF
+IF (ALLOCATED(aa_dest_halocarbon_drydep)) THEN
+  p2 = p1 + SIZE(aa_dest_halocarbon_drydep) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_halocarbon_drydep(:)
+  p1 = p2 + 1
+END IF
+IF (ALLOCATED(aa_dest_halocarbon_rxn_fluxes)) THEN
+  p2 = p1 + SIZE(aa_dest_halocarbon_rxn_fluxes) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_halocarbon_rxn_fluxes(:)
+  p1 = p2 + 1
+END IF
 
 IF (p2 /= n_chemical_fluxes) THEN
   cmessage = ' n_chemical_fluxes and p2 are different'
@@ -9530,6 +9752,10 @@ IF (ALLOCATED(aa_trop_ox_budget_loss02)) DEALLOCATE(aa_trop_ox_budget_loss02)
 IF (ALLOCATED(aa_trop_ox_budget_loss01)) DEALLOCATE(aa_trop_ox_budget_loss01)
 IF (ALLOCATED(aa_trop_ox_budget_prod02)) DEALLOCATE(aa_trop_ox_budget_prod02)
 IF (ALLOCATED(aa_trop_ox_budget_prod01)) DEALLOCATE(aa_trop_ox_budget_prod01)
+IF (ALLOCATED(aa_dest_strat_het_fluxes)) DEALLOCATE(aa_dest_strat_het_fluxes)
+IF (ALLOCATED(aa_dest_halocarbon_wetdep)) DEALLOCATE(aa_dest_halocarbon_wetdep)
+IF (ALLOCATED(aa_dest_halocarbon_drydep)) DEALLOCATE(aa_dest_halocarbon_drydep)
+IF (ALLOCATED(aa_dest_halocarbon_rxn_fluxes)) DEALLOCATE(aa_dest_halocarbon_rxn_fluxes)
 
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)

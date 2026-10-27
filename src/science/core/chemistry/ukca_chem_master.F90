@@ -1113,7 +1113,7 @@ rath_t1(18,'HO2       ','          ','H2O2      ','          ','          ',   &
 !
 ! alternative products of Reactions 2,3,5,11,12 for DEST
 !
-rath_t1(19,'ClONO2    ','HCl       ','Cl2       ','HO2NO2    ','          ',   &
+rath_t1(19,'ClONO2    ','HCl       ','Cl2       ','HONO2     ','          ',   &
 '          ', 0.000, 0.000, 0.000, 0.000, dest,hp,0,107),                      &
 rath_t1(20,'HOCl      ','HCl       ','Cl2       ','H2O       ','           ',  &
 '          ', 0.000, 0.000, 0.000, 0.000, dest,hp,0,107),                      &
@@ -1122,7 +1122,8 @@ rath_t1(21,'N2O5      ','HCl       ','ClNO2     ','HONO2     ','           ',  &
 rath_t1(22,'HOBr      ','HBr       ','Br2       ','H2O       ','          ',   &
 '          ', 0.000, 0.000, 0.000, 0.000, dest,eh,0,111),                      &
 rath_t1(23,'BrONO2    ','HBr       ','Br2       ','HONO2     ','          ',   &
-'          ', 0.000, 0.000, 0.000, 0.000, dest,eh,0,111) ]
+'          ', 0.000, 0.000, 0.000, 0.000, dest,eh,0,111)                       &
+]
 ! ----------------------------------------------------------------------
 
 
@@ -6866,7 +6867,7 @@ ratb_t1(745,'HO2       ','EtCO3     ','OH        ','EtOO      ','CO2       ',  &
 ! Additional reactions for DEST chemical scheme
 n_ratb_s = n_ratb_e+1
 ratb_defs_master(n_ratb_s:n_bimol_master) = [                                  &
-!!! Adding reactions of extra long-lived ODSs with O1D/OH for DESTy !!!
+!!! Adding reactions of extra long-lived ODSs with O1D/OH for DEST !!!
 ! ---- CFC11/CFC12 +OH ----
 ratb_t1(746,'CFCl3     ','OH        ','Cl        ','Cl        ','ClO       ',  &
 '          ',1.00e-11,  0.00, 9700.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
