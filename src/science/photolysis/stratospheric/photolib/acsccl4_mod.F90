@@ -106,7 +106,7 @@ DO jw = 57 , 79
   lam4 = lam*lam3
 
   arg = a0 + a1*lam + a2*lam2 + a3*lam3 + a4*lam4 +                            &
-    tc*(b0+b1*lam+b2*lam2+b3*lam3+b4*lam4)
+    (tc-273.0)*(b0+b1*lam+b2*lam2+b3*lam3+b4*lam4)
 
   accl4(jw) = 10.0**arg
 

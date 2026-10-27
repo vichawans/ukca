@@ -17,6 +17,8 @@ IMPLICIT NONE
 ! Description:
 !     Subroutine which calculates the methyl chloride (CH3Cl) absorption
 !     cross section based on P. C. Simon et al. (1988).
+! DEST - updated to SPARC 2013, and corrected a bug in the expression
+! for temp dependence
 
 ! Method:
 !     Journal of atmospheric chemistry, Vol. 7, pp. 107-135, 1988.
@@ -24,7 +26,7 @@ IMPLICIT NONE
 !     This is done via a polynomial expression of the form;
 !     log10(sigma)=A(lamda) + T B(lamda)
 
-!     The expression is valid for the wavelength range; 174-226 nm
+!     The expression is valid for the wavelength range; 174-216 nm
 !                            and the temperature range; 210-300 K.
 
 !  UKCA is a community model supported by The Met Office and
@@ -59,17 +61,17 @@ REAL, INTENT(IN OUT) :: amc(jpwav)
 ! Local variables
 
 !     Polynomial coefficients.
-REAL, PARAMETER :: a0=-299.80
-REAL, PARAMETER :: a1= 5.1047
-REAL, PARAMETER :: a2=-3.363e-2
-REAL, PARAMETER :: a3= 9.5805e-5
-REAL, PARAMETER :: a4=-1.0135e-7
+REAL, PARAMETER :: a0=-305.715
+REAL, PARAMETER :: a1=5.22714
+REAL, PARAMETER :: a2=-0.0345787
+REAL, PARAMETER :: a3=9.9067e-5
+REAL, PARAMETER :: a4=-1.05544e-7
 
-REAL, PARAMETER :: b0=-7.1727
-REAL, PARAMETER :: b1= 1.4837e-1
-REAL, PARAMETER :: b2=-1.1463e-3
-REAL, PARAMETER :: b3= 3.9188e-6
-REAL, PARAMETER :: b4=-4.9994e-9
+REAL, PARAMETER :: b0=-7.86957
+REAL, PARAMETER :: b1=0.162746
+REAL, PARAMETER :: b2=-0.00125729
+REAL, PARAMETER :: b3=4.29877e-6
+REAL, PARAMETER :: b4=-5.486e-9
 
 INTEGER :: jw
 
@@ -104,7 +106,7 @@ DO jw = 45 , 67
   lam3 = lam*lam2
   lam4 = lam*lam3
   arg = a0 + a1*lam + a2*lam2 + a3*lam3 + a4*lam4 +                            &
-    tc*(b0+b1*lam+b2*lam2+b3*lam3+b4*lam4)
+    (tc-273.0)*(b0+b1*lam+b2*lam2+b3*lam3+b4*lam4)
   amc(jw) = 10.0**arg
 
 END DO

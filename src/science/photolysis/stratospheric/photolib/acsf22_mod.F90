@@ -59,15 +59,18 @@ REAL, INTENT(IN OUT) :: af22(jpwav)
 ! Local variables.
 
 !     Polynomial coefficients.
-REAL, PARAMETER :: a0=-106.029
-REAL, PARAMETER :: a1= 1.5038
-REAL, PARAMETER :: a2=-8.2476e-3
-REAL, PARAMETER :: a3= 1.4206e-5
+! DEST - updated to SPARC2013
+REAL, PARAMETER :: a0=-369.398
+REAL, PARAMETER :: a1=7.09844
+REAL, PARAMETER :: a2=-0.0527699
+REAL, PARAMETER :: a3=0.0001715165
+REAL, PARAMETER :: a4=-2.0822e-7
 
-REAL, PARAMETER :: b0=-1.3399e-1
-REAL, PARAMETER :: b1= 2.7405e-3
-REAL, PARAMETER :: b2=-1.8028e-5
-REAL, PARAMETER :: b3= 3.8504e-8
+REAL, PARAMETER :: b0=-6.5412
+REAL, PARAMETER :: b1=0.138288
+REAL, PARAMETER :: b2=-0.00109207
+REAL, PARAMETER :: b3=3.8164e-6
+REAL, PARAMETER :: b4=-4.9772e-9
 
 INTEGER :: jw
 REAL :: tc
@@ -75,6 +78,7 @@ REAL :: tc
 REAL :: lam
 REAL :: lam2
 REAL :: lam3
+REAL :: lam4
 REAL :: arg
 
 INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
@@ -99,8 +103,9 @@ DO jw = 45 , 61
 
   lam2 = lam*lam
   lam3 = lam*lam2
-  arg = a0 + a1*lam + a2*lam2 + a3*lam3 +                                      &
-    tc*(b0+b1*lam+b2*lam2+b3*lam3)
+  lam4 = lam*lam3
+  arg = a0 + a1*lam + a2*lam2 + a3*lam3 + a4*lam4 +                              &
+    (tc-273.0)*(b0+b1*lam+b2*lam2+b3*lam3+b4*lam4)
   af22(jw) = 10.0**arg
 
 END DO

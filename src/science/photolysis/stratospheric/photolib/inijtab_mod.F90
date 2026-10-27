@@ -505,7 +505,8 @@ DO jo=1,jpo3p
     !         CALL ACSCHBR3(TABT(JT),WAVENM,ACHBR3 )
 
     !        CH2Br2
-    CALL acsdbrm(tabt(jt),adbrm )
+    ! DEST commented out
+    !CALL acsdbrm(tabt(jt),adbrm )
 
     !        CS2
     CALL acscs2 (acs2 )
