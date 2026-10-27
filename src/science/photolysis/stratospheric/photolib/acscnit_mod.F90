@@ -117,7 +117,7 @@ acnitb(:) = 0.0
 
 ! ClONO2 cross section, following JPL (2002)
 acnita(55:120) = acnitt(55:120)*(1.0 + a1(55:120)*(tc-296.0)                   &
-  + a2(55:120)*((tc-296.0)**2.0))
+  + a2(55:120)*((tc-296.0)**2))
 ! ClONO2 cross section, times quantum yield for ClO + NO2 channel
 acnitb(55:120) = (1.0 - quanty(55:120)) * acnita(55:120)
 ! ClONO2 cross section, times quantum yield for Cl  + NO3 channel
