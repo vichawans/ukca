@@ -77,7 +77,10 @@ USE ukca_constants,     ONLY: c_cf2cl2, c_cfcl3, c_clo, c_cl,                  &
   c_hono, c_c2h6, c_etooh, c_mecho, c_pan,                                     &
   c_c3h8, c_prooh, c_etcho, c_mecoch2ooh,                                      &
   c_ppan, c_meono2, c_h, c_oh, c_ho2, c_meoo,                                  &
-  c_etoo, c_proo, c_etco3, c_mecoch2oo
+  c_etoo, c_proo, c_etco3, c_mecoch2oo,                                        &
+  c_chbr3, c_ch2cl2, c_chcl3, c_c2cl4, c_c2h4cl2, c_cocl2, c_clno2,            &
+  c_ch2brcl, c_chbr2cl, c_chbrcl2, c_chcl2o2, c_cf2clcf2cl, c_cf2clcf3,        &
+  c_mecfcl2, c_mecf2cl, c_cl2, c_br2
 
 USE ereport_mod,        ONLY: ereport
 USE errormessagelength_mod, ONLY: errormessagelength
@@ -291,6 +294,134 @@ IF (firstcall) THEN
       nbr_tracers = nbr_tracers + 1
       br_tracers(nbr_tracers) = m
       c_br_tracers(nbr_tracers) = c_cf2clbr
+    !!! DEST
+    CASE ('CH2Cl2    ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_ch2cl2
+      cl_validity(ncl_tracers) = 2.0
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_ch2cl2
+      h_validity(nh_tracers) = 2.0      
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('CHCl3     ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_chcl3
+      cl_validity(ncl_tracers) = 3.0
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_chcl3
+      h_validity(nh_tracers) = 1.0      
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('C2Cl4     ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_c2cl4
+      cl_validity(ncl_tracers) = 4.0
+    CASE ('C2H4Cl2   ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_c2h4cl2
+      cl_validity(ncl_tracers) = 2.0
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_c2h4cl2
+      h_validity(nh_tracers) = 4.0      
+      do_not_change(nh_tracers) = .TRUE.      
+    CASE ('COCl2     ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_cocl2
+      cl_validity(ncl_tracers) = 2.0
+    CASE ('ClNO2     ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_clno2
+    CASE ('CH2BrCl   ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_ch2brcl
+      contains_bromine(ncl_tracers) = .TRUE.
+      nbr_tracers = nbr_tracers + 1
+      br_tracers(nbr_tracers) = m
+      c_br_tracers(nbr_tracers) = c_ch2brcl
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_ch2brcl
+      h_validity(nh_tracers) = 2.0 
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('CHBr2Cl   ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_chbr2cl
+      contains_bromine(ncl_tracers) = .TRUE.
+      nbr_tracers = nbr_tracers + 1
+      br_tracers(nbr_tracers) = m
+      c_br_tracers(nbr_tracers) = c_chbr2cl
+      br_validity(nbr_tracers) = 2.0
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_chbr2cl 
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('CHBrCl2   ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_chbrcl2
+      cl_validity(ncl_tracers) = 2.0
+      contains_bromine(ncl_tracers) = .TRUE.
+      nbr_tracers = nbr_tracers + 1
+      br_tracers(nbr_tracers) = m
+      c_br_tracers(nbr_tracers) = c_chbrcl2
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_chbrcl2
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('CHCl2O2   ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_chcl2o2
+      cl_validity(ncl_tracers) = 2.0
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_chcl2o2
+      do_not_change(nh_tracers) = .TRUE.
+     CASE ('CF2ClCF2Cl')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_cf2clcf2cl
+      cl_validity(ncl_tracers) = 2.0
+     CASE ('CF2ClCF3  ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_cf2clcf3
+     CASE ('MeCFCl2   ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_mecfcl2
+      cl_validity(ncl_tracers) = 2.0
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_mecfcl2
+      h_validity(nh_tracers) = 3.0 
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('MeCF2Cl   ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_mecf2cl
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_mecf2cl
+      h_validity(nh_tracers) = 3.0 
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('Cl2       ')
+      ncl_tracers = ncl_tracers + 1
+      cl_tracers(ncl_tracers) = m
+      c_cl_tracers(ncl_tracers) = c_cl2
+      cl_validity(ncl_tracers) = 2.0
+    !!! end DEST
+
       ! Bromine tracers
     CASE ('Brx       ','BrO       ')
       nbr_tracers = nbr_tracers + 1
@@ -342,6 +473,24 @@ IF (firstcall) THEN
       c_h_tracers(nh_tracers) = c_ch2br2
       h_validity(nh_tracers) = 2.0
       do_not_change(nh_tracers) = .TRUE.
+!!! DEST
+    CASE ('CHBr3     ')
+      nbr_tracers = nbr_tracers + 1
+      br_tracers(nbr_tracers) = m
+      c_br_tracers(nbr_tracers) = c_chbr3
+      br_validity(nbr_tracers) = 3.0
+      nh_tracers = nh_tracers + 1
+      h_tracers(nh_tracers) = m
+      c_h_tracers(nh_tracers) = c_chbr3
+      h_validity(nh_tracers) = 1.0
+      do_not_change(nh_tracers) = .TRUE.
+    CASE ('Br2       ')
+      nbr_tracers = nbr_tracers + 1
+      br_tracers(nbr_tracers) = m
+      c_br_tracers(nbr_tracers) = c_br2
+      br_validity(nbr_tracers) = 2.0
+!!! end DEST
+
       ! hydrogen tracers
     CASE ('TOTH      ')
       n_toth = m
