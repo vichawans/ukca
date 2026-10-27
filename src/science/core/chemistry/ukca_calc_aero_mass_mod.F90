@@ -32,28 +32,28 @@ PUBLIC :: ukca_calc_aero_mass
 CONTAINS
 
 SUBROUTINE ukca_calc_aero_mass(tracer, n_chemistry_tracers,            &
-                                      row_length, rows, model_levels,         &
-                                      so4_total_mmr, om1_total_mmr,            &
-                                      om2_total_mmr, aero_total_mmr)
+                                row_length, rows, model_levels,         &
+                                so4_total_mmr, om1_total_mmr,            &
+                                om2_total_mmr, aero_total_mmr)
 
 USE ukca_mode_setup,               ONLY: nmodes, cp_su, cp_oc, cp_so,         &
                                         glomap_variables_type
-USE ukca_config_specification_mod,           ONLY: glomap_variables
+USE ukca_config_specification_mod, ONLY: glomap_variables
 USE ukca_mode_tracer_maps_mod,     ONLY: mmr_index
 USE parkind1,                      ONLY: jprb, jpim
 USE yomhook,                       ONLY: lhook, dr_hook
 
 IMPLICIT NONE
 
-! variables from outside
-INTEGER, INTENT(IN) :: n_chemistry_tracers
-TYPE(glomap_variables_type), TARGET, INTENT(IN) :: glomap_variables_local
-INTEGER, INTENT(IN) :: row_length
-INTEGER, INTENT(IN) :: rows
-INTEGER, INTENT(IN) :: model_levels
 
 ! tracer MMR (row_length,rows,model_levels,ntracers)
 REAL, INTENT(IN)    :: tracer(:,:,:,:)
+
+! variables from outside
+INTEGER, INTENT(IN) :: n_chemistry_tracers
+INTEGER, INTENT(IN) :: row_length
+INTEGER, INTENT(IN) :: rows
+INTEGER, INTENT(IN) :: model_levels
 
 ! output totals in kg/kg(dry air)
 REAL, INTENT(OUT) :: so4_total_mmr(row_length, rows, model_levels)
@@ -67,8 +67,8 @@ INTEGER :: icp
 INTEGER :: iaer
 INTEGER :: ifirst
 INTEGER :: ntr_all
-INTEGER :: ncp
 
+INTEGER, POINTER :: ncp
 LOGICAL, POINTER :: component(:,:)
 LOGICAL, POINTER :: mode(:)
 
@@ -89,17 +89,12 @@ om1_total_mmr(:,:,:) = 0.0
 om2_total_mmr(:,:,:) = 0.0
 aero_total_mmr(:,:,:) = 0.0
 
-IF (.NOT. ALLOCATED(mmr_index)) THEN
-  IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
-  RETURN
-END IF
-
 ifirst = n_chemistry_tracers + 1
 ntr_all = SIZE(tracer,4)
 
+
 DO imode = 1, nmodes
   IF (.NOT. mode(imode)) CYCLE
-
   ! Sulfate total across all active modes.
   IF (cp_su <= ncp) THEN
     IF (component(imode, cp_su) .AND. mmr_index(imode, cp_su) > 0) THEN
@@ -122,6 +117,7 @@ DO imode = 1, nmodes
 
   ! OM2 (cp_so) may be unavailable in reduced-component setups.
   IF (cp_so <= ncp) THEN
+
     IF (component(imode, cp_so) .AND. mmr_index(imode, cp_so) > 0) THEN
       iaer = n_chemistry_tracers + mmr_index(imode, cp_so) - ifirst + 1
       IF (iaer >= 1 .AND. iaer <= ntr_all) THEN

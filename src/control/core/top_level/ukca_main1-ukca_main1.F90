@@ -403,6 +403,17 @@ REAL, ALLOCATABLE :: H_plus_3d_arr(:,:,:)
 ! Output from Plumeria model in ukca_volcanic_so2 subroutine
 REAL, ALLOCATABLE :: plumeria_height(:,:)
 
+!--VS 3D array for organic carbon and total aerosol masses to use in chem_ctl
+! by ukca_calc_aero_mass
+REAL, ALLOCATABLE :: focr(:,:,:)
+REAL, ALLOCATABLE :: roc(:,:,:)
+REAL, ALLOCATABLE :: so4_total_mmr(:,:,:)
+REAL, ALLOCATABLE :: om1_total_mmr(:,:,:)
+REAL, ALLOCATABLE :: om2_total_mmr(:,:,:)
+REAL, ALLOCATABLE :: aero_total_mmr(:,:,:)
+INTEGER :: i_ukca_hetorg_case
+
+
 ! diagnostics from chemistry_ctl
 
 ! Nitric acid trihydrate (kg(nat)/kg(air))
@@ -2203,17 +2214,27 @@ IF (ukca_config%l_ukca_chem) THEN
     !----------------------------------------------------------------------------
     !--VS add routine to calculate total sulfate and oc mass for stratospheric
     !     heterogeneous reactions on organic aerosols
-     
-    ! 1. initialise focr, roc = 0 
-    IF (.NOT. ALLOCATED(H_plus_3d_arr)) THEN 
-      ALLOCATE(focr(row_length,rows,model_levels))
-      ALLOCATE(roc(row_length,rows,model_levels))
-    END IF
+    WRITE(*,*) '!--VS start focr allocation'
+    
+    ! 1. initialise aerosol mmrs  
+    IF (.NOT. ALLOCATED(focr))                                    &
+      ALLOCATE(so4_total_mmr(row_length,rows,model_levels))
+    IF (.NOT. ALLOCATED(focr))                                    &
+      ALLOCATE(om1_total_mmr(row_length,rows,model_levels))
+    IF (.NOT. ALLOCATED(focr))                                    &
+      ALLOCATE(om2_total_mmr(row_length,rows,model_levels))
+    IF (.NOT. ALLOCATED(focr))                                    &
+      ALLOCATE(aero_total_mmr(row_length,rows,model_levels))
 
-    focr = 0.0
-    roc = 0.0
-
+    i_ukca_hetorg_case = 1
     ! 2. populate focr, roc using new function, use om1 or om2 depending on the case settings
+    IF (i_ukca_hetorg_case > 0) THEN
+      WRITE(*,*) '!--VS call ukca_calc_aero_mass'
+      CALL ukca_calc_aero_mass(                                                &
+              all_tracers(:,:,:,1:n_chem_tracers+n_aero_tracers),              & 
+              n_chem_tracers,row_length, rows, model_levels,                   &
+              so4_total_mmr, om1_total_mmr, om2_total_mmr, aero_total_mmr)
+    END IF
 
     ! Check cases for strat het reactions on oc
     ! IF (ukca_config%l_ukca_intph) THEN ! Use logical set in Rose suite
@@ -2223,6 +2244,21 @@ IF (ukca_config%l_ukca_chem) THEN
     ! case case=3, set roc
     ! case case=4, set focr (om1)
     ! case case=5, set focr (om2)
+    
+    IF (.NOT. ALLOCATED(focr))                                    &
+      ALLOCATE(focr(row_length,rows,model_levels))
+    IF (.NOT. ALLOCATED(focr))                                    &
+      ALLOCATE(roc(row_length,rows,model_levels))
+    focr = 0.0
+    roc = 0.0
+
+    IF (i_ukca_hetorg_case >= 1 .AND. i_ukca_hetorg_case <= 3) THEN
+      roc = om1_total_mmr / so4_total_mmr
+    ELSE IF (i_ukca_hetorg_case == 4) THEN
+      focr = om1_total_mmr / aero_total_mmr
+    ELSE IF (i_ukca_hetorg_case == 5) THEN
+      focr = om2_total_mmr / aero_total_mmr
+    END IF
 
     
     !----------------------------------------------------------------------------

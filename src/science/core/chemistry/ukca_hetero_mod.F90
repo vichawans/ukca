@@ -118,7 +118,7 @@ REAL, PARAMETER, PRIVATE  :: radsa=1.0e-5  ! aerosol radius(cm)
 ! Should ultimately be namelist-controlled (ukca_config); hardwired here
 ! for development.
 ! ---------------------------------------------------------------------
-INTEGER, PARAMETER, PRIVATE :: i_ukca_hetorg_case = 0 ! 0-5, see above
+INTEGER, PARAMETER, PRIVATE :: i_ukca_hetorg_case = 1 ! 0-5, see above
 REAL, PARAMETER, PRIVATE :: oc_frac_scale = 1.0 ! tuning multiplier on
                                                 ! focr and roc (cf /4)
 REAL, PARAMETER, PRIVATE :: oc_so4_crit = 1.0 ! case 1 only: org/sulfate
