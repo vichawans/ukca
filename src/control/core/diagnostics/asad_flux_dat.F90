@@ -9910,6 +9910,128 @@ TYPE(asad_flux_defn), PARAMETER :: dest_Ox_loss_2(48) = [                      &
        ['Sec_Org   ','          ','          ','          '])                  &
 ]
 
+
+TYPE(asad_flux_defn), PARAMETER :: dest_NOy_tendency(17) = [                   &
+       asad_flux_defn('NET',50559,'X',.FALSE.,0,1,                             &
+       ['NO        ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50560,'X',.FALSE.,0,1,                             &
+       ['NO2       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50561,'X',.FALSE.,0,1,                             &
+       ['PAN       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50562,'X',.FALSE.,0,1,                             &
+       ['HONO2     ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50563,'X',.FALSE.,0,1,                             &
+       ['ClONO2    ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50564,'X',.FALSE.,0,1,                             &
+       ['N2O5      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50565,'X',.FALSE.,0,1,                             &
+       ['HO2NO2    ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50566,'X',.FALSE.,0,1,                             &
+       ['ClNO2     ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50567,'X',.FALSE.,0,1,                             &
+       ['NO3       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50568,'X',.FALSE.,0,1,                             &
+       ['BrONO2    ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50569,'X',.FALSE.,0,1,                             &
+       ['HONO      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50570,'X',.FALSE.,0,1,                             &
+       ['N         ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50571,'X',.FALSE.,0,1,                             &
+       ['MeONO2    ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50572,'X',.FALSE.,0,1,                             &
+       ['MPAN      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50573,'X',.FALSE.,0,1,                             &
+       ['PPAN      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50574,'X',.FALSE.,0,1,                             &
+       ['ISON      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50575,'X',.FALSE.,0,1,                             &
+       ['NALD      ','          '],                                            &
+       ['          ','          ','          ','          '])                  &
+]
+
+
+TYPE(asad_flux_defn), PARAMETER :: dest_Bry_tendency(6) = [                    &
+       asad_flux_defn('NET',50576,'X',.FALSE.,0,1,                             &
+       ['Br        ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50577,'X',.FALSE.,0,1,                             &
+       ['BrO       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50578,'X',.FALSE.,0,1,                             &
+       ['HBr       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50589,'X',.FALSE.,0,1,                             &
+       ['HOBr      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50580,'X',.FALSE.,0,1,                             &
+       ['BrCl      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50581,'X',.FALSE.,0,1,                             &
+       ['Br2       ','          '],                                            &
+       ['          ','          ','          ','          '])                  &
+]
+
+TYPE(asad_flux_defn), PARAMETER :: dest_Cly_tendency(7) = [                    &
+       asad_flux_defn('NET',50582,'X',.FALSE.,0,1,                             &
+       ['Cl        ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50583,'X',.FALSE.,0,1,                             &
+       ['ClO       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50584,'X',.FALSE.,0,1,                             &
+       ['OClO      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50585,'X',.FALSE.,0,1,                             &
+       ['HOCl      ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50586,'X',.FALSE.,0,1,                             &
+       ['HCl       ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50587,'X',.FALSE.,0,1,                             &
+       ['Cl2O2     ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50588,'X',.FALSE.,0,1,                             &
+       ['Cl2       ','          '],                                            &
+       ['          ','          ','          ','          '])                  &
+]
+
+TYPE(asad_flux_defn), PARAMETER :: dest_OH_COCl2_tendency(2) = [               &
+       asad_flux_defn('NET',50589,'X',.FALSE.,0,1,                             &
+       ['OH        ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50590,'X',.FALSE.,0,1,                             &
+       ['COCl2     ','          '],                                            &
+       ['          ','          ','          ','          '])                  &
+]
+
+TYPE(asad_flux_defn), PARAMETER :: dest_Ox_tendency(3) = [                     &
+       asad_flux_defn('NET',50591,'X',.FALSE.,0,1,                             &
+       ['O3        ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50592,'X',.FALSE.,0,1,                             &
+       ['O(3P)     ','          '],                                            &
+       ['          ','          ','          ','          ']),                 &
+       asad_flux_defn('NET',50593,'X',.FALSE.,0,1,                             &
+       ['O(1D)     ','          '],                                            &
+       ['          ','          ','          ','          '])                  &
+]
+
 PUBLIC :: asad_load_default_fluxes
 
 CHARACTER(LEN=*), PARAMETER, PRIVATE :: ModuleName='ASAD_FLUX_DAT'
@@ -10007,6 +10129,11 @@ TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_COCl2_budget(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_OH_prod(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_Ox_loss(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_Ox_loss_2(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_NOy_tendency(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_Bry_tendency(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_Cly_tendency(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_OH_COCl2_tendency(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_Ox_tendency(:)
 
 INTEGER :: p1                   ! start position in asad_chemical_fluxes array
 INTEGER :: p2                   ! end position in asad_chemical_fluxes array
@@ -10211,6 +10338,16 @@ IF (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_deststrattrop) THEN
     aa_dest_Ox_loss = dest_Ox_loss    
     ALLOCATE(aa_dest_Ox_loss_2(SIZE(dest_Ox_loss_2)))
     aa_dest_Ox_loss_2 = dest_Ox_loss_2 
+    ALLOCATE(aa_dest_NOy_tendency(SIZE(dest_NOy_tendency)))
+    aa_dest_NOy_tendency = dest_NOy_tendency 
+    ALLOCATE(aa_dest_Bry_tendency(SIZE(dest_Bry_tendency)))
+    aa_dest_Bry_tendency = dest_Bry_tendency 
+    ALLOCATE(aa_dest_Cly_tendency(SIZE(dest_Cly_tendency)))
+    aa_dest_Cly_tendency = dest_Cly_tendency 
+    ALLOCATE(aa_dest_OH_COCl2_tendency(SIZE(dest_OH_COCl2_tendency)))
+    aa_dest_OH_COCl2_tendency = dest_OH_COCl2_tendency 
+    ALLOCATE(aa_dest_Ox_tendency(SIZE(dest_Ox_tendency)))
+    aa_dest_Ox_tendency = dest_Ox_tendency 
   END IF
 
 
@@ -10509,7 +10646,7 @@ IF (ALLOCATED(aa_dest_Bry_budget))                                             &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Bry_budget)
 IF (ALLOCATED(aa_dest_Cly_budget))                                             &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Cly_budget)
-IF (ALLOCATED(aa_dest_Cly_budget_2))                                             &
+IF (ALLOCATED(aa_dest_Cly_budget_2))                                           &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Cly_budget_2)
 IF (ALLOCATED(aa_dest_COCl2_budget))                                           &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_COCl2_budget)
@@ -10517,8 +10654,18 @@ IF (ALLOCATED(aa_dest_OH_prod))                                                &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_OH_prod)
 IF (ALLOCATED(aa_dest_Ox_loss))                                                &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Ox_loss)
-IF (ALLOCATED(aa_dest_Ox_loss_2))                                                &
+IF (ALLOCATED(aa_dest_Ox_loss_2))                                              &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Ox_loss_2)
+IF (ALLOCATED(aa_dest_NOy_tendency))                                           &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_NOy_tendency)
+IF (ALLOCATED(aa_dest_Bry_tendency))                                           &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Bry_tendency)
+IF (ALLOCATED(aa_dest_Cly_tendency))                                           &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Cly_tendency)
+IF (ALLOCATED(aa_dest_OH_COCl2_tendency))                                      &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_OH_COCl2_tendency)
+IF (ALLOCATED(aa_dest_Ox_tendency))                                            &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_Ox_tendency)
 
 ALLOCATE(asad_chemical_fluxes(n_chemical_fluxes))
 
@@ -10722,7 +10869,31 @@ IF (ALLOCATED(aa_dest_Ox_loss_2)) THEN
   asad_chemical_fluxes(p1:p2) = aa_dest_Ox_loss_2(:)
   p1 = p2 + 1
 END IF
-
+IF (ALLOCATED(aa_dest_NOy_tendency)) THEN
+  p2 = p1 + SIZE(aa_dest_NOy_tendency) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_NOy_tendency(:)
+  p1 = p2 + 1
+END IF
+IF (ALLOCATED(aa_dest_Bry_tendency)) THEN
+  p2 = p1 + SIZE(aa_dest_Bry_tendency) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_Bry_tendency(:)
+  p1 = p2 + 1
+END IF
+IF (ALLOCATED(aa_dest_Cly_tendency)) THEN
+  p2 = p1 + SIZE(aa_dest_Cly_tendency) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_Cly_tendency(:)
+  p1 = p2 + 1
+END IF
+IF (ALLOCATED(aa_dest_OH_COCl2_tendency)) THEN
+  p2 = p1 + SIZE(aa_dest_OH_COCl2_tendency) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_OH_COCl2_tendency(:)
+  p1 = p2 + 1
+END IF
+IF (ALLOCATED(aa_dest_Ox_tendency)) THEN
+  p2 = p1 + SIZE(aa_dest_Ox_tendency) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_Ox_tendency(:)
+  p1 = p2 + 1
+END IF
 
 IF (p2 /= n_chemical_fluxes) THEN
   cmessage = ' n_chemical_fluxes and p2 are different'
@@ -10810,10 +10981,15 @@ IF (ALLOCATED(aa_dest_halocarbon_rxn_fluxes)) DEALLOCATE(aa_dest_halocarbon_rxn_
 IF (ALLOCATED(aa_dest_NOy_budget))       DEALLOCATE(aa_dest_NOy_budget)
 IF (ALLOCATED(aa_dest_Bry_budget))       DEALLOCATE(aa_dest_Bry_budget)
 IF (ALLOCATED(aa_dest_Cly_budget))       DEALLOCATE(aa_dest_Cly_budget)
-IF (ALLOCATED(aa_dest_Cly_budget_2))       DEALLOCATE(aa_dest_Cly_budget_2)
+IF (ALLOCATED(aa_dest_Cly_budget_2))     DEALLOCATE(aa_dest_Cly_budget_2)
 IF (ALLOCATED(aa_dest_COCl2_budget))     DEALLOCATE(aa_dest_COCl2_budget)
 IF (ALLOCATED(aa_dest_OH_prod))          DEALLOCATE(aa_dest_OH_prod)
-IF (ALLOCATED(aa_dest_Ox_loss_2))          DEALLOCATE(aa_dest_Ox_loss_2)
+IF (ALLOCATED(aa_dest_Ox_loss_2))        DEALLOCATE(aa_dest_Ox_loss_2)
+IF (ALLOCATED(aa_dest_NOy_tendency))     DEALLOCATE(aa_dest_NOy_tendency)
+IF (ALLOCATED(aa_dest_Bry_tendency))     DEALLOCATE(aa_dest_Bry_tendency)
+IF (ALLOCATED(aa_dest_Cly_tendency))     DEALLOCATE(aa_dest_Cly_tendency)
+IF (ALLOCATED(aa_dest_OH_COCl2_tendency)) DEALLOCATE(aa_dest_OH_COCl2_tendency)
+IF (ALLOCATED(aa_dest_Ox_tendency))      DEALLOCATE(aa_dest_Ox_tendency)
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 
