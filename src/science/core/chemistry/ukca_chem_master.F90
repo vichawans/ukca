@@ -414,32 +414,32 @@ chch_t1(59,'ISOOH     ',1,'TR        ','          ',1,1,ti+st+r+dest,0,0,107), &
 chch_t1(60,'ISON      ',1,'TR        ','          ',0,1,r,0,0,107),            &
 chch_t1(60,'ISON      ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 !  61 DD: 28,
-chch_t1(61,'MACR      ',1,'TR        ','          ',1,0,ti+st,0,0,107),        &
+chch_t1(61,'MACR      ',1,'TR        ','          ',1,0,ti+st+dest,0,0,107),   &
 !  62
 chch_t1(62,'MACRO2    ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  62 ; Select 'OO' type MACRO2 in ST mechanism if RN or RP == T
-chch_t1(62,'MACRO2    ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
-chch_t1(62,'MACRO2    ',1,'OO        ','          ',0,0,st,rn+rp,0,107),       &
+chch_t1(62,'MACRO2    ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
+chch_t1(62,'MACRO2    ',1,'OO        ','          ',0,0,st+dest,rn+rp,0,107),  &
 !  63 DD: 29,WD: 24,
-chch_t1(63,'MACROOH   ',1,'TR        ','          ',1,1,ti+st,0,0,107),        &
+chch_t1(63,'MACROOH   ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 !  64 DD: 30,
-chch_t1(64,'MPAN      ',1,'TR        ','          ',1,0,ti+st+cs,0,0,107),     &
+chch_t1(64,'MPAN      ',1,'TR        ','          ',1,0,ti+st+cs+dest,0,0,107),&
 !  65 DD: 31,WD: 25,   (110)
-chch_t1(65,'HACET     ',1,'TR        ','          ',1,1,ti+st,0,0,107),        &
+chch_t1(65,'HACET     ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 !  66 DD: 32,WD: 26,
 ! No dry deposition for methyl glyoxal in R scheme
 chch_t1(66,'MGLY      ',1,'TR        ','          ',0,1,r,0,0,107),            &
-chch_t1(66,'MGLY      ',1,'TR        ','          ',1,1,ti+st,0,0,107),        &
+chch_t1(66,'MGLY      ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 !  67 DD: 33,
-chch_t1(67,'NALD      ',1,'TR        ','          ',1,0,ti+st,0,0,107),        &
+chch_t1(67,'NALD      ',1,'TR        ','          ',1,0,ti+st+dest,0,0,107),   &
 !  68 DD: 34,WD: 27,
-chch_t1(68,'HCOOH     ',1,'TR        ','          ',1,1,ti+st,0,0,107),        &
+chch_t1(68,'HCOOH     ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 !  68
 chch_t1(68,'HCOOH     ',1,'TR        ','          ',1,1,cs,0,0,107),           &
 !  69 DD: 35,WD: 28,
-chch_t1(69,'MeCO3H    ',1,'TR        ','          ',1,1,ti+st+cs,0,0,107),     &
+chch_t1(69,'MeCO3H    ',1,'TR        ','          ',1,1,ti+st+cs+dest,0,0,107),&
 !  70 DD: 36,WD: 29,
-chch_t1(70,'MeCO2H    ',1,'TR        ','          ',1,1,ti+st,0,0,107),        &
+chch_t1(70,'MeCO2H    ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 !  70 MeCO2H emitted in CRI
 chch_t1(70,'MeCO2H    ',1,'TR        ','          ',1,1,cs,0,0,107),           &
 !  71 DD: 37,
