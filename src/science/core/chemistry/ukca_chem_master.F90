@@ -274,7 +274,8 @@ chch_t1(19,'OH        ',1,'TR        ','HOx       ',0,0,ti+s+st+cs+dest,       &
 chch_t1(19,'OH        ',1,'SS        ','HOx       ',0,0,t+r,0,0,107),          &
 chch_t1(19,'OH        ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
 !  20        WD: 10,
-chch_t1(20,'HO2       ',1,'TR        ','HOx       ',0,1,ti+s+st+dest,0,0,107), &
+chch_t1(20,'HO2       ',1,'TR        ','HOx       ',0,1,ti+s+st+cs+dest,       &
+                                                                0,0,107),      &
 chch_t1(20,'HO2       ',1,'SS        ','HOx       ',0,1,t+r,0,0,107),          &
 chch_t1(20,'HO2       ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
 !  21 VS_note - DEST add new species of Cl which deposits
@@ -458,7 +459,7 @@ chch_t1(72,'MeOH      ',1,'TR        ','          ',0,1,r,0,0,107),            &
 !  72
 chch_t1(72,'MeOH      ',1,'TR        ','          ',1,1,cs,0,0,107),           &
 !  73
-chch_t1(73,'CO2       ',1,'CT        ','          ',0,0,ti+t+s+st+cs+dest,          &
+chch_t1(73,'CO2       ',1,'CT        ','          ',0,0,ti+t+s+st+cs+dest,     &
                                                              0,ci,107),        &
 !  73
 ! Stratospheric chemical schemes are enabled to take 3D CO2 as input
@@ -570,7 +571,7 @@ chch_t1(114,'GLY       ',1,'TR        ','          ',0,1,r,0,0,107),           &
 ! 115
 chch_t1(115,'oXYLENE   ',1,'TR        ','          ',0,0,r+cs,0,0,107),        &
 ! 116 - Lumped peroxy radical field for use with RO2-permutation chemistry
-chch_t1(116,'RO2       ',1,'CF        ','          ',0,0,st+cs+dest,rp,0,107),      &
+chch_t1(116,'RO2       ',1,'CF        ','          ',0,0,st+cs+dest,rp,0,107), &
 ! From here on out, all new CRI species
 ! 117
 chch_t1(117,'TBUT2ENE  ',1,'TR        ','          ',0,0,cs,0,0,107),          &
@@ -941,7 +942,7 @@ chch_t1(282,'RU10NO3   ',1,'TR        ','          ',1,1,cs,0,0,119),          &
 ! 283
 chch_t1(283,'MACO3     ',1,'OO        ','          ',0,0,cs,rp,0,119),         &
 ! 284
-chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st+dest,a,0,132)           &
+chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st+dest,a,0,132)      &
 ]
 
 
