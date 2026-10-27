@@ -109,7 +109,7 @@ INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DE
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
-INTEGER, PARAMETER :: n_bimol_master = 1228 ! number of bimolecular reactions !DEST +16
+INTEGER, PARAMETER :: n_bimol_master = 1238 ! number of bimolecular reactions !DEST +26
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 116 ! number of termolecular reactions
 
@@ -6720,7 +6720,7 @@ ratb_t1(745,'HO2       ','EtCO3     ','OH        ','EtOO      ','CO2       ',  &
 ! Additional reactions for DEST chemical scheme
 n_ratb_s = n_ratb_e+1
 ratb_defs_master(n_ratb_s:n_bimol_master) = [                                  &
-!!! Adding reactions of extra long-lived ODSs with O1D/OH for DEST !!!
+!!! Adding reactions of extra long-lived ODSs with O1D/OH for DESTy !!!
 ! ---- CFC11/CFC12 +OH ----
 ratb_t1(746,'CFCl3     ','OH        ','Cl        ','Cl        ','ClO       ',  &
 '          ',1.00e-11,  0.00, 9700.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
@@ -6760,8 +6760,34 @@ ratb_t1(759,'MeCCl3    ','O(1D)     ','Cl        ','Cl        ','ClO       ',  &
 ratb_t1(760,'CF3Br     ','OH        ','Br        ','          ','          ',  &
 '          ',1.00e-12,  0.00, 3600.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ratb_t1(761,'CF3Br     ','O(1D)     ','BrO       ','          ','          ',  &
-'          ',4.50e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
-        
+'          ',4.50e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+!!! Br-VSLS reactions; JPL2015
+!!!
+! ---- CH2Br2 ----
+ratb_t1(762,'CH2Br2    ','OH        ','Br        ','Br        ','H2O       ',  &
+'          ',2.00e-12,  0.00,  840.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(763,'CH2Br2    ','O(1D)     ','Br        ','Br        ','OH        ',  & ! EMB - should it prod OH???
+'          ',2.57e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(764,'CH2Br2    ','Cl        ','Br        ','Br        ','HCl       ',  &
+'          ',6.30e-12,  0.00,  800.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- bromoform ----
+ratb_t1(765,'CHBr3     ','OH        ','Br        ','Br        ','Br        ',  &
+'H2O       ',9.00e-13,  0.00,  360.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(766,'CHBr3     ','O(1D)     ','Br        ','Br        ','Br        ',  & ! EMB - should it prod OH???
+'OH        ',4.62e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(767,'CHBr3     ','Cl        ','Br        ','Br        ','Br        ',  &
+'HCl       ',4.85e-12,  0.00,  850.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- CH2BrCl ----
+ratb_t1(768,'CH2BrCl   ','OH        ','Br        ','Cl        ','H2O       ',  &
+'          ',2.10e-12,  0.00,  880.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+ratb_t1(769,'CH2BrCl   ','Cl        ','Br        ','Cl        ','HCl       ',  &
+'          ',6.80e-12,  0.00,  870.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- CHBr2Cl ----
+ratb_t1(770,'CHBr2Cl   ','OH        ','Br        ','Cl        ','Br        ',  &
+'H2O       ',9.00e-13,  0.00,  420.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! ---- CHBrCl2 ----
+ratb_t1(771,'CHBrCl2   ','OH        ','Br        ','Cl        ','Cl        ',  &
+'H2O       ',9.40e-13,  0.00,  510.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
 ] 
      
 !----------------------------------------------------------------------
