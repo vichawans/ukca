@@ -377,38 +377,42 @@ chch_t1(51,'EtCO3     ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  51
 chch_t1(51,'EtCO3     ',1,'SS        ','          ',0,0,t,0,0,107),            &
 !  51 ; Select 'OO' type EtCO3 in ST mechanism if RN or RP == T
-chch_t1(51,'EtCO3     ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
-chch_t1(51,'EtCO3     ',1,'OO        ','          ',0,0,st+cs,rn+rp,0,107),    &
+chch_t1(51,'EtCO3     ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
+chch_t1(51,'EtCO3     ',1,'OO        ','          ',0,0,st+cs+dest,            &
+                                                              rn+rp,0,107),    &
 !  52
-chch_t1(52,'Me2CO     ',1,'TR        ','          ',0,0,ti+t+st+r+cs,          &
+chch_t1(52,'Me2CO     ',1,'TR        ','          ',0,0,ti+t+st+r+cs+dest,     &
                                                               0,0,107),        &
 !  53                 (90)
 chch_t1(53,'MeCOCH2OO ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  53
 chch_t1(53,'MeCOCH2OO ',1,'SS        ','          ',0,0,t+r,0,0,107),          &
 !  53 ; Select 'OO' type MeCOCH2OO in ST mechanism if RN or RP == T
-chch_t1(53,'MeCOCH2OO ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
-chch_t1(53,'MeCOCH2OO ',1,'OO        ','          ',0,0,st,rn+rp,0,107),       &
+chch_t1(53,'MeCOCH2OO ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
+chch_t1(53,'MeCOCH2OO ',1,'OO        ','          ',0,0,st+dest,rn+rp,0,107),  &
 !  54 DD: 24,WD: 21,
-chch_t1(54,'MeCOCH2OOH',1,'TR        ','          ',1,1,ti+t+st,0,0,107),      &
+chch_t1(54,'MeCOCH2OOH',1,'TR        ','          ',1,1,ti+t+st+dest,0,0,107), &
 !  55 DD: 25,
-chch_t1(55,'PPAN      ',1,'TR        ','          ',1,0,ti+t+st+cs,0,0,107),   &
+chch_t1(55,'PPAN      ',1,'TR        ','          ',1,0,ti+t+st+cs+dest,       &
+                                                              0,0,107),        &
 !  56
-chch_t1(56,'MeONO2    ',1,'TR        ','          ',0,0,ti+t+st+cs,0,0,107),   &
+chch_t1(56,'MeONO2    ',1,'TR        ','          ',0,0,ti+t+st+cs+dest,       &
+                                                              0,0,107),        &
 !  57
-chch_t1(57,'C5H8      ',1,'TR        ','          ',0,0,ti+st+r+cs,0,0,107),   &
+chch_t1(57,'C5H8      ',1,'TR        ','          ',0,0,ti+st+r+cs+dest        &
+                                                              ,0,0,107),       &
 !  58
 chch_t1(58,'ISO2      ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  58 ; Select 'OO' type ISO2 in ST mechanism if RN or RP == T
-chch_t1(58,'ISO2      ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
+chch_t1(58,'ISO2      ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),  &
 !  58                 (100)
-chch_t1(58,'ISO2      ',1,'OO        ','          ',0,0,st,rn+rp,0,107),       &
+chch_t1(58,'ISO2      ',1,'OO        ','          ',0,0,st+dest,rn+rp,0,107),  &
 !  59 DD: 26,WD: 22,
-chch_t1(59,'ISOOH     ',1,'TR        ','          ',1,1,ti+st+r,0,0,107),      &
+chch_t1(59,'ISOOH     ',1,'TR        ','          ',1,1,ti+st+r+dest,0,0,107), &
 !  60 DD: 27,WD: 23,
 ! No DD for ISON in R scheme
 chch_t1(60,'ISON      ',1,'TR        ','          ',0,1,r,0,0,107),            &
-chch_t1(60,'ISON      ',1,'TR        ','          ',1,1,ti+st,0,0,107),        &
+chch_t1(60,'ISON      ',1,'TR        ','          ',1,1,ti+st+dest,0,0,107),   &
 !  61 DD: 28,
 chch_t1(61,'MACR      ',1,'TR        ','          ',1,0,ti+st,0,0,107),        &
 !  62
