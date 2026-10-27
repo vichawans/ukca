@@ -185,7 +185,8 @@ USE ukca_constants,  ONLY: c_br, c_brcl, c_bro, c_brono2, c_buoo,              &
     c_arnoh17, c_anhy, c_cri,c_dhpcarb9, c_hpucarb12, c_hucarb9, c_iepox,      &
     c_hmml, c_dhpr12ooh, c_dhcarb9, c_ru12no3, c_ru10no3, c_dhpr12o2,          &
     c_ru10ao2, c_maco3, c_ch2cl2, c_chcl3, c_c2cl4, c_c2h4cl2, c_clno2,        &
-    c_cocl2
+    c_cocl2, c_cf2clcf2cl, c_cf2clcf3, c_mecfcl2, c_mecf2cl, c_ch2brcl,        &
+    c_chbr2cl, c_chbrcl2, c_chcl2o2, c_cl2, c_br2
 
 
 USE asad_mod,        ONLY: advt, nadvt, speci, jpctr, jpspec
@@ -475,7 +476,17 @@ WHERE (advt == 'C2Cl4     ') c_species = c_c2cl4   !for DEST
 WHERE (advt == 'C2H4Cl2   ') c_species = c_c2h4cl2 !for DEST
 WHERE (advt == 'ClNO2     ') c_species = c_clno2   !for DEST
 WHERE (advt == 'COCl2     ') c_species = c_cocl2   !for DEST
-        
+WHERE (advt == 'CF2ClCF2Cl') c_species = c_cf2clcf2cl  !for DEST
+WHERE (advt == 'CF2ClCF3  ') c_species = c_cf2clcf3    !for DEST
+WHERE (advt == 'MeCFCl2   ') c_species = c_mecfcl2   !for DEST
+WHERE (advt == 'MeCF2Cl   ') c_species = c_mecf2cl   !for DEST
+WHERE (advt == 'CH2BrCl   ') c_species = c_ch2brcl   !for DEST
+WHERE (advt == 'CHBr2Cl   ') c_species = c_chbr2cl   !for DEST
+WHERE (advt == 'CHBrCl2   ') c_species = c_chbrcl2   !for DEST
+WHERE (advt == 'CHCl2O2   ') c_species = c_chcl2o2   !for DEST
+WHERE (advt == 'Cl2       ') c_species = c_cl2   !for DEST
+WHERE (advt == 'Br2       ') c_species = c_br2   !for DEST
+
 ! non-advected tracers
 c_na_species=0.0
 WHERE (nadvt == 'OH        ') c_na_species = c_oh

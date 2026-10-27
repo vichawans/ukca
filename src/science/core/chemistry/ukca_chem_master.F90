@@ -104,7 +104,7 @@ INTEGER, PARAMETER :: rm = 1024   ! Used to remove reactions that existed at
                                   ! later ones
 
 ! Define size of master chemistry
-INTEGER, PARAMETER :: n_chch_master = 372 ! number of known species !DEST +15
+INTEGER, PARAMETER :: n_chch_master = 382 ! number of known species !DEST +25
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
@@ -975,7 +975,30 @@ chch_t1(297,'C2H4Cl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 298
 chch_t1(298,'ClNO2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for ClNO2
 ! 299
-chch_t1(299,'COCl2     ',1,'TR        ','          ',0,0,dest,0,0,107)         & !!! Add W+D deposition for COCl2
+chch_t1(299,'COCl2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! Add W+D deposition for COCl2
+! more long-lived ODSs, for DEST
+! 300
+chch_t1(300,'CF2ClCF2Cl',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 301
+chch_t1(301,'CF2ClCF3  ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 302
+chch_t1(302,'MeCFCl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 303
+chch_t1(303,'MeCF2Cl   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! Cl/Br VSLs to be emitted, for DEST
+! 304
+chch_t1(304,'CH2BrCl   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 305
+chch_t1(305,'CHBr2Cl   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 306
+chch_t1(306,'CHBrCl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! extra mid-products, for DEST
+! 307
+chch_t1(307,'CHCl2O2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
+! 308
+chch_t1(308,'Cl2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for Cl2
+! 309
+chch_t1(309,'Br2       ',1,'TR        ','          ',0,0,dest,0,0,107)         & !!! ADD D deposition for Br2
 ]
 
 

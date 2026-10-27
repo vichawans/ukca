@@ -373,12 +373,59 @@ REAL, PARAMETER :: c_maco3      = 3.489
 REAL, PARAMETER :: c_cri        = 5.1782
 
 !     Extra species for DEST chemistry
+! Commented factors of already existing are different in DEST v11.0.
+! REAL, PARAMETER :: C_CFCl3      = 4.7415
+! REAL, PARAMETER :: C_CF2Cl2     = 4.1736
+! REAL, PARAMETER :: C_ClO        = 1.7760
+! REAL, PARAMETER :: C_HCl        = 1.2585
+! REAL, PARAMETER :: C_ClONO2     = 3.3642
+! REAL, PARAMETER :: C_HOCl       = 1.8108
+! REAL, PARAMETER :: C_OClO       = 2.3283
+! REAL, PARAMETER :: C_BrO        = 3.3103
+! REAL, PARAMETER :: C_BrONO2     = 4.8985
+! REAL, PARAMETER :: C_HBr        = 2.7929
+! REAL, PARAMETER :: C_HOBr       = 3.3452
+! REAL, PARAMETER :: C_BrCl       = 3.9817
+! REAL, PARAMETER :: C_MeBr       = 3.2772
+! REAL, PARAMETER :: C_Br         = 2.7580
+! REAL, PARAMETER :: C_Cl2O2      = 3.5520
+! REAL, PARAMETER :: C_Cl         = 1.2237
+!
+! species not used?
+! REAL, PARAMETER :: c_cf2br2     = 7.2423
+! REAL, PARAMETER :: c_cf2brcf2br = 8.9686
+! 
+! species required for ukca_scenario_rcp
+! REAL, PARAMETER :: C_cf3chf2    = 4.1433 ! HFC125
+! REAL, PARAMETER :: C_ch2fcf3    = 3.5223 ! HFC134a
+!
+! Commented factors of new DEST species have already been defined here,
+! but are different in DEST v11.0.
+!REAL, PARAMETER :: C_CCl4       = 5.3093
+!REAL, PARAMETER :: C_CF2ClCFCl2 = 6.4677
+!REAL, PARAMETER :: C_CHF2Cl     = 2.9848
+!REAL, PARAMETER :: C_MeCCl3     = 4.6048
+!REAL, PARAMETER :: C_MeCl       = 1.7428
+!REAL, PARAMETER :: C_CH2Br2     = 6.0003
+!REAL, PARAMETER :: C_CF2ClBr    = 5.7080
+!REAL, PARAMETER :: C_CF3Br      = 5.1401
+!REAL, PARAMETER :: c_chbr3      = 8.7235
 REAL, PARAMETER :: c_ch2cl2     = 2.9317
 REAL, PARAMETER :: c_chcl3      = 4.1205
 REAL, PARAMETER :: c_c2cl4      = 5.7239
 REAL, PARAMETER :: c_c2h4cl2    = 3.4159
 REAL, PARAMETER :: c_clno2      = 2.8119
 REAL, PARAMETER :: c_cocl2      = 3.4142
+!!REAL, PARAMETER :: c_cf2clcf2cl = 5.8999
+!!REAL, PARAMETER :: c_cf2clcf3   = 5.3321
+!!REAL, PARAMETER :: c_mecfcl2    = 4.0369
+!!REAL, PARAMETER :: c_mecf2cl    = 3.4691
+REAL, PARAMETER :: c_ch2brcl    = 4.4660
+REAL, PARAMETER :: c_chbr2cl    = 7.1892
+REAL, PARAMETER :: c_chbrcl2    = 5.6548
+REAL, PARAMETER :: c_chcl2o2    = 4.0014
+REAL, PARAMETER :: c_cl2        = 2.4474
+REAL, PARAMETER :: c_br2        = 5.5161
 
 !     molecular masses in g/mol of emitted species,
 !     for budget calculations
@@ -637,6 +684,32 @@ REAL, PARAMETER :: m_maco3      = 101.081
 REAL, PARAMETER :: m_cri = 150.0
 
 !     Extra species for DEST chemistry
+! Commented molar masses of already existing are different in DEST v11.0.
+! REAL, PARAMETER :: m_hcl        =  36.46
+! REAL, PARAMETER :: m_n2o        =  44.0
+! REAL, PARAMETER :: m_clo        =  51.45
+! REAL, PARAMETER :: m_hocl       =  52.46
+! REAL, PARAMETER :: m_oclo       =  67.45
+! REAL, PARAMETER :: m_clono2     =  97.46
+! REAL, PARAMETER :: m_cf2cl2     = 120.91
+! REAL, PARAMETER :: m_cfcl3      = 137.36
+! REAL, PARAMETER :: m_hbr        =  80.91
+! REAL, PARAMETER :: m_mebr       =  94.94
+! REAL, PARAMETER :: m_bro        =  95.90
+! REAL, PARAMETER :: m_hobr       =  96.91
+! REAL, PARAMETER :: m_brcl       = 115.35
+! REAL, PARAMETER :: m_brono2     = 141.91
+!
+! Commented molar masses of new DEST species have already been defined here,
+! but are different in DEST v11.0.
+! REAL, PARAMETER :: m_ccl4       = 153.81
+! REAL, PARAMETER :: m_cf2clcfcl2 = 187.37
+! REAL, PARAMETER :: m_chf2cl     =  86.47
+! REAL, PARAMETER :: m_meccl3     = 133.40
+! REAL, PARAMETER :: m_mecl       =  50.49
+! REAL, PARAMETER :: m_ch2br2     = 173.83
+! REAL, PARAMETER :: m_cf2clbr    = 165.36
+! REAL, PARAMETER :: m_cf3br      = 148.91
 REAL, PARAMETER :: m_chbr3      = 252.72
 REAL, PARAMETER :: m_ch2cl2     = 84.93
 REAL, PARAMETER :: m_chcl3      = 119.37
@@ -644,6 +717,16 @@ REAL, PARAMETER :: m_c2cl4      = 165.82
 REAL, PARAMETER :: m_c2h4cl2    = 98.96
 REAL, PARAMETER :: m_clno2      = 81.46
 REAL, PARAMETER :: m_cocl2      = 98.91
+REAL, PARAMETER :: m_cf2clcf2cl = 170.92
+REAL, PARAMETER :: m_cf2clcf3   = 154.47
+REAL, PARAMETER :: m_mecfcl2    = 116.95
+REAL, PARAMETER :: m_mecf2cl    = 100.50
+REAL, PARAMETER :: m_ch2brcl    = 129.38
+REAL, PARAMETER :: m_chbr2cl    = 208.27
+REAL, PARAMETER :: m_chbrcl2    = 163.82
+REAL, PARAMETER :: m_chcl2o2    = 115.92
+REAL, PARAMETER :: m_cl2        = 70.90
+REAL, PARAMETER :: m_br2        = 159.80
 
 ! For solar calculations
 
