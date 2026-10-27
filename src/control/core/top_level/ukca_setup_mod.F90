@@ -167,6 +167,7 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       l_ukca_het_psc,                                          &
                       l_ukca_limit_nat,                                        &
                       l_ukca_sa_clim,                                          &
+                      l_ukca_strat_so4_sa_unmix,                               &
                       l_ukca_trophet,                                          &
                       l_ukca_classic_hetchem,                                  &
                       l_use_photolysis,                                        &
@@ -498,6 +499,7 @@ LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_intph
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_het_psc
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_limit_nat
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_sa_clim
+LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_strat_so4_sa_unmix
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_trophet
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_classic_hetchem
 LOGICAL, OPTIONAL, INTENT(IN) :: l_use_photolysis
@@ -966,6 +968,9 @@ IF (ukca_config%i_ukca_chem /= i_ukca_chem_off) THEN
     IF (PRESENT(l_ukca_limit_nat))                                             &
       ukca_config%l_ukca_limit_nat = l_ukca_limit_nat
     IF (PRESENT(l_ukca_sa_clim)) ukca_config%l_ukca_sa_clim = l_ukca_sa_clim
+
+    IF (PRESENT(l_ukca_strat_so4_sa_unmix))                                    &
+      ukca_config%l_ukca_strat_so4_sa_unmix = l_ukca_strat_so4_sa_unmix
 
   END IF
 

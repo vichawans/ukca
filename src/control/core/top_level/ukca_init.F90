@@ -957,6 +957,37 @@ IF (ukca_config%i_ukca_chem /= i_ukca_chem_off .AND.                           &
   CALL ereport(RoutineName,errcode,cmessage)
 END IF
 
+ 
+!--VS Make sure additional stratospheric het. chemistry 
+! is only used with StratTrop, GLOMAP, and when l_ukca_het_psc is True
+IF (ukca_config%l_ukca_strat_so4_sa_unmix) THEN
+  IF (ukca_config%i_ukca_chem /= i_ukca_chem_strattrop) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' l_ukca_strat_so4_sa_unmix can only be TRUE with ST'
+    errcode = 50
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF ( .NOT. ukca_config%l_ukca_mode) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' l_ukca_strat_so4_sa_unmix can only be TRUE with l_ukca_mode is True'
+    errcode = 50
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF ( .NOT. ukca_config%l_ukca_het_psc) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' l_ukca_strat_so4_sa_unmix can only be TRUE when l_ukca_het_psc is True'
+    errcode = 50
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF ( ukca_config%l_ukca_sa_clim) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' l_ukca_strat_so4_sa_unmix can only be TRUE when l_ukca_sa_clim is False'
+    errcode = 50
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+END IF
+!--VS
+
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 RETURN
 END SUBROUTINE check_settings

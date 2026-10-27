@@ -203,7 +203,7 @@ REAL :: amu        ! atomic mass unit (kg)
 
 !--VS Add temp local variables
 INTEGER :: i
-LOGICAL :: l_ukca_strat_sa_unmix
+LOGICAL :: l_ukca_strat_so4_sa_unmix
 
 INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
 INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
@@ -232,7 +232,7 @@ IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 !! gam_calc returned by the routine ukca_br_gamma
 
 !--VS Add sulfate aerosol separation if use GLOMAP SAD + l_ukca_sa_clim=False + l_ukca_strat_sa_unmix
-l_ukca_strat_sa_unmix = .false.
+l_ukca_strat_so4_sa_unmix = .false.
 
 !! uptake coefficient on PSC type 1 (NAT)
 gam1 = [ 0.2,     & ! ClONO2 + HCl     (JPL 15-10)

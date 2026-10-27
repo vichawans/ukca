@@ -103,9 +103,6 @@ USE errormessagelength_mod, ONLY: errormessagelength
 
 USE asad_cdrive_mod, ONLY: asad_cdrive
 
-!--VS Add pvol module
-USE ukca_sarea_field_mod, ONLY: sarea_su, sarea_bc, sarea_om
-
 
 
 !!!! Note: LFRIC-specific pre-processor directives used in this module are
@@ -236,9 +233,6 @@ LOGICAL :: l_autotune_local
 LOGICAL :: stratflag(model_levels)
 LOGICAL :: have_nat1d(model_levels)
 
-!--VS partial volume for unmixing aerosol surface area 
-! REAL :: so4_sa_unmixed(model_levels)
-
 
 INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
 INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
@@ -287,13 +281,6 @@ IF (l_autotune_segments) THEN
 END IF
 #endif
 
-!--VS add sarea_su, sarea_bc, sarea_om
-write(*,*) '!--VS hello from chemistry_ctl_col before OMP'
-write(*,*) '!--VS sarea_su', SUM(sarea_su)
-write(*,*) '!--VS sarea_bc', SUM(sarea_bc)
-write(*,*) '!--VS sarea_om', SUM(sarea_om)
-
-
 ! Model levels loop
 !$OMP PARALLEL DEFAULT(NONE)                                                   &
 !$OMP PRIVATE(cdot, cmessage, errcode, i, ierr,                                &
@@ -321,7 +308,6 @@ write(*,*) '!--VS sarea_om', SUM(sarea_om)
 !$OMP        o1d_in_ss, o3p_in_ss, photol_rates, pres, q, qcf, qcl,            &
 !$OMP        row_length, rows, so4_sa, shno3_3d,                               &
 !$OMP        temp, tracer, uph2so4inaer, volume, zdryrt, zwetrt,               &
-!$OMP        sarea_su, sarea_bc, sarea_om,                                     &
 !$OMP        H_plus_3d_arr)
 
 IF (.NOT. ALLOCATED(ystore) .AND. uph2so4inaer == 1)                           &
@@ -503,23 +489,7 @@ DO i=1,rows
 
         ! Initialise za for current chunk, following reallocation
         za(:)=0.0
-
-        za(1:chunk_size) = so4_sa(j,i,kcs:kce)
-
-        !--VS let us check so4_sa
-        ! write(*,*) '!--VS za=',shape(za)
-        ! write(*,*) '!--VS so4_sa=',shape(so4_sa)
-
-        !--VS add pvol_save
-        ! IF (ALLOCATED(seg_pvol_save)) THEN
-        !   write(*,*) '!--VS hello from ukca_chemistry_ctl_col in ij loop'
-        !   write(*,*) '!--VS seg_pvol_save=',shape(seg_pvol_save)
-        ! ELSE
-        !   write(*,*) '!--VS hello from ukca_chemistry_ctl_col in ij loop'
-        !   write(*,*) '!--VS seg_pvol_save not yet allocated'
-        ! END IF
-
-
+        za(1:chunk_size) = so4_sa(j,i,kcs:kce) 
 
         ! Initialise sph2o for current chunk
         sph2o(:) = 0.0

@@ -235,6 +235,9 @@ TYPE :: ukca_config_spec_type
                                        ! heights above 1 km
   LOGICAL :: l_ukca_sa_clim            ! True to use surface area density
                                        ! climatology for heterogeneous PSC chem.
+  LOGICAL :: l_ukca_strat_so4_sa_unmix ! True to use surface area density
+                                       ! from sulfate aerosol ONLY from GLOMAP 
+                                       ! for heterogeneous PSC chem.
   LOGICAL :: l_ukca_trophet            ! True for tropospheric het. chemistry
   LOGICAL :: l_ukca_classic_hetchem    ! True if accounting for heterogeneous
                                        ! chemistry on CLASSIC aerosols (RAQ
@@ -889,6 +892,7 @@ ukca_config%l_ukca_het_psc = .FALSE.
 ukca_config%i_ukca_hetconfig = imdi
 ukca_config%l_ukca_limit_nat = .FALSE.
 ukca_config%l_ukca_sa_clim = .FALSE.
+ukca_config%l_ukca_strat_so4_sa_unmix = .FALSE.
 ukca_config%l_ukca_trophet = .FALSE.
 ukca_config%l_ukca_classic_hetchem = .FALSE.
 
@@ -1147,6 +1151,7 @@ SUBROUTINE ukca_get_config(                                                    &
    l_ukca_het_psc,                                                             &
    l_ukca_limit_nat,                                                           &
    l_ukca_sa_clim,                                                             &
+   l_ukca_strat_so4_sa_unmix,                                                  &
    l_ukca_trophet,                                                             &
    l_ukca_classic_hetchem,                                                     &
    l_use_photolysis,                                                           &
@@ -1355,6 +1360,7 @@ LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_scale_soa_yield_isop
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_het_psc
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_limit_nat
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_sa_clim
+LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_strat_so4_sa_unmix
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_trophet
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_classic_hetchem
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_use_photolysis
@@ -1591,6 +1597,8 @@ IF (PRESENT(l_ukca_het_psc)) l_ukca_het_psc = ukca_config%l_ukca_het_psc
 IF (PRESENT(i_ukca_hetconfig)) i_ukca_hetconfig = ukca_config%i_ukca_hetconfig
 IF (PRESENT(l_ukca_limit_nat)) l_ukca_limit_nat = ukca_config%l_ukca_limit_nat
 IF (PRESENT(l_ukca_sa_clim)) l_ukca_sa_clim = ukca_config%l_ukca_sa_clim
+IF (PRESENT(l_ukca_strat_so4_sa_unmix)) l_ukca_strat_so4_sa_unmix =            &
+  ukca_config%l_ukca_strat_so4_sa_unmix
 IF (PRESENT(l_ukca_trophet)) l_ukca_trophet = ukca_config%l_ukca_trophet
 IF (PRESENT(l_ukca_classic_hetchem))                                           &
   l_ukca_classic_hetchem = ukca_config%l_ukca_classic_hetchem

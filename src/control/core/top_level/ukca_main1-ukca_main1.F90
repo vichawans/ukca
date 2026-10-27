@@ -258,6 +258,9 @@ USE ukca_time_mod,   ONLY: i_year, i_month, i_day, i_hour, i_minute,           &
                            i_minute_previous, i_second_previous,               &
                            set_time, set_previous_time
 
+
+!--VS Add sarea module
+USE ukca_sarea_field_mod, ONLY: sarea_su
 IMPLICIT NONE
 
 ! ----------------------------------------------------------------------
@@ -1418,9 +1421,42 @@ IF (ukca_config%l_ukca_chem .OR. ukca_config%l_ukca_mode) THEN
     ELSE        ! Not ukca_sa_clim, take aerosol fully from GLOMAP
 
       IF (ukca_config%l_ukca_mode ) THEN
-        cmessage='UKCA_Het_PSC: Using only GLOMAP aerosol surface area '
-        i = name2ntpindex('surfarea  ')
-        so4_sa = all_ntp(i)%data_3d
+        !--VS add a new check for sulfate surface area only
+        IF ( ukca_config%l_ukca_strat_so4_sa_unmix) THEN
+          IF (.NOT. ALLOCATED(sarea_su)) THEN
+            cmessage='UKCA_Het_PSC: Using GLOMAP tot. aerosol because'//       &
+            ' sulfate ONLY aerosol surface area is not yet allocated. Use'//   &
+            ' sulfate ONLY in following steps'
+            i = name2ntpindex('surfarea  ')
+            so4_sa = all_ntp(i)%data_3d
+            
+            write(*,*) '!--VS Use glomap tot. SA (1st time step)'
+            write(*,*) '!--VS so4_sa =', sum(so4_sa)
+
+          ELSE
+            ! so4_sa is allocated in the previous chemical step
+            ! Use aerosol surface area from partial sulfate surface area ONLY 
+            ! calculated from GLOMAP-mode 
+            cmessage='UKCA_Het_PSC: Using GLOMAP aerosol sulfate ONLY s. area'
+
+            write(*,*) '!--VS If we use surfarea from glomap'
+            i = name2ntpindex('surfarea  ')
+            so4_sa = all_ntp(i)%data_3d
+            write(*,*) '!--VS so4_sa =', sum(so4_sa)
+
+            write(*,*) '!--VS Instead, we set so4_sa = sarea_su'
+            so4_sa = sarea_su
+            write(*,*) '!--VS so4_sa =', sum(so4_sa)
+
+            
+          END IF ! l_ukca_strat_so4_sa_unmix + allocated(sarea_su)
+        ELSE
+          cmessage='UKCA_Het_PSC: Using only GLOMAP tot. aerosol surface area '
+          i = name2ntpindex('surfarea  ')
+          so4_sa = all_ntp(i)%data_3d
+          write(*,*) '!--VS use glomap tot. SA (l_ukca_strat_so4_sa_unmix=F)'
+          write(*,*) '!--VS so4_sa =', sum(so4_sa)
+        END IF ! l_ukca_mode  
       ELSE
         cmessage='UKCA HET_PSC: Surface area undefined. At least '//           &
           'one from l_ukca_sa_clim and l_ukca_glomap has to be selected.'
@@ -2058,10 +2094,6 @@ IF (ukca_config%l_ukca_chem) THEN
     ! ----------------------------------------------------------------------
       ! Do chemistry calculation here (at chemistry timesteps)
   IF (do_chemistry) THEN
-
-    !--VS try defining a new variable
-    write(*,*) '!--VS hello from do_chemistry'
-    write(*,*) '!--VS n_mode_diags=',n_mode_diags
 
     IF (.NOT. ALLOCATED(t_chem)) ALLOCATE(t_chem(row_length,rows,model_levels))
     IF (.NOT. ALLOCATED(q_chem)) ALLOCATE(q_chem(row_length,rows,model_levels))

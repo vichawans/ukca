@@ -764,10 +764,6 @@ IF (glomap_config%l_ukca_radaer) THEN
   CALL ukca_check_radaer_coupling(all_ntp)
 END IF
 
-!--VS checking time step
-
-write(*,*) 'month,day,hour,min', i_month, i_day_number, i_hour,i_minute
-
 ! Molar mass of dry air (kg/mol)
 mm_da = avogadro * boltzmann/rgas
 
@@ -4959,13 +4955,6 @@ DO n = 1, nukca_d1items
 END DO
 !--VS end pre-scan
 
-! write(*,*) '!--VS k_sarea_* =', k_sarea_nuc, k_sarea_ait, k_sarea_acc, k_sarea_coa
-! write(*,*) '!--VS k_pvol_nuc_* =', k_pvol_nuc_su, k_pvol_nuc_om
-! write(*,*) '!--VS k_pvol_ait_* =', k_pvol_ait_su, k_pvol_ait_bc, k_pvol_ait_om
-! write(*,*) '!--VS k_pvol_acc_* =', k_pvol_acc_su, k_pvol_acc_bc, k_pvol_acc_om, k_pvol_acc_ss
-! write(*,*) '!--VS k_pvol_cor_* =', k_pvol_cor_su, k_pvol_cor_bc, k_pvol_cor_om, k_pvol_cor_ss
-! write(*,*) '!--VS mode_diags', shape(mode_diags)
-
 !--VS: compute fractional surface areas for su, bc, om
 ! Mirrors ukca_trop_hetchem total_vol/frac_vol approach
 ! frac_sarea_X = (pvol_X / tot_vol) * sarea, summed over modes
@@ -5092,7 +5081,9 @@ IF (k_pvol_cor_su > 0 .AND. k_sarea_coa > 0) THEN
 END IF
 !--VS end fractional sarea computation
 
-write(*,*) '!--VS mode_diags(:,:,:,k_pvol_acc_su)', SUM(mode_diags(:,:,:,k_pvol_acc_su))
+!--VS print surfarea for compariso
+i = name2ntpindex('surfarea  ')
+write(*,*) '!--VS mode_diags(:,:,:,surfarea)', SUM(all_ntp(i)%data_3d)
 write(*,*) '!--VS sarea_su', SUM(sarea_su)
 write(*,*) '!--VS sarea_bc', SUM(sarea_bc)
 write(*,*) '!--VS sarea_om', SUM(sarea_om)
