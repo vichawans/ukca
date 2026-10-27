@@ -109,7 +109,7 @@ INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DE
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
-INTEGER, PARAMETER :: n_bimol_master = 1259 ! number of bimolecular reactions !DEST +46
+INTEGER, PARAMETER :: n_bimol_master = 1269 ! number of bimolecular reactions !DEST +56
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 116 ! number of termolecular reactions
 
@@ -2710,7 +2710,7 @@ ratb_t1(5,'Br        ','OClO      ','BrO       ','ClO       ','          ',    &
                                                               0,0,107),        &
 ratb_t1(5,'Br        ','OClO      ','BrO       ','ClO       ','          ',    &
 '          ',2.70e-11,  0.00, 1300.00, 0.00, 0.00, 0.00, 0.00,s,0,0,107),      &
-! B006 JPL2011
+! B006 JPL2011 - DEST: see reaction 793 for 2nd channel of reaction
 ratb_t1(6,'BrO       ','BrO       ','Br        ','Br        ','O2        ',    &
 '          ',2.40e-12,  0.00,  -40.00, 0.00, 0.00, 0.00, 0.00,s+st+cs+dest,    &
                                                               0,0,107),        &
@@ -6870,7 +6870,39 @@ ratb_t1(790,'CHCl2O2   ','HO2       ','HO2       ','CO        ','Cl        ',  &
 ratb_t1(791,'CHCl2O2   ','MeOO      ','Cl        ','HO2       ','CO        ',  &
 'HCHO      ',1.20e-12,  0.00,    0.00, 2.00, 2.00, 1.00, 1.00, dest,0,0,107),  & !k(a)=0.6*k(tot)
 ratb_t1(792,'CHCl2O2   ','MeOO      ','COCl2     ','HCHO      ','HO2       ',  &
-'          ',0.80e-12,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   & !k(a)=(0.2+0.2)*k(tot)
+'          ',0.80e-12,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & !k(a)=(0.2+0.2)*k(tot)
+!!! other inorganic halogen reactions for DEST
+!
+! JPL2015; second channel to reaction 6
+ratb_t1(793,'BrO       ','BrO       ','Br2       ','O2        ','          ',  &
+'          ',2.80e-14,  0.00, -860.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015
+ratb_t1(794,'Br2       ','OH        ','Br        ','HOBr      ','          ',  &
+'          ',2.10e-11,  0.00, -240.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015
+ratb_t1(795,'Cl2       ','OH        ','Cl        ','HOCl      ','          ',  &
+'          ',2.60e-12,  0.00, 1100.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015, analogue to reaction 29
+ratb_t1(796,'ClO       ','ClO       ','Cl2       ','O2        ','          ',  &
+'          ',1.00e-12,  0.00, 1590.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015,  analogue to reaction 30 (assumes ->ClOO+Cl->>Cl2+O2)
+ratb_t1(797,'ClO       ','ClO       ','Cl2       ','O2        ','          ',  &
+'          ',3.00e-11,  0.00, 2450.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015
+ratb_t1(798,'HBr       ','OH        ','Br        ','H2O       ','          ',  &
+'          ',5.50e-12,  0.00, -200.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015
+ratb_t1(799,'ClNO2     ','OH        ','HOCl      ','NO2       ','          ',  &
+'          ',2.40e-12,  0.00, 1250.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015; omitts quenching channel, so that k332=0.8*k(JPL2015)
+ratb_t1(800,'COCl2     ','O(1D)     ','CO        ','ClO       ','Cl        ',  &
+'          ',1.76e-10,  0.00,  -30.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! 3rd reaction channel to 107-108
+ratb_t1(801,'O(1D)     ','HBr       ','H         ','BrO       ','          ',  &
+'          ',3.00e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! JPL2015, omitts quenching channel so that k334=0.75*k(JPL2015)
+ratb_t1(802,'Cl2       ','O(1D)     ','Cl        ','ClO       ','          ',  &
+'          ',2.03e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)  &
 ] 
      
 !----------------------------------------------------------------------
