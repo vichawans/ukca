@@ -1703,7 +1703,8 @@ SUBROUTINE asad_emissions_diagnostics(row_length, rows,                        &
                                  n_emissions,                                  &
                                  n_boundary_vals, em_spec,                     &
                                  lbc_spec, molmass,                            &
-                                 lbc_molmass, ierr)
+                                 lbc_molmass, n_boundary_vals_2D,              &
+                                 lbc_spec_2D, lbc_molmass_vsls, ierr)
 
 USE ukca_constants,    ONLY: c_no, c_no2
 IMPLICIT NONE
@@ -1715,10 +1716,13 @@ REAL, INTENT(IN)    :: em_field(row_length,rows,n_chem_tracers)
 REAL, INTENT(IN)    :: surf_area(row_length,rows)        ! cell area
 INTEGER, INTENT(IN) :: n_emissions                       ! no of emitted species
 INTEGER, INTENT(IN) :: n_boundary_vals
+INTEGER, INTENT(IN) :: n_boundary_vals_2D
 CHARACTER(LEN=10), INTENT(IN) :: em_spec(n_emissions)
 CHARACTER(LEN=10), INTENT(IN) :: lbc_spec(n_boundary_vals)
+CHARACTER(LEN=10), INTENT(IN) :: lbc_spec_2D(n_boundary_vals_2D)
 REAL, INTENT(IN) :: molmass(n_emissions)
 REAL, INTENT(IN) :: lbc_molmass(n_boundary_vals)
+REAL, INTENT(IN) :: lbc_molmass_vsls(n_boundary_vals_2D)
 
 INTEGER, INTENT(OUT) :: ierr                               ! error code
 
@@ -1775,6 +1779,23 @@ IF (firstcall) THEN
           END IF
         END DO        ! mspecies,n_boundary_vals
 
+        !!! DEST
+        DO mspecies=1,n_boundary_vals_2D
+          ! work out which molmass to take!, can overwrite with
+          ! lbc_molmass, since emissions_ctl does this anyway
+          IF ((advt(ntracer) == lbc_spec_2D(mspecies)) .AND.         &
+              (asad_chemdiags(l)%species == lbc_spec_2D(mspecies)))  &
+          THEN
+            asad_chemdiags(l)%molecular_mass=lbc_molmass_vsls(mspecies)
+            asad_chemdiags(l)%c_vmr_to_mmr = c_species(ntracer)
+            L_cd_emitted(ntracer) = .TRUE.
+            IF (asad_chemdiags(l)%species == 'NO        ') &
+                asad_chemdiags(l)%molecular_mass = &
+                asad_chemdiags(l)%molecular_mass*c_no/c_no2
+          END IF
+        END DO        ! mspecies,n_boundary_vals_2D
+        !!! end of DEST
+        
         IF (L_cd_emitted(ntracer)) THEN
           IF (advt(ntracer) == asad_chemdiags(l)%species)                      &
                     asad_chemdiags(l)%location = ntracer

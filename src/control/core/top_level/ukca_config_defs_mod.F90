@@ -144,9 +144,9 @@ IF (ukca_config%l_ukca_deststrattrop) THEN !! .AND. ukca_config%l_ukca_dest_clvs
   !   lbc_spec_2D =                                                              &
   !        ['CH2Cl2    ','CHCl3     ']
     
-  ELSE
-    n_boundary_vals_2D = 0
   END IF
+ELSE
+  n_boundary_vals_2D = 0
 END IF
 
 ! Microplastics species

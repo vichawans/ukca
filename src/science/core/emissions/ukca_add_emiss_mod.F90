@@ -82,7 +82,8 @@ USE ukca_config_specification_mod, ONLY: ukca_config, glomap_config,           &
                                          glomap_variables
 
 USE ukca_config_defs_mod,    ONLY: n_use_emissions, em_chem_spec,              &
-                                   n_boundary_vals, lbc_mmr, lbc_spec
+                                   n_boundary_vals, lbc_mmr, lbc_spec,         &
+                                   n_boundary_vals_2D, lbc_mmr_2D, lbc_spec_2D
 USE get_molmass_mod,         ONLY: get_molmass
 
 USE ukca_mode_setup,         ONLY: nmodes, cp_su, moment_number, moment_mass
@@ -217,6 +218,9 @@ REAL, SAVE, ALLOCATABLE :: molmass        (:)    ! molar masses
 REAL, SAVE, ALLOCATABLE :: lbc_molmass    (:)    ! molar masses for lower
                                                  ! boundary conditions
 
+REAL, SAVE, ALLOCATABLE :: lbc_molmass_vsls(:)   ! molar masses for lower
+                                                 ! boundary conditions of Cl-VSLS
+
 ! Scalar to store daily scaling accounting for weekly cycle of emissions
 REAL :: fdaily_scaling
 
@@ -265,6 +269,9 @@ CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_ADD_EMISS'
 
 INTEGER                            :: section   ! stash section
 INTEGER                            :: item      ! stash item
+
+! For latitudinally varying LBC for Cl-VSLS
+INTEGER :: mylat
 
 ! End of header
 
@@ -355,6 +362,17 @@ IF (firstcall) THEN
       molmass (k) = get_molmass (em_chem_spec(k))
     END DO
 
+    !     Allocate and initialise array with molar masses of Cl-VSLS
+    ALLOCATE (lbc_molmass_vsls(n_boundary_vals_2D))
+    lbc_molmass_vsls(:) = 0.0
+    
+    IF (ukca_config%l_ukca_deststrattrop) THEN
+      !     Get the molar masses of emitted species
+      DO k = 1, n_boundary_vals_2D
+        lbc_molmass_vsls (k) = get_molmass (lbc_spec_2D(k))
+      END DO
+    END IF
+      
     ! Check if all the emitted species have a valid molecular weight
     IF (ANY(molmass(:) < small_number)) THEN
       n = 0
@@ -374,6 +392,26 @@ IF (firstcall) THEN
       END IF
     END IF  ! is any molmass < small_number ?
 
+    !DEST
+    IF (ukca_config%l_ukca_deststrattrop) THEN
+      n = 0
+      DO k = 1, n_boundary_vals_2D
+        IF (lbc_molmass_vsls(k) < small_number) THEN
+          cmessage = 'Species ' // TRIM (lbc_spec_2D(k)) //                  &
+                     ' missing from lower boundary condition molmass list.'
+          errcode  = -k
+          CALL ereport ('UKCA_ADD_EMISS', errcode, cmessage)
+          n = n + 1
+        END IF
+      END DO
+      IF (n > 0) THEN
+        cmessage = 'Species missing from lower boundary condition ' //    &
+                   'molmass list'
+        errcode  = n
+        CALL ereport ('UKCA_ADD_EMISS', errcode, cmessage)
+      END IF ! is any molmass_vsls < small_number ?
+    END IF
+       
     IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.        &
         ukca_config%l_ukca_stratcfc .OR. ukca_config%l_ukca_cristrat .OR.      &
         ukca_config%l_ukca_deststrattrop) THEN
@@ -909,6 +947,20 @@ IF (ukca_config%l_ukca_chem) THEN
       END DO
     END IF   ! l_ukca_strat, etc
 
+    !Add 2D LBC for Cl-VSLS in DEST
+    IF (ukca_config%l_ukca_deststrattrop) THEN
+      DO l = 1, n_boundary_vals_2D
+        IF (advt(k) == lbc_spec_2D(l)) THEN
+          em_field (:,:,:,            k) = 0
+          DO mylat=1,rows         
+            em_field (:,mylat,surface_level,k) =                                 &
+                     (lbc_mmr_2D(mylat,l) - tracers(:,mylat,surface_level,k)) *  &
+                     mass(:,mylat,surface_level) / surf_area(:,mylat) / timestep
+          END DO
+        END IF
+      END DO
+    END IF
+      
   END DO  ! jpctr
 END IF ! l_ukca_chem
 ! --------------------------------------------------------------------
@@ -1063,6 +1115,9 @@ IF (ukca_config%l_ukca_chem) THEN
          lbc_spec,                                                             &
          molmass,                                                              &
          lbc_molmass,                                                          &
+         ! DEST
+         n_boundary_vals_2D, lbc_spec_2D,                                      &
+         lbc_molmass_vsls,                                                     &
          ierr)
   END IF
 

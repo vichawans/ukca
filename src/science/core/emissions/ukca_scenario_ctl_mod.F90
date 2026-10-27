@@ -63,7 +63,7 @@ USE nlsizes_namelist_mod, ONLY: rows
 
 USE ukca_scenario_prescribed_mod, ONLY: ukca_scenario_prescribed
 USE ukca_scenario_wmoa1_mod, ONLY: ukca_scenario_wmoa1
-!USE ukca_scenario_Cl_VSLSs_mod,  ONLY: ukca_scenario_Cl_VSLSs
+USE ukca_scenario_Cl_VSLSs_mod,  ONLY: ukca_scenario_Cl_VSLSs
                                        !test_scenario_cl_vsls_ctl, &
                                        !l_ukca_test_scenario_cl_vsls
 IMPLICIT NONE
@@ -139,16 +139,16 @@ IF (PrintStatus >= Prstatus_Oper) THEN
 END IF
 
 ! DEST
-IF ((ukca_config%l_ukca_deststrattrop) .AND. (ukca_config%l_ukca_dest_clvsls_emiss) ) THEN
+IF ((ukca_config%l_ukca_deststrattrop) .AND. (ukca_config%l_ukca_dest_clvsls_lbc) ) THEN
 
   IF (PrintStatus >= Prstatus_DIAG) THEN
     WRITE(umMessage,*) 'n_boundary_vals_2D:',n_boundary_vals_2D,'; lbc_spec_2D:',lbc_spec_2D
     CALL umPrint(umMessage,src='ukca_scenario_ctl_mod')
   END IF
 
-  !CALL ukca_scenario_Cl_VSLSs(n_boundary_vals_2D, lbc_spec_2D,   &
-  !                            i_year, i_day_number,           &
-  !                            lbc_mmr_2D)
+  CALL ukca_scenario_Cl_VSLSs(n_boundary_vals_2D, lbc_spec_2D,   &
+                              i_year, i_day_number,           &
+                              lbc_mmr_2D)
  ! Include test later
  !  IF (L_first) THEN
  !    IF (mype == 0) THEN
