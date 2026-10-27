@@ -292,7 +292,7 @@ END IF
 !$OMP         zp, zprt1d, zq, zt, co2_1d, zwetrt2,                             &
 !$OMP         kcs, kce, chunk_size, dpd_full, dpw_full,                        &
 !$OMP         fpsc1_full, fpsc2_full, prk_full, y_full, jspf, jna,             &
-!$OMP         focr_1d_arr,roc_1d_arr,H_plus_1d_arr)                                                   &
+!$OMP         focr_1d_arr, roc_1d_arr, H_plus_1d_arr)                          &
 !$OMP SHARED(advt, all_ntp, atm_cf2cl2_mol, atm_cfcl3_mol, atm_ch4_mol,        &
 !$OMP        atm_co_mol, atm_h2_mol, atm_mebr_mol, atm_n2o_mol, avogadro,      &
 !$OMP        c_species, c_na_species, cloud_frac,                              &

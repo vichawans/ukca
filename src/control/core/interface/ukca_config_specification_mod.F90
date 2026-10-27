@@ -1160,7 +1160,7 @@ SUBROUTINE ukca_get_config(                                                    &
    l_ukca_limit_nat,                                                           &
    l_ukca_sa_clim,                                                             &
    l_ukca_strat_so4_sa_unmix,                                                  &
-   i_ukca_hetorg_case,                                                  &
+   i_ukca_hetorg_case,                                                         &
    l_ukca_trophet,                                                             &
    l_ukca_classic_hetchem,                                                     &
    l_use_photolysis,                                                           &

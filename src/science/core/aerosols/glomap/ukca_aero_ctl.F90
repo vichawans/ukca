@@ -4978,17 +4978,17 @@ sarea_om = 0.0
 IF (k_pvol_nuc_su > 0 .AND. k_sarea_nuc > 0) THEN
   ! set total volume of mode to first component (sulfate)
   tot_vol_3d = mode_diags(:,:,:,k_pvol_nuc_su)
-  IF (k_pvol_nuc_om > 0)                                                &
+  IF (k_pvol_nuc_om > 0)                                                       &
     tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_nuc_om)
   WHERE (tot_vol_3d > 0.0)
-    sarea_su = sarea_su +                                      &
-      (mode_diags(:,:,:,k_pvol_nuc_su) / tot_vol_3d) *                  &
+    sarea_su = sarea_su +                                                      &
+      (mode_diags(:,:,:,k_pvol_nuc_su) / tot_vol_3d) *                         &
        mode_diags(:,:,:,k_sarea_nuc)
   END WHERE
   IF (k_pvol_nuc_om > 0) THEN
     WHERE (tot_vol_3d > 0.0)
-      sarea_om = sarea_om +                                    &
-        (mode_diags(:,:,:,k_pvol_nuc_om) / tot_vol_3d) *                &
+      sarea_om = sarea_om +                                                    &
+        (mode_diags(:,:,:,k_pvol_nuc_om) / tot_vol_3d) *                       &
          mode_diags(:,:,:,k_sarea_nuc)
     END WHERE
   END IF
@@ -4997,26 +4997,26 @@ END IF
 ! --- aitken soluble: su + bc + om ---
 IF (k_pvol_ait_su > 0 .AND. k_sarea_ait > 0) THEN
   tot_vol_3d = mode_diags(:,:,:,k_pvol_ait_su)
-  IF (k_pvol_ait_bc > 0)                                                &
+  IF (k_pvol_ait_bc > 0)                                                       &
     tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_ait_bc)
-  IF (k_pvol_ait_om > 0)                                                &
+  IF (k_pvol_ait_om > 0)                                                       &
     tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_ait_om)
   WHERE (tot_vol_3d > 0.0)
-    sarea_su = sarea_su +                                      &
-      (mode_diags(:,:,:,k_pvol_ait_su) / tot_vol_3d) *                  &
+    sarea_su = sarea_su +                                                      &
+      (mode_diags(:,:,:,k_pvol_ait_su) / tot_vol_3d) *                         &
        mode_diags(:,:,:,k_sarea_ait)
   END WHERE
   IF (k_pvol_ait_bc > 0) THEN
     WHERE (tot_vol_3d > 0.0)
-      sarea_bc = sarea_bc +                                    &
-        (mode_diags(:,:,:,k_pvol_ait_bc) / tot_vol_3d) *                &
+      sarea_bc = sarea_bc +                                                    &
+        (mode_diags(:,:,:,k_pvol_ait_bc) / tot_vol_3d) *                       &
          mode_diags(:,:,:,k_sarea_ait)
     END WHERE
   END IF
   IF (k_pvol_ait_om > 0) THEN
     WHERE (tot_vol_3d > 0.0)
-      sarea_om = sarea_om +                                    &
-        (mode_diags(:,:,:,k_pvol_ait_om) / tot_vol_3d) *                &
+      sarea_om = sarea_om +                                                    &
+        (mode_diags(:,:,:,k_pvol_ait_om) / tot_vol_3d) *                       &
          mode_diags(:,:,:,k_sarea_ait)
     END WHERE
   END IF
@@ -5025,28 +5025,28 @@ END IF
 ! --- accumulation soluble: su + bc + om + ss ---
 IF (k_pvol_acc_su > 0 .AND. k_sarea_acc > 0) THEN
   tot_vol_3d = mode_diags(:,:,:,k_pvol_acc_su)
-  IF (k_pvol_acc_bc > 0)                                                &
+  IF (k_pvol_acc_bc > 0)                                                       &
     tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_acc_bc)
-  IF (k_pvol_acc_om > 0)                                                &
+  IF (k_pvol_acc_om > 0)                                                       &
     tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_acc_om)
-  IF (k_pvol_acc_ss > 0)                                                &
+  IF (k_pvol_acc_ss > 0)                                                       &
     tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_acc_ss)
   WHERE (tot_vol_3d > 0.0)
-    sarea_su = sarea_su +                                      &
-      (mode_diags(:,:,:,k_pvol_acc_su) / tot_vol_3d) *                  &
+    sarea_su = sarea_su +                                                      &
+      (mode_diags(:,:,:,k_pvol_acc_su) / tot_vol_3d) *                         &
        mode_diags(:,:,:,k_sarea_acc)
   END WHERE
   IF (k_pvol_acc_bc > 0) THEN
     WHERE (tot_vol_3d > 0.0)
-      sarea_bc = sarea_bc +                                    &
-        (mode_diags(:,:,:,k_pvol_acc_bc) / tot_vol_3d) *                &
+      sarea_bc = sarea_bc +                                                    &
+        (mode_diags(:,:,:,k_pvol_acc_bc) / tot_vol_3d) *                       &
          mode_diags(:,:,:,k_sarea_acc)
     END WHERE
   END IF
   IF (k_pvol_acc_om > 0) THEN
     WHERE (tot_vol_3d > 0.0)
-      sarea_om = sarea_om +                                    &
-        (mode_diags(:,:,:,k_pvol_acc_om) / tot_vol_3d) *                &
+      sarea_om = sarea_om +                                                    &
+        (mode_diags(:,:,:,k_pvol_acc_om) / tot_vol_3d) *                       &
          mode_diags(:,:,:,k_sarea_acc)
     END WHERE
   END IF

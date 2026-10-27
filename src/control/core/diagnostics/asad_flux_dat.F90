@@ -9380,7 +9380,7 @@ IF (ALLOCATED(aa_ch4_ste))                                                     &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_ch4_ste)
 IF (ALLOCATED(aa_het_chem_strattrop))                                          &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_het_chem_strattrop)
-IF (ALLOCATED(aa_strat_het_strattrop))                                          &
+IF (ALLOCATED(aa_strat_het_strattrop))                                         &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_strat_het_strattrop)
 
 ALLOCATE(asad_chemical_fluxes(n_chemical_fluxes))

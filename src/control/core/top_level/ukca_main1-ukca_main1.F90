@@ -2231,7 +2231,6 @@ IF (ukca_config%l_ukca_chem) THEN
       WRITE(*,*) '!--VS n_chem_tracers=', n_chem_tracers
       WRITE(*,*) '!--VS n_aero_tracers=', n_aero_tracers
       WRITE(*,*) '!--VS n_mode_tracers=', n_mode_tracers
-      WRITE(*,*) '!--VS shape(all_tracers,4)=', shape(all_tracers)
       WRITE(*,*) '!--VS call ukca_calc_aero_mass'
       CALL ukca_calc_aero_mass(                                                &
               all_tracers(:,:,:,1:n_chem_tracers+n_aero_tracers+n_mode_tracers),              & 
