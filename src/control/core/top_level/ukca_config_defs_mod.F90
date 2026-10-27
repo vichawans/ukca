@@ -428,7 +428,7 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
             'C2H6      ','C3H8      ','Me2CO     ','MeCHO     ',               &
             'C5H8      ','MeOH      ','NO_aircrft']
       n_chem_tracers = 71         ! No chem tracers
-      nr_therm       = 220        ! thermal reactions
+      nr_therm       = 220        ! thermal reactions LS: 220 - 4 = 216??
       nr_phot        = 55         ! photolytic (ATA)
 
     ELSE  ! If using aerosol chemistry
@@ -456,9 +456,9 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       END IF
       n_chem_tracers = 71         ! No chem tracers
       IF (ukca_config%l_ukca_trophet) THEN
-        nr_therm     = 241        ! thermal reactions
+        nr_therm     = 241        ! thermal reactions, LS 241-4 = 237 ??
       ELSE
-        nr_therm     = 239        ! thermal reactions
+        nr_therm     = 239        ! thermal reactions, LS 239-4 = 235 ??
       END IF
       nr_phot        = 59         ! photolytic (ATA)
 

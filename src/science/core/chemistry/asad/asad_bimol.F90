@@ -271,7 +271,8 @@ IF (first_pass) THEN
         prods(2) = 'MSA       '
         idmsoh = asad_findreaction( r1, r2, prods, 2, spb, nbrkx,              &
                                     jpbk+1, jpspb )
-      ELSE IF (ukca_config%l_ukca_strattrop .AND.                              &
+     ELSE IF ((ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_deststrattrop) &
+                                            .AND.                              &
            (ukca_config%i_ukca_chem_version < i_chem_version_121)) THEN
          ! at v121 reaction is considered as 2 termolecular rxns
         IF (ukca_config%i_ukca_chem_version >= i_chem_version_117) THEN
@@ -302,7 +303,8 @@ IF (first_pass) THEN
     ! a termolecular reaction
     IF (ukca_config%l_ukca_chem_aero .AND.                                     &
         (ukca_config%l_ukca_offline .OR. ukca_config%l_ukca_offline_be .OR.    &
-         ukca_config%l_ukca_strat .OR. (ukca_config%l_ukca_strattrop .AND.     &
+        ukca_config%l_ukca_strat .OR.                                          &
+       ( (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_strattrop)  .AND. &
          (ukca_config%i_ukca_chem_version < i_chem_version_121)) .OR.          &
          ukca_config%l_ukca_tropisop) .AND. (idmsoh == 0) ) THEN
       errcode = 1
