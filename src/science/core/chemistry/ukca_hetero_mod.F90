@@ -491,9 +491,18 @@ IF (ukca_config%i_ukca_hetconfig == 0) THEN
     rk(:,n_hocl_hcl) = hk(:,3)
   END IF
 
+! Yao: Optionally filter N2O5+H2O by stratflag to prevent double-counting.
   IF (n_n2o5_h2o > 0) THEN
     ! 4. N2O5 + H2O -> 2 HNO3
-    rk(:,n_n2o5_h2o) = hk(:,4)
+    IF (ukca_config%l_fix_ukca_n2o5_h2o) THEN
+      WHERE (stratflag)
+        rk(:,n_n2o5_h2o) = hk(:,4)
+      ELSE WHERE
+        rk(:,n_n2o5_h2o) = 0.0
+      END WHERE
+    ELSE
+      rk(:,n_n2o5_h2o) = hk(:,4)
+    END IF
   END IF
 
   IF (n_n2o5_hcl > 0) THEN
@@ -504,14 +513,14 @@ IF (ukca_config%i_ukca_hetconfig == 0) THEN
   ! =====================================================================
 
 ELSE ! New config
-  ! Calculate non-constant gammas
+  ! Calculate non-constant gammas for reactions on psc
   IF ( ukca_config%i_ukca_hetconfig == 2 .OR.                                  &
       ukca_config%i_ukca_hetconfig == 4 ) THEN
     CALL ukca_br_gamma(1,n_points,n_points,zt(1:n_points),zhbr(1:n_points),    &
                        gam_calc)
   END IF
 
-  ! Calculate uptake coefficients on SA using formulation of Shi et al. 2001
+  ! Calculate uptake coefficients on aerosol using formulation of Shi et al. 2001
   ! for i_ukca_hetconfig == 1 (Shi coeff) or == 2 (Shi coeff + Br)
   IF (ukca_config%i_ukca_hetconfig == 1 .OR.                                   & 
       ukca_config%i_ukca_hetconfig == 2) THEN
@@ -520,7 +529,7 @@ ELSE ! New config
                                  zhcl(1:n_points),zclono2(1:n_points),         &
                                  gam3calc(1:n_points,:))
 
-  ! Calculate uptake coefficient on SA using formula of Solomon et al. 2023
+  ! Calculate uptake coefficient on aerosol using formula of Solomon et al. 2023
   ! for i_ukca_hetconfig == 3 (Solomon coeff) or == 4 (Solomon coeff + Br)
   ELSE IF (ukca_config%i_ukca_hetconfig == 3 .OR.                              &
           ukca_config%i_ukca_hetconfig == 4) THEN
@@ -675,14 +684,33 @@ ELSE ! New config
   END WHERE
 
   WHERE ( zh2o > peps )
+    rk(:,n_clono2_h2o) = kpsc(:,2) / zh2o
+    rk(:,n_brono2_h2o) = kpsc(:,8) / zh2o
     rkpsc(:,2) = kpsc(:,2) / zh2o
     rkpsc(:,4) = kpsc(:,4) / zh2o
     rkpsc(:,8) = kpsc(:,8) / zh2o
   ELSE WHERE
+    rk(:,n_clono2_h2o) = 0.0
+    rk(:,n_brono2_h2o) = 0.0
     rkpsc(:,2) = 0.0
     rkpsc(:,4) = 0.0
     rkpsc(:,8) = 0.0
   END WHERE
+
+  ! Yao: Optionally filter N2O5+H2O by stratflag to prevent double-counting.
+  IF (ukca_config%l_fix_ukca_n2o5_h2o) THEN
+    WHERE ( zh2o > peps .AND. stratflag )
+      rk(:,n_n2o5_h2o) = kpsc(:,4) / zh2o
+    ELSE WHERE
+      rk(:,n_n2o5_h2o) = 0.0
+    END WHERE
+  ELSE
+    WHERE ( zh2o > peps )
+      rk(:,n_n2o5_h2o) = kpsc(:,4) / zh2o
+    ELSE WHERE
+      rk(:,n_n2o5_h2o) = 0.0
+    END WHERE
+  END IF
 
   WHERE ( zhbr > peps )
     rkpsc(:,9) = kpsc(:,9) / zhbr
@@ -1047,12 +1075,15 @@ DO jl=kstart, kend
 
   g_h2o=(4*h_clono2*r_vol*tt/c_clono2)*(d_clono2*k_hydr)**0.5
 
+  ! Effective Henry's coefficient from eq 38, Shi 2001
   h_hcl = (0.094 - 0.61*mf_h2so4 + 1.2*mf_h2so4**2)*                           &
        EXP(-8.68 + (8515.0 - 10718.0*mf_h2so4**0.7)/tt)
 
+  ! bulk liquid concentration of HCl (mol L-1)
   m_hcl = h_hcl*phcl
 
-  k_hcl = 7.9e11*ah*d_clono2*m_hcl
+  ! pseudo-first order rate constant eq 43 on Shi 2001
+  k_hcl = 7.9e11*ah*d_clono2*m_hcl 
 
   l_clono2 = (d_clono2/(k_hydr + k_hcl))**0.5
 
@@ -1062,6 +1093,7 @@ DO jl=kstart, kend
 
   g_hcl = (g_clono2 * k_hcl)/(k_hcl + k_hydr)
 
+  ! eqn 44 on Shi 2001
   g_s = 66.12*EXP(-1374.0/tt)*h_clono2*m_hcl
 
   f_hcl = 1/(1 + (0.612*(g_s + g_hcl)*(pclono2/phcl)))
@@ -1087,8 +1119,10 @@ DO jl=kstart, kend
     ELSE
       gam_clono2 = 1.0/g_s2_b
 
+      ! gamma_clono2_hcl (Table A3 from Shi 2001)
       gam3arr(jl,1) = gam_clono2*((g_s2 + g_hcl2)/(g_s2 + g_b))
 
+      ! gamma_clono2_h2o
       gam3arr(jl,2) = gam_clono2 - gam3arr(jl,1)
 
       ! make sure at a minimum value
