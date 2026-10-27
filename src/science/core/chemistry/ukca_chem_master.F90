@@ -105,7 +105,7 @@ INTEGER, PARAMETER :: rm = 1024   ! Used to remove reactions that existed at
 INTEGER, PARAMETER :: di = 2048   ! DEST + iodine
 
 ! Define size of master chemistry
-INTEGER, PARAMETER :: n_chch_master = 382 ! number of known species !DEST +25
+INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DEST_I +18
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
@@ -999,7 +999,44 @@ chch_t1(307,'CHCl2O2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 308
 chch_t1(308,'Cl2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for Cl2
 ! 309
-chch_t1(309,'Br2       ',1,'TR        ','          ',0,0,dest,0,0,107)         & !!! ADD D deposition for Br2
+chch_t1(309,'Br2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD D deposition for Br2
+! iodine chemistry
+! 310
+chch_t1(310,'HOI       ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for HOI
+! 311
+chch_t1(311,'HI        ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for HI
+! 312
+chch_t1(312,'I2        ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for I2
+! 313
+chch_t1(313,'I         ',1,'TR        ','          ',0,0,dest,di,0,107),        &
+! 314
+chch_t1(314,'ICl       ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for ICl
+! 315
+chch_t1(315,'IBr       ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for IBr
+! 316
+chch_t1(316,'IO        ',1,'TR        ','          ',0,0,dest,di,0,107),        &
+! 317
+chch_t1(317,'OIO       ',1,'TR        ','          ',0,0,dest,di,0,107),        &
+! 318
+chch_t1(318,'INO       ',1,'TR        ','          ',0,0,dest,di,0,107),        &
+! 319
+chch_t1(319,'INO2      ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for INO2
+! 320
+chch_t1(320,'IONO2     ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for IONO2
+! 321
+chch_t1(321,'I2O2      ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for I2O2
+! 322 
+chch_t1(322,'I2O3      ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for I2O3
+! 323
+chch_t1(323,'I2O4      ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for I2O4
+! 324
+chch_t1(324,'CH3I      ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! ADD W deposition for CH3I
+! 325
+chch_t1(325,'CH2I2     ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! ADD W deposition for CH2I2
+! 326
+chch_t1(326,'CH2ICl    ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! ADD W deposition for CH2ICl
+! 327
+chch_t1(327,'CH2IBr    ',1,'TR        ','          ',0,0,dest,di,0,107)         & !!! ADD W deposition for CH2IBr
 ]
 
 

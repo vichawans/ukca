@@ -430,6 +430,10 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       nr_therm       = 220        ! thermal reactions LS: 220 - 4 = 216??
       nr_phot        = 55         ! photolytic (ATA)
 
+      IF (ukca_config%l_ukca_dest_iodine) THEN
+         n_chem_tracers = 114     !  DEST_I +18
+      END IF
+
     ELSE  ! If using aerosol chemistry
       n_chem_emissions = 19      ! em_chem_spec below
       n_3d_emissions   = 4       ! BC, OC, volc SO2 & aircraft NOX
@@ -461,6 +465,10 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       END IF
       nr_phot        = 59         ! photolytic (ATA)
 
+      IF (ukca_config%l_ukca_dest_iodine) THEN
+         n_chem_tracers = 114     !  DEST_I +18
+      END IF
+      
       ! adding microplastics to em_chem_spec
       IF (ukca_config%l_ukca_mode .AND. glomap_config%i_mode_setup == 13) THEN
         em_chem_spec(24) = microplastic_spec(1)

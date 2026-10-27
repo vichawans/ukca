@@ -186,7 +186,9 @@ USE ukca_constants,  ONLY: c_br, c_brcl, c_bro, c_brono2, c_buoo,              &
     c_hmml, c_dhpr12ooh, c_dhcarb9, c_ru12no3, c_ru10no3, c_dhpr12o2,          &
     c_ru10ao2, c_maco3, c_ch2cl2, c_chcl3, c_c2cl4, c_c2h4cl2, c_clno2,        &
     c_cocl2, c_cf2clcf2cl, c_cf2clcf3, c_mecfcl2, c_mecf2cl, c_ch2brcl,        &
-    c_chbr2cl, c_chbrcl2, c_chcl2o2, c_cl2, c_br2
+    c_chbr2cl, c_chbrcl2, c_chcl2o2, c_cl2, c_br2, c_hoi, c_hi, c_i2, c_i,     &
+    c_icl, c_ibr, c_io, c_oio, c_ino, c_ino2, c_iono2, c_i2o2, c_i2o3, c_i2o4, &
+    c_ch3i, c_ch2i2, c_ch2icl, c_ch2ibr
 
 
 USE asad_mod,        ONLY: advt, nadvt, speci, jpctr, jpspec
@@ -486,6 +488,25 @@ WHERE (advt == 'CHBrCl2   ') c_species = c_chbrcl2   !for DEST
 WHERE (advt == 'CHCl2O2   ') c_species = c_chcl2o2   !for DEST
 WHERE (advt == 'Cl2       ') c_species = c_cl2   !for DEST
 WHERE (advt == 'Br2       ') c_species = c_br2   !for DEST
+! DEST + iodine
+WHERE (advt == 'HOI       ') c_species = c_hoi
+WHERE (advt == 'HI        ') c_species = c_hi
+WHERE (advt == 'I2        ') c_species = c_i2
+WHERE (advt == 'I         ') c_species = c_i
+WHERE (advt == 'ICl       ') c_species = c_icl
+WHERE (advt == 'IBr       ') c_species = c_ibr
+WHERE (advt == 'IO        ') c_species = c_io
+WHERE (advt == 'OIO       ') c_species = c_oio
+WHERE (advt == 'INO       ') c_species = c_ino
+WHERE (advt == 'INO2      ') c_species = c_ino2
+WHERE (advt == 'IONO2     ') c_species = c_iono2
+WHERE (advt == 'I2O2      ') c_species = c_i2o2
+WHERE (advt == 'I2O3      ') c_species = c_i2o3
+WHERE (advt == 'I2O4      ') c_species = c_i2o4
+WHERE (advt == 'CH3I      ') c_species = c_ch3i
+WHERE (advt == 'CH2I2     ') c_species = c_ch2i2
+WHERE (advt == 'CH2ICl    ') c_species = c_ch2icl
+WHERE (advt == 'CH2IBr    ') c_species = c_ch2ibr
 
 ! non-advected tracers
 c_na_species=0.0

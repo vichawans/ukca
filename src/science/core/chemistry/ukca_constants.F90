@@ -426,6 +426,27 @@ REAL, PARAMETER :: c_chbrcl2    = 5.6548
 REAL, PARAMETER :: c_chcl2o2    = 4.0014
 REAL, PARAMETER :: c_cl2        = 2.4474
 REAL, PARAMETER :: c_br2        = 5.5161
+!
+! DEST + iodine
+REAL, PARAMETER :: c_hoi        = 4.9676
+REAL, PARAMETER :: c_hi         = 4.4153
+REAL, PARAMETER :: c_i2         = 8.7608
+REAL, PARAMETER :: c_i          = 4.3804
+REAL, PARAMETER :: c_icl        = 5.6041
+REAL, PARAMETER :: c_ibr        = 7.1384
+REAL, PARAMETER :: c_io         = 4.9327
+REAL, PARAMETER :: c_oio        = 5.4850
+REAL, PARAMETER :: c_ino        = 5.4163
+REAL, PARAMETER :: c_ino2       = 5.9686
+REAL, PARAMETER :: c_iono2      = 6.5209
+REAL, PARAMETER :: c_i2o2       = 9.8654
+REAL, PARAMETER :: c_i2o3       = 10.4177
+REAL, PARAMETER :: c_i2o4       = 10.9700
+!
+REAL, PARAMETER :: c_ch3i       = 4.8996
+REAL, PARAMETER :: c_ch2i2      = 9.2451
+REAL, PARAMETER :: c_ch2icl     = 6.0884
+REAL, PARAMETER :: c_ch2ibr     = 7.6227
 
 !     molecular masses in g/mol of emitted species,
 !     for budget calculations
@@ -727,6 +748,23 @@ REAL, PARAMETER :: m_chbrcl2    = 163.82
 REAL, PARAMETER :: m_chcl2o2    = 115.92
 REAL, PARAMETER :: m_cl2        = 70.90
 REAL, PARAMETER :: m_br2        = 159.80
+!
+! DEST + iodine
+REAL, PARAMETER :: m_ch3i       = 141.94
+REAL, PARAMETER :: m_ch2i2      = 267.83
+REAL, PARAMETER :: m_ch2icl     = 176.38
+REAL, PARAMETER :: m_ch2ibr     = 220.83
+!
+REAL, PARAMETER :: m_hoi        = 143.91
+REAL, PARAMETER :: m_hi         = 127.91
+REAL, PARAMETER :: m_i2         = 253.80
+REAL, PARAMETER :: m_icl        = 162.35
+REAL, PARAMETER :: m_ibr        = 206.80
+REAL, PARAMETER :: m_ino2       = 172.91
+REAL, PARAMETER :: m_iono2      = 188.91
+REAL, PARAMETER :: m_i2o2       = 285.80
+REAL, PARAMETER :: m_i2o3       = 301.80
+REAL, PARAMETER :: m_i2o4       = 317.80
 
 ! For solar calculations
 
