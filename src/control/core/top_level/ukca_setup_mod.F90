@@ -172,7 +172,7 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       l_ukca_scale_soa_yield_isop,                             &
                       l_ukca_dest_iodine,                                      &
                       l_ukca_dest_clvsls_emiss,                                &
-                      l_ukca_include_clvsls,                                   &
+                      l_ukca_dest_clvsls_lbc,                                   &
                       l_ukca_fix_clvsls,                                       &
                       l_ukca_het_psc,                                          &
                       l_ukca_limit_nat,                                        &
@@ -513,7 +513,7 @@ LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_ro2_perm
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_intph
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_dest_iodine
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_dest_clvsls_emiss
-LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_include_clvsls
+LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_dest_clvsls_lbc
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_fix_clvsls
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_het_psc
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ukca_limit_nat
@@ -973,8 +973,8 @@ IF (ukca_config%i_ukca_chem /= i_ukca_chem_off) THEN
   IF (PRESENT(l_ukca_dest_clvsls_emiss))                                       &
     ukca_config%l_ukca_dest_clvsls_emiss = l_ukca_dest_clvsls_emiss
 
-  IF (PRESENT(l_ukca_include_clvsls))                                          &
-    ukca_config%l_ukca_include_clvsls = l_ukca_include_clvsls
+  IF (PRESENT(l_ukca_dest_clvsls_lbc))                                          &
+    ukca_config%l_ukca_dest_clvsls_lbc = l_ukca_dest_clvsls_lbc
 
   IF (PRESENT(l_ukca_fix_clvsls))                                              &
     ukca_config%l_ukca_fix_clvsls = l_ukca_fix_clvsls

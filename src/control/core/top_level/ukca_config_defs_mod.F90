@@ -122,7 +122,7 @@ cfc_lumped = ['CF2ClCFCl2','CF2ClCF2Cl','CF2ClCF3  ','CCl4      ',             &
                'CF2ClBr   ','CF2Br2    ','CF3Br     ','CF2BrCF2Br',            &
                'MeCl      ']
 
-IF (ukca_config%l_ukca_deststrattrop) THEN !! .AND. ukca_config%l_ukca_include_clvsls ???
+IF (ukca_config%l_ukca_deststrattrop) THEN !! .AND. ukca_config%l_ukca_dest_clvsls_lbc ???
   IF (.NOT. ukca_config%l_ukca_dest_clvsls_emiss) THEN
     n_boundary_vals_2D = 4
     ALLOCATE(lbc_mmr_2D(rows,n_boundary_vals_2D))
