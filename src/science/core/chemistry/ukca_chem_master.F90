@@ -102,6 +102,7 @@ INTEGER, PARAMETER :: ce = 512    ! CH4 emission-driven chemistry
 INTEGER, PARAMETER :: rm = 1024   ! Used to remove reactions that existed at
                                   ! previous chemistry versions but not at
                                   ! later ones
+INTEGER, PARAMETER :: di = 2048   ! DEST + iodine
 
 ! Define size of master chemistry
 INTEGER, PARAMETER :: n_chch_master = 382 ! number of known species !DEST +25
@@ -8844,6 +8845,8 @@ IF (ukca_config%l_ukca_emsdrvn_ch4) qualifier = qualifier + ce
 ! (dis)qualifier to remove reactions used in previous chemistry versions
 ! introduced at version 121.
 IF (ukca_config%i_ukca_chem_version >= 121) qualifier = qualifier + rm
+! Qualifier for adding iodine chemistry for DEST
+IF (ukca_config%l_ukca_dest_iodine) qualifier = qualifier + di
 
 WRITE (umMessage,'(A,1X,I9)') 'UKCA_CHEM_MASTER: qualifier = ',qualifier
 CALL umPrint(umMessage,src=RoutineName)
