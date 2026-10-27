@@ -1128,8 +1128,8 @@ SUBROUTINE ukca_solomon_liquid_aerosol(kstart,kend,kchmlev,t,th2o,             &
 
 USE ukca_config_constants_mod, ONLY: boltzmann
 USE asad_mod,                  ONLY: peps
-USE ukca_mode_setup            ONLY: nmodes, nmodes_sol                        &
-                                     cp_su, cp_bc, cp_oc, cp_so,
+USE ukca_mode_setup            ONLY: nmodes, nmodes_sol,                       &
+                                     cp_su, cp_bc, cp_oc, cp_so,               &
                                      mm
                                      
 IMPLICIT NONE
