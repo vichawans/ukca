@@ -9976,7 +9976,7 @@ TYPE(asad_flux_defn), PARAMETER :: dest_Bry_tendency(6) = [                    &
        asad_flux_defn('NET',50578,'X',.FALSE.,0,1,                             &
        ['HBr       ','          '],                                            &
        ['          ','          ','          ','          ']),                 &
-       asad_flux_defn('NET',50589,'X',.FALSE.,0,1,                             &
+       asad_flux_defn('NET',50579,'X',.FALSE.,0,1,                             &
        ['HOBr      ','          '],                                            &
        ['          ','          ','          ','          ']),                 &
        asad_flux_defn('NET',50580,'X',.FALSE.,0,1,                             &
