@@ -109,7 +109,7 @@ INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DE
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
-INTEGER, PARAMETER :: n_bimol_master = 1246 ! number of bimolecular reactions !DEST +34
+INTEGER, PARAMETER :: n_bimol_master = 1259 ! number of bimolecular reactions !DEST +46
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 116 ! number of termolecular reactions
 
@@ -6819,8 +6819,58 @@ ratb_t1(778,'MeCFCl2   ','OH        ','Cl        ','Cl        ','H2O       ',  &
 '          ',1.25e-12,  0.00, 1600.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! hcfc142b + oh -> ch2cf2cl +h2o
 ratb_t1(779,'MeCF2Cl   ','OH        ','Cl        ','H2O       ','          ',  &
-'          ',1.30e-12,  0.00, 1770.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
-
+'          ',1.30e-12,  0.00, 1770.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
+! -----------------------------------------------------------------------------
+!! extra reactions to accomodate Cl-VLSLs
+!
+! --- CH2Cl2 +OH -> CHCl2 + H2O ->>>> CHCl2O2
+ratb_t1(780,'CH2Cl2    ','OH        ','CHCl2O2   ','H2O       ','          ',  &
+'          ',1.92e-12,  0.00,  880.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & ! JPL2015
+!
+! --- CHCl3 +OH
+ratb_t1(781,'CHCl3     ','OH        ','COCl2     ','Cl        ','H2O       ',  &
+'          ',2.20e-12,  0.00,  920.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & ! JPL2015
+!
+! --- C2H4Cl2 +OH -> products
+ratb_t1(782,'C2H4Cl2   ','OH        ','Cl        ','Cl        ','H2O       ',  & ! EMB - also H2O produced?
+'          ',1.14e-11,  0.00, 1150.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & ! JPL2015
+!
+! --- CH2Cl2 +Cl -> CHCl2 + HCl ->>>> CHCl2O2
+ratb_t1(783,'CH2Cl2    ','Cl        ','CHCl2O2   ','HCl       ','          ',  &
+'          ',7.40e-12,  0.00,  910.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & ! JPL2015
+!
+! --- CHCl3 +Cl
+ratb_t1(784,'CHCl3     ','Cl        ','COCl2     ','Cl        ','HCl       ',  &
+'          ',3.30e-12,  0.00,  990.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & ! JPL2015
+!
+! --- C2H4Cl2 +Cl -> products
+ratb_t1(785,'C2H4Cl2   ','Cl        ','Cl        ','Cl        ','HCl       ',  &
+'          ',1.3e-12,  0.00,     0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & !k from Ryan
+!
+! --- C2Cl4 +OH -> 0.47*COCl2 + 3.06*Cl
+ratb_t1(786,'C2Cl4     ','OH        ','COCl2     ','Cl        ','          ',  &
+'          ',4.7e-12,  0.00,   990.00, 0.47, 3.06, 0.00, 0.00, dest,0,0,107),  & !JPL2015
+! -----------------------------------------------------------------------------
+!!! EMB loss of CHCl2O2; rates from mcm.leeds.ac.uk website
+!
+ratb_t1(787,'CHCl2O2   ','NO        ','Cl        ','NO2       ','CO        ',  & ! EMB1 prods assuming phot
+'HO2       ',4.05e-12,  0.00, -360.00, 2.00, 1.00, 1.00, 1.00, dest,0,0,107),  & ! EMB2 k=1.5*KRO2NO
+!
+ratb_t1(788,'CHCl2O2   ','NO3       ','Cl        ','NO2       ','CO        ',  &
+'HO2       ',2.30e-12,  0.00,    0.00, 2.00, 1.00, 1.00, 1.00, dest,0,0,107),  &
+!
+! two loss chanels with HO2
+ratb_t1(789,'CHCl2O2   ','HO2       ','COCl2     ','H2O       ','          ',  &
+'          ',3.92e-13,  0.00, -700.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & !k(a)=0.7*k(tot)
+ratb_t1(790,'CHCl2O2   ','HO2       ','HO2       ','CO        ','Cl        ',  &
+'HOCl      ',1.68e-13,  0.00, -700.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  & !k(a)=0.3*k(tot)
+!
+! three loss chanels with RO2 (here assumed RO2=CH3O2) and products
+! of channels b and c are identical
+ratb_t1(791,'CHCl2O2   ','MeOO      ','Cl        ','HO2       ','CO        ',  &
+'HCHO      ',1.20e-12,  0.00,    0.00, 2.00, 2.00, 1.00, 1.00, dest,0,0,107),  & !k(a)=0.6*k(tot)
+ratb_t1(792,'CHCl2O2   ','MeOO      ','COCl2     ','HCHO      ','HO2       ',  &
+'          ',0.80e-12,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   & !k(a)=(0.2+0.2)*k(tot)
 ] 
      
 !----------------------------------------------------------------------
