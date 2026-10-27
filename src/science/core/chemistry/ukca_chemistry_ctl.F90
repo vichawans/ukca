@@ -401,6 +401,11 @@ DO k=1,model_levels
     rc_het(:,:) = 0.0
   END IF
 
+  !--VS this is where za is populated in asad_mod. za is used later in ukca_hetero_mod
+  !--VS but za is not passed on to asad_cdrive as a parameter.
+  !--VS that is, there are multiple ways of setting variables. 
+
+  !--VS if l_ukca_strat_sa_unmix -> unlump sulfate sa 
   za(:) = so4_sa(kcs:kce)
 
   IF (uph2so4inaer == 1) THEN
@@ -412,6 +417,7 @@ DO k=1,model_levels
       ystore(:) = y(:,nn_h2so4)
     END IF
   END IF
+
 
   CALL asad_cdrive(cdot,                                                       &
                    zftr,                                                       &

@@ -278,6 +278,10 @@ USE umPrintMgr, ONLY: umMessage, umPrint
 USE ukca_cdnc_jones_mod, ONLY: ukca_cdnc_jones
 USE ukca_ddepaer_coeff_mod, ONLY: set_ddepaer_coeff
 
+!--VS add module for aerosol fields to use in het
+USE ukca_sarea_field_mod, ONLY: sarea_su, sarea_bc, sarea_om
+
+
 IMPLICIT NONE
 
 ! Inputs
@@ -717,6 +721,17 @@ REAL :: seg_znotg(nbox)
 ! Background vmr of O3 (dimensionless)
 REAL :: seg_zo3(nbox)
 
+!--VS for computing variables here for parsing to ukca_hetero_mod
+INTEGER :: k_sarea_nuc, k_sarea_ait, k_sarea_acc, k_sarea_coa 
+INTEGER :: k_pvol_nuc_su, k_pvol_nuc_om
+INTEGER :: k_pvol_ait_su, k_pvol_ait_bc, k_pvol_ait_om 
+INTEGER :: k_pvol_acc_su, k_pvol_acc_bc, k_pvol_acc_om, k_pvol_acc_ss
+INTEGER :: k_pvol_cor_su, k_pvol_cor_bc, k_pvol_cor_om, k_pvol_cor_ss
+
+! --VS: temporary for fractional sarea computation
+REAL :: tot_vol_3d(row_length, rows, model_levels)
+
+
 INTEGER :: errcode
 INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
 INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
@@ -748,6 +763,10 @@ root2 = SQRT(2.0)
 IF (glomap_config%l_ukca_radaer) THEN
   CALL ukca_check_radaer_coupling(all_ntp)
 END IF
+
+!--VS checking time step
+
+write(*,*) 'month,day,hour,min', i_month, i_day_number, i_hour,i_minute
 
 ! Molar mass of dry air (kg/mol)
 mm_da = avogadro * boltzmann/rgas
@@ -4890,6 +4909,195 @@ END DO  ! ik loop over segments
 !$OMP END PARALLEL
 !
 ! End of OpenMP
+
+
+!--VS print populated mode_diags for ukca_hetero_mod
+!--VS pre-scan: find k indices for pvol/sarea diagnostics after OMP region
+k_sarea_nuc   = 0;  k_sarea_ait   = 0
+k_sarea_acc   = 0;  k_sarea_coa   = 0
+k_pvol_nuc_su = 0;  k_pvol_nuc_om = 0
+k_pvol_ait_su = 0;  k_pvol_ait_bc = 0; k_pvol_ait_om = 0
+k_pvol_acc_su = 0;  k_pvol_acc_bc = 0
+k_pvol_acc_om = 0;  k_pvol_acc_ss = 0
+k_pvol_cor_su = 0;  k_pvol_cor_bc = 0
+k_pvol_cor_om = 0;  k_pvol_cor_ss = 0
+
+k = 0
+DO n = 1, nukca_d1items
+  IF (ukcaD1codes(n)%section == stashcode_glomap_sec .AND.                  &
+      ((ukcaD1codes(n)%item >= item1_mode_diags .AND.                       &
+        ukcaD1codes(n)%item <=                                              &
+                         item1_mode_diags+nmax_mode_diags-1) .OR.           &
+       (ukcaD1codes(n)%item >= item1_nitrate_diags .AND.                    &
+        ukcaD1codes(n)%item <= itemN_nitrate_diags) .OR.                    &
+       (ukcaD1codes(n)%item >= item1_dust3mode_diags .AND.                  &
+        ukcaD1codes(n)%item <= itemN_dust3mode_diags) .OR.                  &
+       (ukcaD1codes(n)%item >= item1_microplastic_diags .AND.               &
+        ukcaD1codes(n)%item <= itemN_microplastic_diags)) .AND.             &
+      ukcaD1codes(n)%item /= imdi) THEN
+    k = k + 1
+    SELECT CASE(ukcaD1codes(n)%item)
+    CASE (item1_mode_diags+215);  k_sarea_nuc   = k
+    CASE (item1_mode_diags+216);  k_sarea_ait   = k
+    CASE (item1_mode_diags+217);  k_sarea_acc   = k
+    CASE (item1_mode_diags+218);  k_sarea_coa   = k
+    CASE (item1_mode_diags+241);  k_pvol_nuc_su = k
+    CASE (item1_mode_diags+242);  k_pvol_nuc_om = k
+    CASE (item1_mode_diags+245);  k_pvol_ait_su = k
+    CASE (item1_mode_diags+246);  k_pvol_ait_bc = k
+    CASE (item1_mode_diags+247);  k_pvol_ait_om = k
+    CASE (item1_mode_diags+250);  k_pvol_acc_su = k
+    CASE (item1_mode_diags+251);  k_pvol_acc_bc = k
+    CASE (item1_mode_diags+252);  k_pvol_acc_om = k
+    CASE (item1_mode_diags+253);  k_pvol_acc_ss = k
+    CASE (item1_mode_diags+257);  k_pvol_cor_su = k
+    CASE (item1_mode_diags+258);  k_pvol_cor_bc = k
+    CASE (item1_mode_diags+259);  k_pvol_cor_om = k
+    CASE (item1_mode_diags+260);  k_pvol_cor_ss = k
+    END SELECT
+  END IF
+END DO
+!--VS end pre-scan
+
+! write(*,*) '!--VS k_sarea_* =', k_sarea_nuc, k_sarea_ait, k_sarea_acc, k_sarea_coa
+! write(*,*) '!--VS k_pvol_nuc_* =', k_pvol_nuc_su, k_pvol_nuc_om
+! write(*,*) '!--VS k_pvol_ait_* =', k_pvol_ait_su, k_pvol_ait_bc, k_pvol_ait_om
+! write(*,*) '!--VS k_pvol_acc_* =', k_pvol_acc_su, k_pvol_acc_bc, k_pvol_acc_om, k_pvol_acc_ss
+! write(*,*) '!--VS k_pvol_cor_* =', k_pvol_cor_su, k_pvol_cor_bc, k_pvol_cor_om, k_pvol_cor_ss
+! write(*,*) '!--VS mode_diags', shape(mode_diags)
+
+!--VS: compute fractional surface areas for su, bc, om
+! Mirrors ukca_trop_hetchem total_vol/frac_vol approach
+! frac_sarea_X = (pvol_X / tot_vol) * sarea, summed over modes
+
+IF (.NOT. ALLOCATED(sarea_su)) THEN
+  ALLOCATE(sarea_su(row_length, rows, model_levels))
+END IF
+IF (.NOT. ALLOCATED(sarea_bc)) THEN
+  ALLOCATE(sarea_bc(row_length, rows, model_levels))
+END IF
+IF (.NOT. ALLOCATED(sarea_om)) THEN
+  ALLOCATE(sarea_om(row_length, rows, model_levels))
+END IF
+sarea_su = 0.0
+sarea_bc = 0.0
+sarea_om = 0.0
+
+! --- nucleation soluble: su + om only (no bc) ---
+IF (k_pvol_nuc_su > 0 .AND. k_sarea_nuc > 0) THEN
+  ! set total volume of mode to first component (sulfate)
+  tot_vol_3d = mode_diags(:,:,:,k_pvol_nuc_su)
+  IF (k_pvol_nuc_om > 0)                                                &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_nuc_om)
+  WHERE (tot_vol_3d > 0.0)
+    sarea_su = sarea_su +                                      &
+      (mode_diags(:,:,:,k_pvol_nuc_su) / tot_vol_3d) *                  &
+       mode_diags(:,:,:,k_sarea_nuc)
+  END WHERE
+  IF (k_pvol_nuc_om > 0) THEN
+    WHERE (tot_vol_3d > 0.0)
+      sarea_om = sarea_om +                                    &
+        (mode_diags(:,:,:,k_pvol_nuc_om) / tot_vol_3d) *                &
+         mode_diags(:,:,:,k_sarea_nuc)
+    END WHERE
+  END IF
+END IF
+
+! --- aitken soluble: su + bc + om ---
+IF (k_pvol_ait_su > 0 .AND. k_sarea_ait > 0) THEN
+  tot_vol_3d = mode_diags(:,:,:,k_pvol_ait_su)
+  IF (k_pvol_ait_bc > 0)                                                &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_ait_bc)
+  IF (k_pvol_ait_om > 0)                                                &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_ait_om)
+  WHERE (tot_vol_3d > 0.0)
+    sarea_su = sarea_su +                                      &
+      (mode_diags(:,:,:,k_pvol_ait_su) / tot_vol_3d) *                  &
+       mode_diags(:,:,:,k_sarea_ait)
+  END WHERE
+  IF (k_pvol_ait_bc > 0) THEN
+    WHERE (tot_vol_3d > 0.0)
+      sarea_bc = sarea_bc +                                    &
+        (mode_diags(:,:,:,k_pvol_ait_bc) / tot_vol_3d) *                &
+         mode_diags(:,:,:,k_sarea_ait)
+    END WHERE
+  END IF
+  IF (k_pvol_ait_om > 0) THEN
+    WHERE (tot_vol_3d > 0.0)
+      sarea_om = sarea_om +                                    &
+        (mode_diags(:,:,:,k_pvol_ait_om) / tot_vol_3d) *                &
+         mode_diags(:,:,:,k_sarea_ait)
+    END WHERE
+  END IF
+END IF
+
+! --- accumulation soluble: su + bc + om + ss ---
+IF (k_pvol_acc_su > 0 .AND. k_sarea_acc > 0) THEN
+  tot_vol_3d = mode_diags(:,:,:,k_pvol_acc_su)
+  IF (k_pvol_acc_bc > 0)                                                &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_acc_bc)
+  IF (k_pvol_acc_om > 0)                                                &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_acc_om)
+  IF (k_pvol_acc_ss > 0)                                                &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_acc_ss)
+  WHERE (tot_vol_3d > 0.0)
+    sarea_su = sarea_su +                                      &
+      (mode_diags(:,:,:,k_pvol_acc_su) / tot_vol_3d) *                  &
+       mode_diags(:,:,:,k_sarea_acc)
+  END WHERE
+  IF (k_pvol_acc_bc > 0) THEN
+    WHERE (tot_vol_3d > 0.0)
+      sarea_bc = sarea_bc +                                    &
+        (mode_diags(:,:,:,k_pvol_acc_bc) / tot_vol_3d) *                &
+         mode_diags(:,:,:,k_sarea_acc)
+    END WHERE
+  END IF
+  IF (k_pvol_acc_om > 0) THEN
+    WHERE (tot_vol_3d > 0.0)
+      sarea_om = sarea_om +                                    &
+        (mode_diags(:,:,:,k_pvol_acc_om) / tot_vol_3d) *                &
+         mode_diags(:,:,:,k_sarea_acc)
+    END WHERE
+  END IF
+END IF
+
+! --- coarse soluble: su + bc + om + ss ---
+IF (k_pvol_cor_su > 0 .AND. k_sarea_coa > 0) THEN
+  tot_vol_3d = mode_diags(:,:,:,k_pvol_cor_su)
+  IF (k_pvol_cor_bc > 0)                                                      &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_cor_bc)
+  IF (k_pvol_cor_om > 0)                                                      &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_cor_om)
+  IF (k_pvol_cor_ss > 0)                                                      &
+    tot_vol_3d = tot_vol_3d + mode_diags(:,:,:,k_pvol_cor_ss)
+  WHERE (tot_vol_3d > 0.0)
+    sarea_su = sarea_su +                                                     &
+      (mode_diags(:,:,:,k_pvol_cor_su) / tot_vol_3d) *                        &
+       mode_diags(:,:,:,k_sarea_coa)
+  END WHERE
+  IF (k_pvol_cor_bc > 0) THEN
+    WHERE (tot_vol_3d > 0.0)
+      sarea_bc = sarea_bc +                                                   &
+        (mode_diags(:,:,:,k_pvol_cor_bc) / tot_vol_3d) *                      &
+         mode_diags(:,:,:,k_sarea_coa)
+    END WHERE
+  END IF
+  IF (k_pvol_cor_om > 0) THEN
+    WHERE (tot_vol_3d > 0.0)
+      sarea_om = sarea_om +                                                   &
+        (mode_diags(:,:,:,k_pvol_cor_om) / tot_vol_3d) *                      &
+         mode_diags(:,:,:,k_sarea_coa)
+    END WHERE
+  END IF
+END IF
+!--VS end fractional sarea computation
+
+write(*,*) '!--VS mode_diags(:,:,:,k_pvol_acc_su)', SUM(mode_diags(:,:,:,k_pvol_acc_su))
+write(*,*) '!--VS sarea_su', SUM(sarea_su)
+write(*,*) '!--VS sarea_bc', SUM(sarea_bc)
+write(*,*) '!--VS sarea_om', SUM(sarea_om)
+
+
 
 ! Deallocate lookup tables in dust impaction scavenging routine
 IF (l_dust_mp_slinn_impc_scav) CALL ukca_impc_scav_dust_dealloc()

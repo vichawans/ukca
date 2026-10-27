@@ -2059,6 +2059,10 @@ IF (ukca_config%l_ukca_chem) THEN
       ! Do chemistry calculation here (at chemistry timesteps)
   IF (do_chemistry) THEN
 
+    !--VS try defining a new variable
+    write(*,*) '!--VS hello from do_chemistry'
+    write(*,*) '!--VS n_mode_diags=',n_mode_diags
+
     IF (.NOT. ALLOCATED(t_chem)) ALLOCATE(t_chem(row_length,rows,model_levels))
     IF (.NOT. ALLOCATED(q_chem)) ALLOCATE(q_chem(row_length,rows,model_levels))
     t_chem = t_theta_levels
@@ -2225,6 +2229,9 @@ IF (ukca_config%l_ukca_chem) THEN
 
     IF (ukca_config%l_ukca_offline_be) THEN
 
+      !--VS try defining a new variable
+      write(*,*) '!--VS hello from ukca_chemistry_ctl_be'
+
       ! Offline chemistry with explicit backward-Euler solver
       CALL ukca_chemistry_ctl_be(                                              &
            row_length, rows, model_levels,                                     &
@@ -2291,6 +2298,9 @@ IF (ukca_config%l_ukca_chem) THEN
       IF (.NOT. ALLOCATED(sea_salt_jet))                                       &
           ALLOCATE (sea_salt_jet  (row_length, rows, model_levels))
 
+      !--VS try defining a new variable
+      write(*,*) '!--VS hello from ukca_chemistry_ctl_tropraq'
+
       CALL ukca_chemistry_ctl_tropraq(                                         &
            row_length, rows, model_levels,                                     &
            theta_field_size, tot_n_pnts,                                       &
@@ -2337,6 +2347,10 @@ IF (ukca_config%l_ukca_chem) THEN
 
     ELSE IF (ukca_config%l_ukca_asad_full) THEN
 
+      !--VS try defining a new variable
+      write(*,*) '!--VS hello from ukca_chemistry_ctl_full'
+
+
       CALL ukca_chemistry_ctl_full(                                            &
            row_length, rows, model_levels,                                     &
            theta_field_size, tot_n_pnts,                                       &
@@ -2373,7 +2387,8 @@ IF (ukca_config%l_ukca_chem) THEN
            )
 
     ELSE IF (ukca_config%l_ukca_asad_columns) THEN
-
+      !--VS try defining a new variable
+      write(*,*) '!--VS hello from ukca_chemistry_ctl_col'
       CALL ukca_chemistry_ctl_col(                                             &
            row_length, rows, model_levels,                                     &
            theta_field_size,                                                   &
@@ -2410,6 +2425,9 @@ IF (ukca_config%l_ukca_chem) THEN
            )
 
     ELSE
+
+      !--VS try defining a new variable
+      write(*,*) '!--VS hello from ukca_chemistry_ctl'
 
       CALL ukca_chemistry_ctl(                                                 &
            row_length, rows, model_levels,                                     &
