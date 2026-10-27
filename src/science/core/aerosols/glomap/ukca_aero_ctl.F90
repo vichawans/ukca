@@ -5084,9 +5084,9 @@ END IF
 !--VS print surfarea for compariso
 i = name2ntpindex('surfarea  ')
 write(*,*) '!--VS mode_diags(:,:,:,surfarea)', SUM(all_ntp(i)%data_3d)
-write(*,*) '!--VS sarea_su', SUM(sarea_su)
-write(*,*) '!--VS sarea_bc', SUM(sarea_bc)
-write(*,*) '!--VS sarea_om', SUM(sarea_om)
+
+
+!--VS get mmr of sulfate from all modes
 
 
 

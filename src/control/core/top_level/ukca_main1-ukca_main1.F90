@@ -261,6 +261,8 @@ USE ukca_time_mod,   ONLY: i_year, i_month, i_day, i_hour, i_minute,           &
 
 !--VS Add sarea module
 USE ukca_sarea_field_mod, ONLY: sarea_su
+USE ukca_calc_aesro_mass_totals_mod, ONLY: ukca_calc_aero_mass_totals
+
 IMPLICIT NONE
 
 ! ----------------------------------------------------------------------
@@ -2197,6 +2199,33 @@ IF (ukca_config%l_ukca_chem) THEN
         END DO
       END IF
     END IF ! .NOT. ukca_config%l_ukca_offline_be
+
+    !----------------------------------------------------------------------------
+    !--VS add routine to calculate total sulfate and oc mass for stratospheric
+    !     heterogeneous reactions on organic aerosols
+     
+    ! 1. initialise focr, roc = 0 
+    IF (.NOT. ALLOCATED(H_plus_3d_arr)) THEN 
+      ALLOCATE(focr(row_length,rows,model_levels))
+      ALLOCATE(roc(row_length,rows,model_levels))
+    END IF
+
+    focr = 0.0
+    roc = 0.0
+
+    ! 2. populate focr, roc using new function, use om1 or om2 depending on the case settings
+
+    ! Check cases for strat het reactions on oc
+    ! IF (ukca_config%l_ukca_intph) THEN ! Use logical set in Rose suite
+    ! case case=0, no change
+    ! case case=1, set roc
+    ! case case=2, set roc
+    ! case case=3, set roc
+    ! case case=4, set focr (om1)
+    ! case case=5, set focr (om2)
+
+    
+    !----------------------------------------------------------------------------
 
     ! Initially assign 3D pH array the default global value of 5.0
     IF (.NOT. ALLOCATED(H_plus_3d_arr))                                        &

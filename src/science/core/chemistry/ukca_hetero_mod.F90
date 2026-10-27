@@ -48,11 +48,107 @@ REAL, PARAMETER, PRIVATE  :: rad1=1.0e-4   ! Radius of type 1 PSCs (cm)
 REAL, PARAMETER, PRIVATE  :: rad2=10.0e-4  ! Radius of type 2 PSCs (cm)
 REAL, PARAMETER, PRIVATE  :: radsa=1.0e-5  ! aerosol radius(cm)
 
+! ---------------------------------------------------------------------
+! Heterogeneous chemistry on wildfire / background organic aerosol,
+! after Solomon et al. (2023, Nature, doi:10.1038/s41586-022-05683-0)
+! and Stone et al. (2025, ACP, doi:10.5194/acp-25-7683-2025).
+!
+! Six treatments, selected by i_ukca_hetorg_case. Cases 1-2 are the two
+! hypotheses of Solomon et al. (2023); cases 3-5 are the three cases of
+! Stone et al. (2025). Every case reduces exactly to case 0 as the
+! organic input tends to zero.
+!
+!   0 : CONTROL. Standard UKCA Shi et al. (2001) sulfate chemistry.
+!       Bit-identical to trunk. No organic input required.
+!
+!   --- Solomon et al. (2023) -------------------------------------
+!
+!   1 : SOLUBILITY / THRESHOLD (Solomon 2023, accepted case). Binary
+!       switch on the organic/sulfate mass ratio roc: above
+!       oc_so4_crit, HCl dissolves entirely as if in an organic phase
+!       (hexanoic-acid proxy, sulfate contribution DROPPED); below,
+!       standard Shi sulfate solubility. Discontinuous at the
+!       threshold. Superseded by case 5, retained for intercomparison.
+!       Solomon et al. also masked to the Southern Hemisphere; UKCA_HETERO
+!       has no latitude on the chemistry vector, so apply that in the
+!       driver by zeroing roc in the NH if required.
+!
+!   2 : DILUTION (Solomon 2023, REJECTED - overestimated ClO/HOCl and
+!       inverted the ClONO2 signal). Organics are a physical diluent of
+!       the sulfate solution: they lower the H2SO4 weight percent and
+!       hence the acidity, which indirectly raises HCl uptake through
+!       the UNMODIFIED Shi Henry law. The hexanoic-acid solubility is
+!       never used. NOTE this is the only case that alters the reaction
+!       KINETICS as well as the solubility: the diluted weight percent
+!       propagates into solution viscosity, acid activity and k_hydr.
+!
+!   --- Stone et al. (2025) ---------------------------------------
+!
+!   3 : HOMOGENEOUS MIXING (Stone case 1, REJECTED - gives the wrong
+!       multi-year trend, because coagulating sulfate re-acidifies the
+!       mixed particle). Organics and sulfate share one phase; organic
+!       mass dilutes the weight percent, and the reduced acidity raises
+!       HCl solubility through the Williams et al. (1995) effective
+!       Henry law H* = H_hex*(1 + Ka/aH). Unlike case 2, the reaction
+!       kinetics retain the undiluted weight percent (as in CESM).
+!
+!   4 : LLPS, ALL ORGANICS (Stone case 2). Liquid-liquid phase
+!       separation: HCl dissolves independently in an organic phase
+!       (hexanoic proxy) and a sulfate phase, combined by organic mass
+!       fraction focr:
+!         M_HCl = pHCl*[(1-focr)*H_sulf(Shi 2001) + focr*H_hex]
+!       focr built from TOTAL (background+wildfire) OM. Stone et al.
+!       showed this OVER-depletes HCl (esp. clean-year SH winter) and is
+!       sensitive to the model background-SOA burden.
+!
+!   5 : LLPS, WILDFIRE ORGANICS ONLY (Stone case 3; the published and
+!       accepted case). IDENTICAL code path to case 4 - the only
+!       difference is that the driver supplies focr built from WILDFIRE
+!       organics alone, with background SOA counted only as
+!       background/dilutant mass in the denominator. Requires a GLOMAP
+!       configuration separating primary from secondary OM.
+!
+! ORGANIC INPUT REQUIRED (supplied by the driver):
+!   cases 1, 2, 3 : roc  = organic / SULFATE MASS (>= 0) 
+!   cases 4, 5    : focr = organic / TOTAL AEROSOL MASS [0,1]
+!   case  0       : none
+!
+! oc_frac_scale is a tuning multiplier applied to focr and roc (Stone
+! et al. reduced the SH background-SOA fraction by ~4x, i.e. 0.25).
+! Should ultimately be namelist-controlled (ukca_config); hardwired here
+! for development.
+! ---------------------------------------------------------------------
+INTEGER, PARAMETER, PRIVATE :: i_ukca_hetorg_case = 0 ! 0-5, see above
+REAL, PARAMETER, PRIVATE :: oc_frac_scale = 1.0 ! tuning multiplier on
+                                                ! focr and roc (cf /4)
+REAL, PARAMETER, PRIVATE :: oc_so4_crit = 1.0 ! case 1 only: org/sulfate
+                                              ! mass ratio threshold.
+                                              ! Solomon et al. used the
+                                              ! organic/SULFUR ratio; for
+                                              ! an SO4-mass denominator
+                                              ! the equivalent is ~0.33
+REAL, PARAMETER, PRIVATE :: forg_min = 1.0e-3 ! min organic amount for
+                                              ! HOBr+HCl and rate-limiter
+                                              ! gating (trunk-preserving)
+REAL, PARAMETER, PRIVATE :: wt_dilute_min = 0.1 ! case 2: floor on the
+                                                ! diluted H2SO4 wt% (CESM)
+REAL, PARAMETER, PRIVATE :: mm_hexanoic = 116.16 ! molar mass hexanoic acid (g/mol)
+REAL, PARAMETER, PRIVATE :: kdiss_hcl = 7.9433e5 ! Ka = 10^5.9 HCl
+                                                 ! dissociation (Trummal 2016)
+
+! Case 1 only: reproduce the operator-precedence bug in the Solomon et
+! al. (2023) supplementary code, where the hexanoic-acid density was
+! evaluated as (a*T**2 + b*T + 1.1238*1000), scaling only the constant
+! term by 1000 (rho ~1124 vs ~995 g/L, i.e. H_hex ~14% high). Corrected
+! in the Stone et al. (2025) code. Set .TRUE. only for bit-level
+! comparison against published 2023 runs.
+LOGICAL, PARAMETER, PRIVATE :: l_solomon_orig_density = .FALSE.
+
 CHARACTER(LEN=*), PARAMETER, PRIVATE :: ModuleName='UKCA_HETERO_MOD'
 
 CONTAINS
 
-SUBROUTINE ukca_hetero(n_points, have_nat, stratflag)
+SUBROUTINE ukca_hetero(n_points, have_nat, stratflag, focr, roc)
 ! Description:
 !
 ! Changed from version by Peter Breasicke to allow for dynamical limitation of
@@ -94,7 +190,6 @@ USE ukca_config_constants_mod,  ONLY: avogadro, boltzmann
 USE ukca_constants,  ONLY: pi, m_clono2, m_hocl, m_brono2, m_hobr, m_n2o5,     &
                            m_h2o, m_hno3
 USE ukca_config_specification_mod, ONLY: ukca_config
-
 IMPLICIT NONE
 
 ! Subroutine interface
@@ -104,6 +199,18 @@ INTEGER, INTENT(IN) :: n_points
 LOGICAL, INTENT(IN) :: have_nat(n_points)
 ! logical to indicate whether point is in stratosphere
 LOGICAL, INTENT(IN) :: stratflag(n_points)
+
+! VS: organic-aerosol inputs for the wildfire HCl-solubility scheme.
+! Both are dimensionless and optional so existing call sites compile.
+!  focr : organic mass fraction of TOTAL aerosol, in [0,1]. Used by
+!         cases 2 and 3 (the LLPS mass-fraction blend). For case 2
+!         built from combined OM / total aerosol mass; for case 3 from
+!         WILDFIRE OM / total aerosol mass (background SOA in the
+!         denominator only).
+!  roc  : organic / sulfate mass ratio (>=0). Used by case 1 (the
+!         homogeneous weight-percent dilution). Built from combined OM.
+REAL, INTENT(IN), OPTIONAL :: focr(n_points)
+REAL, INTENT(IN), OPTIONAL :: roc(n_points)
 
 ! Local variables
 
@@ -189,11 +296,16 @@ REAL :: rkpsc(n_points, 13) ! reaction rate as bimolecular reaction
 
 REAL :: gam1(13) ! uptake coefficients on ice and NAT
 REAL :: gam2(13) ! uptake coefficients on ice
-REAL :: gam3(13) ! uptake coefficients on sulphate aerosol
+REAL :: gam3(13) ! uptake coefficients on sulfate aerosol
 
 ! spatially varying uptake coefficients
 REAL :: gam_calc(n_points, 7) ! for non constant uptake coefficients
 REAL :: gam3calc(n_points, 8) !
+
+! VS: organic mass fraction (cases 2/3) and organic/sulfate ratio
+! (case 1), pre-scaled and zeroed outside the stratosphere
+REAL :: zfocr(n_points) ! case 4, 5
+REAL :: zroc(n_points)  ! case 1, 2 ,3 
 
 REAL :: mm_arr(13) ! relevent molar mass for each reaction
 
@@ -514,41 +626,60 @@ IF (ukca_config%i_ukca_hetconfig == 0) THEN
   ! =====================================================================
 
 ELSE ! New config
-  ! Calculate non-constant gammas for reactions on psc
-  IF ( ukca_config%i_ukca_hetconfig == 2 .OR.                                  &
-      ukca_config%i_ukca_hetconfig == 4 ) THEN
+
+  ! Calculate non-constant gammas
+  IF ( ukca_config%i_ukca_hetconfig == 2 ) THEN
     CALL ukca_br_gamma(1,n_points,n_points,zt(1:n_points),zhbr(1:n_points),    &
                        gam_calc)
   END IF
 
   ! Calculate uptake coefficients on aerosol using formulation of Shi et al. 2001
-  ! for i_ukca_hetconfig == 1 (Shi coeff) or == 2 (Shi coeff + Br)
-  IF (ukca_config%i_ukca_hetconfig == 1 .OR.                                   & 
-      ukca_config%i_ukca_hetconfig == 2) THEN
+  ! Include modifications from Solomon et al. and Stone et al.
+  IF (ukca_config%i_ukca_hetconfig > 0) THEN
+
+    ! VS: build the organic inputs, applying the tuning multiplier and
+    ! restricting to the stratosphere (the UKCA analogue of the
+    ! p < 300 hPa gate in CESM mo_strato_rates). The Shi routine reads
+    ! i_ukca_hetorg_case directly (module parameter) and uses zfocr for
+    ! cases 2/3 or zroc for case 1.
+    zfocr(:) = 0.0
+    zroc(:)  = 0.0
+    IF (i_ukca_hetorg_case == 4 .OR. i_ukca_hetorg_case == 5) THEN
+      ! Stone LLPS cases: organic mass fraction of total aerosol.
+      ! Case 4 uses combined OM, case 5 wildfire OM only - the
+      ! distinction is made here, in the driver, not in the chemistry.
+      IF (PRESENT(focr)) THEN
+        WHERE (stratflag(1:n_points))
+          zfocr(1:n_points) = MIN(MAX(focr(1:n_points)*oc_frac_scale,0.0),1.0)
+        END WHERE
+      END IF
+    ELSE IF (i_ukca_hetorg_case >= 1 .AND. i_ukca_hetorg_case <= 3) THEN
+      ! Solomon threshold (1), Solomon dilution (2) and Stone
+      ! homogeneous (3): organic/sulfate mass ratio. For case 1 the
+      ! Solomon et al. (2023) Southern Hemisphere mask, if wanted,
+      ! should be applied by the driver when building roc (set roc=0 in
+      ! the NH), since UKCA_HETERO does not carry latitude on the
+      ! chemistry vector.
+      IF (PRESENT(roc)) THEN
+        WHERE (stratflag(1:n_points))
+          zroc(1:n_points) = MAX(roc(1:n_points)*oc_frac_scale, 0.0)
+        END WHERE
+      END IF
+    END IF
+
     CALL ukca_shi_liquid_aerosol(1,n_points,n_points,                          &
                                  zt(1:n_points),zh2o(1:n_points),              &
                                  zhcl(1:n_points),zclono2(1:n_points),         &
-                                 gam3calc(1:n_points,:))
-
-  ! Calculate uptake coefficient on aerosol using formula of Solomon et al. 2023
-  ! for i_ukca_hetconfig == 3 (Solomon coeff) or == 4 (Solomon coeff + Br)
-  ELSE IF (ukca_config%i_ukca_hetconfig == 3 .OR.                              &
-          ukca_config%i_ukca_hetconfig == 4) THEN
-    PRINT *, 'SOLOMON CALLING'
-    CALL ukca_solomon_liquid_aerosol(1,n_points,n_points,                      &
-                                 zt(1:n_points),zh2o(1:n_points),              &
-                                 zhcl(1:n_points),zclono2(1:n_points),         &
-                                 gam3calc(1:n_points,:))
+                                 gam3calc(1:n_points,:),                       &
+                                 zfocr(1:n_points), zroc(1:n_points))
   END IF
-
   IF ( gppsc ) THEN     !  If heterogeneous processes are on.
 
     ! Set conversion factor (atomic mass unit in kg)
     amu = 1.0 / (avogadro * 1000.0)
 
     ! calculate reaction rate on psc
-    IF (ukca_config%i_ukca_hetconfig == 2 .OR.                                 & 
-        ukca_config%i_ukca_hetconfig == 4) THEN
+    IF (ukca_config%i_ukca_hetconfig == 2) THEN
       n_hk = 13
     ELSE
       n_hk = 5        ! leave out Br reactions
@@ -559,7 +690,6 @@ ELSE ! New config
     kpsc(1:n_points, :) = 0.0
 
     DO jh = 1, n_hk ! loop over reactions
-
       !---------------------------------------------------------------------
       !          2.  GENERAL TERMS IN COLLISION FREQUENCY EXPRESSION
       !              ------- ----- -- --------- --------- ----------
@@ -606,9 +736,12 @@ ELSE ! New config
       !--------------------------------------------------------------------
       !          4.  AEROSOL REACTIONS
       !              ------- ---------
-      !        If required, include the reactions on the sulphate aerosols.
+      !        If required, include the reactions on the sulfate aerosols.
       IF (ukca_config%i_ukca_hetconfig > 0) THEN
-        IF ( jh <= 3 .OR. jh == 8) THEN  ! reaction uses calculated gamma
+        ! VS: jh==6 (HOBr+HCl) added for Solomon et al. (2023) scheme;
+        ! gam3calc(:,6) is non-zero only at organic-rich points, so base
+        ! behaviour (gamma=0 on sulfate) is preserved elsewhere.
+        IF ( jh <= 3 .OR. jh == 6 .OR. jh == 8) THEN  ! calculated gamma
           kpsc(1:n_points ,jh) = kpsc(1:n_points, jh) + c_cf(1:n_points)*      &
                                  100.0*za(1:n_points) * gam3calc(1:n_points, jh)
         ELSE                ! reaction uses constant gamma
@@ -648,8 +781,7 @@ ELSE ! New config
 
     !       6. CHECK FOR LOW HBr
     !          ----- --- --- ---
-    IF ( ukca_config%i_ukca_hetconfig == 2 .OR.                                &
-        ukca_config%i_ukca_hetconfig == 4 ) THEN
+    IF ( ukca_config%i_ukca_hetconfig == 2 ) THEN
       DO jl = 1, n_points
         zrate=MAX(1.0,                                                         &
                   cdt*(kpsc(jl,9)  * zhobr(jl)+                                &
@@ -671,18 +803,44 @@ ELSE ! New config
 
   ! divide rates by h2o/hcl/hbr as asad treats psc reactions as bimolecular
   WHERE ( zhcl > peps )
-    rkpsc(:,1) = kpsc(:,1) / zhcl
-    rkpsc(:,3) = kpsc(:,3) / zhcl
-    rkpsc(:,5) = kpsc(:,5) / zhcl
-    rkpsc(:,6) = kpsc(:,6) / zhcl
-    rkpsc(:,7) = kpsc(:,7) / zhcl
+    rk(:,n_clono2_hcl) = kpsc(:,1) / zhcl
+    rk(:,n_hocl_hcl) = kpsc(:,3) / zhcl
+    rk(:,n_n2o5_hcl) = kpsc(:,5) / zhcl
+    rk(:,n_hobr_hcl) = kpsc(:,6) / zhcl
+    rk(:,n_brono2_hcl) = kpsc(:,7) / zhcl
   ELSE WHERE
-    rkpsc(:,1) = 0.0
-    rkpsc(:,3) = 0.0
-    rkpsc(:,5) = 0.0
-    rkpsc(:,6) = 0.0
-    rkpsc(:,7) = 0.0
+    rk(:,n_clono2_hcl) = 0.0
+    rk(:,n_hocl_hcl) = 0.0
+    rk(:,n_n2o5_hcl) = 0.0
+    rk(:,n_hobr_hcl) = 0.0
+    rk(:,n_brono2_hcl) = 0.0
   END WHERE
+
+  ! VS: limiting-reactant normalisation, following mo_strato_rates
+  ! (Solomon et al. 2023 supplementary code). With the enhanced organic
+  ! HCl solubility, ClONO2+HCl, HOCl+HCl and HOBr+HCl can become fast
+  ! enough to exhaust HCl within a chemistry timestep. In the ASAD
+  ! pseudo-bimolecular treatment the rate rk*[X]*[HCl] with
+  ! rk = kpsc/[HCl] is independent of [HCl]. Where HCl is the scarcer
+  ! reactant we instead normalise by [X], so the rate becomes
+  ! kpsc*[HCl], i.e. limited by the available HCl (equivalent to the
+  ! hcldeni/cntdeni switch in the CESM code).
+  IF (i_ukca_hetorg_case > 0) THEN
+    DO jl = 1, n_points
+      ! organics active: cases 2/3/4/5 need a non-negligible amount;
+      ! case 1 is binary and only activates above its threshold
+      IF ( (i_ukca_hetorg_case == 1 .AND. zroc(jl) > oc_so4_crit) .OR.         &
+           (i_ukca_hetorg_case /= 1 .AND.                                      &
+            (zfocr(jl) > forg_min .OR. zroc(jl) > forg_min)) ) THEN
+        IF (n_clono2_hcl > 0 .AND. zclono2(jl) > MAX(zhcl(jl),peps))           &
+          rk(jl,n_clono2_hcl) = kpsc(jl,1) / zclono2(jl)
+        IF (n_hocl_hcl > 0 .AND. zhocl(jl) > MAX(zhcl(jl),peps))               &
+          rk(jl,n_hocl_hcl) = kpsc(jl,3) / zhocl(jl)
+        IF (n_hobr_hcl > 0 .AND. zhobr(jl) > MAX(zhcl(jl),peps))               &
+          rk(jl,n_hobr_hcl) = kpsc(jl,6) / zhobr(jl)
+      END IF
+    END DO
+  END IF
 
   WHERE ( zh2o > peps )
     rk(:,n_clono2_h2o) = kpsc(:,2) / zh2o
@@ -712,58 +870,18 @@ ELSE ! New config
   END IF
 
   WHERE ( zhbr > peps )
-    rkpsc(:,9) = kpsc(:,9) / zhbr
-    rkpsc(:,10) = kpsc(:,10) / zhbr
-    rkpsc(:,11) = kpsc(:,11) / zhbr
-    rkpsc(:,12) = kpsc(:,12) / zhbr
-    rkpsc(:,13) = kpsc(:,13) / zhbr
+    rk(:,n_hobr_hbr) = kpsc(:,9) / zhbr
+    rk(:,n_hocl_hbr) = kpsc(:,10) / zhbr
+    rk(:,n_clono2_hbr) = kpsc(:,11) / zhbr
+    rk(:,n_brono2_hbr) = kpsc(:,12) / zhbr
+    rk(:,n_n2o5_hbr) = kpsc(:,13) / zhbr
   ELSE WHERE
-    rkpsc(:,9) = 0.0
-    rkpsc(:,10) = 0.0
-    rkpsc(:,11) = 0.0
-    rkpsc(:,12) = 0.0
-    rkpsc(:,13) = 0.0
+    rk(:,n_hobr_hbr) = 0.0
+    rk(:,n_hocl_hbr) = 0.0
+    rk(:,n_clono2_hbr) = 0.0
+    rk(:,n_brono2_hbr) = 0.0
+    rk(:,n_n2o5_hbr) = 0.0
   END WHERE
-
-  ! 1) ClONO2 + HCl -> 2Cl + HONO2
-  IF (n_clono2_hcl > 0) rk(:,n_clono2_hcl) = rkpsc(:,1)
-
-  ! 2. ClONO2 + H2O -> HOCl + HONO2
-  IF (n_clono2_h2o > 0) rk(:,n_clono2_h2o) = rkpsc(:,2)
-
-  ! 3) HOCl + HCl   -> H2O + 2Cl
-  IF (n_hocl_hcl > 0) rk(:,n_hocl_hcl) = rkpsc(:,3)
-
-  ! 4) N2O5 + H2O   -> 2HONO2
-  IF (n_n2o5_h2o > 0) rk(:,n_n2o5_h2o) = rkpsc(:,4)
-
-  ! 5) N2O5 + HCl   -> ClNO2 + HONO2
-  IF (n_n2o5_hcl > 0) rk(:,n_n2o5_hcl) = rkpsc(:,5)
-
-  ! 6) HOBr + HCl   -> H2O + BrCl
-  IF (n_hobr_hcl > 0) rk(:,n_hobr_hcl) = rkpsc(:,6)
-
-  ! 7) HCl + BrONO2 -> BrCl + HONO2
-  IF (n_brono2_hcl > 0) rk(:,n_brono2_hcl) = rkpsc(:,7)
-
-  ! 8) BrONO2 + H2O -> HOBr + HONO2
-  IF (n_brono2_h2o > 0) rk(:,n_brono2_h2o) = rkpsc(:,8)
-
-  ! 9) HOBr+HBr     -> 2Br + H2O
-  IF (n_hobr_hbr > 0) rk(:,n_hobr_hbr) = rkpsc(:,9)
-
-  ! 10) HOCl+HBr    -> BrCl + H2O
-  IF (n_hocl_hbr > 0) rk(:,n_hocl_hbr) = rkpsc(:,10)
-
-  ! 11) ClONO2 + HBr-> BrCl + HONO2
-  IF (n_clono2_hbr > 0) rk(:,n_clono2_hbr) = rkpsc(:,11)
-
-  ! 12) BrONO2 + HBr-> 2Br + HONO2
-  IF (n_brono2_hbr > 0) rk(:,n_brono2_hbr) = rkpsc(:,12)
-
-  ! 13) N2O5 + HBr  -> BrNO2 + HONO2
-  IF (n_n2o5_hbr > 0) rk(:,n_n2o5_hbr) = rkpsc(:,13)
-
 END IF
 
 
@@ -845,18 +963,56 @@ END SUBROUTINE ukca_br_gamma
 
 !===========================================================================
 SUBROUTINE ukca_shi_liquid_aerosol(kstart,kend,kchmlev,t,th2o,                 &
-                                   thcl,tcnit,gam3arr)
+                                   thcl,tcnit,gam3arr,focr,roc)
 
 !*********************************************************************
 !subroutine description
 !
 !new method for calculating uptake coeffiecients of heterogeneous
-!reactions on liquid sulphate aerosol.  produces differnt gamma
+!reactions on liquid sulfate aerosol.  produces differnt gamma
 !values to the pre-existing ukca scheme for hocl+hcl and clono2+h2o,
 !and also includes calculations for the clono2+hcl reaction, which
 !was not previously included in the pre-existing ukca scheme
 !
 !written by jmk 09/07/15
+!
+!VS: extended for heterogeneous chemistry on organic aerosol after
+!Solomon et al. (2023) and Stone et al. (2025). The treatment is chosen
+!by the module parameter i_ukca_hetorg_case (see module header):
+!
+!  case 1 (Solomon Solubility / threshold): binary switch on the
+!         organic/sulfate mass ratio roc_b. Above oc_so4_crit the
+!         solubility is purely organic (H_hex, sulfate DROPPED); below
+!         it purely sulfate. The step-function limit of cases 4/5.
+!
+!  case 2 (Solomon Dilution): organics dilute the H2SO4 weight percent.
+!         h_hcl remains the UNMODIFIED Shi expression, but is evaluated
+!         at the diluted, ternary (H2SO4/H2O/organic) mole fraction, so
+!         the enhancement is purely an acidity effect. UNIQUELY among
+!         the cases, the diluted weight percent also propagates into
+!         the reaction kinetics (viscosity -> d_clono2, acid activity
+!         -> k_hydr, and the BrONO2/HOBr gammas), matching CESM
+!         mo_strato_rates-Dilution.F90.
+!
+!  case 3 (Stone homogeneous): organics dilute the weight percent and
+!         the resulting acidity aH enters the effective Henry law
+!         H* = H_hex*(1 + Ka/aH). The reaction kinetics keep the
+!         UNDILUTED weight percent (unlike case 2).
+!
+!  cases 4/5 (Stone LLPS): independent organic and sulfate phases; the
+!         particle-phase HCl molarity entering the Shi et al. (2001)
+!         bulk kinetics is the organic-mass-fraction-weighted blend
+!           m_hcl = phcl*[(1-focr)*H_sulf + focr*H_hex]
+!         Cases 4 and 5 are the same code; only the driver's focr
+!         differs (combined OM vs wildfire OM).
+!
+!H_sulf is the Shi et al. (2001) sulfate value, H_hex the HCl
+!solubility in hexanoic acid (IUPAC Solubility Data Series vol. 42), a
+!proxy for aged oxidised organic acids. All treatments reduce smoothly
+!and exactly to standard UKCA Shi chemistry as focr/roc_b -> 0. The
+!HOBr+HCl reaction on liquid aerosol (Waschewsky & Abbatt 1999 rates
+!adjusted to Hanson 2003 solubility) is returned in gam3arr(:,6) where
+!organics are present.
 !
 !*********************************************************************
 !technical notes and references
@@ -882,6 +1038,13 @@ REAL, INTENT(IN) :: thcl(kchmlev)          !                HCl
 REAL, INTENT(IN) :: tcnit(kchmlev)         !                ClONO2
 
 REAL, INTENT(OUT) :: gam3arr(kchmlev, 8)   ! uptake coefficients
+
+! VS: organic mass fraction of total aerosol, in [0,1], for the LLPS
+! blend (cases 2/3); and organic/sulphate mass ratio (>=0) for the
+! homogeneous weight-percent dilution (case 1). Pre-scaled by the
+! driver; both optional.
+REAL, INTENT(IN), OPTIONAL :: focr(kchmlev)
+REAL, INTENT(IN), OPTIONAL :: roc(kchmlev)
 
 REAL, PARAMETER :: r_vol=0.082             ! gas constant/vol (atm K-1 M-1)
 
@@ -918,6 +1081,30 @@ REAL :: l_clono2, l_hocl ! reacto-diffusive length       (cm)
 REAL :: f_clono2, f_hocl, f_hcl
 REAL :: gam_hocl, gam_clono2 ! reaction prob.
 REAL :: small_value
+
+! VS: organics scheme locals (Solomon 2023 / Stone 2025)
+REAL :: focr_b             ! organic mass fraction at this point
+REAL :: roc_b             ! organic/sulfate mass ratio at this point
+REAL :: h_hcl_sulf       ! HCl Henry coeff, sulfate phase (M atm-1)
+REAL :: h_hcl_hex        ! HCl Henry coeff, organic phase  (M atm-1)
+REAL :: wt_org_adj       ! organic-diluted H2SO4 weight percent (%)
+REAL :: ah_hcl           ! acid activity of the diluted mixture
+REAL :: wt_org           ! case 2: organic weight percent (%)
+REAL :: wt_water         ! case 2: water weight percent (%)
+LOGICAL :: l_dilute      ! case 2: dilution active at this point
+LOGICAL :: l_orgactive   ! organics present and enhancing here
+REAL :: x_hcl            ! HCl mole fraction in hexanoic acid
+REAL :: ratio_hcl        ! HCl mole ratio, x/(1-x)
+REAL :: den_hex          ! hexanoic acid density          (g L-1)
+REAL :: c_hobr           ! HOBr molecular velocity        (cm s-1)
+REAL :: h_hobr           ! HOBr Henry coeff               (M atm-1)
+REAL :: d_hobr           ! HOBr diffusion coeff           (cm2 s-1)
+REAL :: k_wasch          ! Waschewsky & Abbatt rate const (M-1 s-1)
+REAL :: k_dl             ! diffusion-limited rate const   (M-1 s-1)
+REAL :: k_hobr           ! pseudo-first-order rate const  (s-1)
+REAL :: l_hobr           ! reacto-diffusive length        (cm)
+REAL :: f_hobr, g_hobr_rxn, gam_hobr
+
 REAL, PARAMETER :: min_value=1.0e-15
 INTEGER :: jl
 
@@ -1012,6 +1199,48 @@ DO jl=kstart, kend
   wt_h2so4 = (9800.0*ml_h2so4)/((98.0*ml_h2so4)+1000.0)
 
   !*********************************************************************
+  ! VS: organic-aerosol inputs, read once per point. roc_b is the
+  ! organic/sulfate mass ratio (cases 1-3), focr_b the organic mass
+  ! fraction of total aerosol (cases 4-5). Both have been scaled and
+  ! stratosphere-masked by the driver.
+  !
+  ! focr and roc has been scaled in the driver.
+  ! This step bounds focr and roc_b to their correct ranges again.
+  ! focr_b is bound between [0, 1]
+  ! rocl_b is bound >=0 
+  !*********************************************************************
+  focr_b = 0.0
+  roc_b = 0.0
+  IF (PRESENT(focr)) focr_b = MIN(MAX(focr(jl), 0.0), 1.0)
+  IF (PRESENT(roc))  roc_b = MAX(roc(jl), 0.0)
+
+  !*********************************************************************
+  ! VS: CASE 2 ONLY (Solomon et al. 2023 Dilution). Organic mass dilutes
+  ! the sulfate solution, lowering the H2SO4 weight percent. This is
+  ! applied HERE, upstream of the solution properties, so that the
+  ! diluted weight percent propagates into the solution viscosity, the
+  ! acid activity ah (and hence k_hydr), the H2SO4 mole fraction (and
+  ! hence the UNMODIFIED Shi h_hcl), and the BrONO2+H2O / HOBr+HCl
+  ! gammas - exactly as in CESM mo_strato_rates-Dilution.F90. This is
+  ! the only case that alters the reaction kinetics rather than h_hcl
+  ! alone. The molality ml_h2so4 (and hence the solution density) is
+  ! left undiluted, following CESM.
+  ! NB CESM evaluates wt_org = wt*aoc/aso4 outside its aso4>0 guard, a
+  ! latent divide-by-zero; here roc_b is guaranteed finite and >= 0 by
+  ! the driver, and the whole block is skipped when roc_b = 0.
+  !*********************************************************************
+  l_dilute = (i_ukca_hetorg_case == 2) .AND. (roc_b > 0.0)
+  wt_org   = 0.0
+  wt_water = 100.0 - wt_h2so4
+
+  IF (l_dilute) THEN
+    wt_h2so4 = 1.0/((1.0/wt_h2so4) + (roc_b/100.0))
+    wt_h2so4 = MAX(wt_h2so4, wt_dilute_min)
+    wt_org   = wt_h2so4*roc_b
+    wt_water = 100.0 - wt_h2so4 - wt_org
+  END IF
+
+  !*********************************************************************
   !parameters for the h2so4 solution
   !*********************************************************************
 
@@ -1030,7 +1259,14 @@ DO jl=kstart, kend
   mr_h2so4 = (rho_h2so4*wt_h2so4)/9.8
 
   !calculate h2so4 mole fraction
+  IF (l_dilute) THEN
+    ! VS: case 2 - ternary solution, H2SO4 (98) / H2O (18) / organic,
+    ! the organic taken as hexanoic acid (116.16 g mol-1)
+    mf_h2so4 = wt_h2so4/(wt_h2so4 + (wt_water*(98.0/18.0))                     &
+                                  + (wt_org*(98.0/mm_hexanoic)))
+  ELSE
   mf_h2so4 = wt_h2so4/(wt_h2so4+((100.0-wt_h2so4)*(98.0/18.0)))
+  END IF
 
   !set up terms for h2so4 viscosity calculation
   IF (wt_h2so4 <= 80.0) THEN ! parameterisation valid for wt% < 80
@@ -1074,11 +1310,122 @@ DO jl=kstart, kend
 
   g_h2o=(4*h_clono2*r_vol*tt/c_clono2)*(d_clono2*k_hydr)**0.5
 
-  ! Effective Henry's coefficient from eq 38, Shi 2001
-  h_hcl = (0.094 - 0.61*mf_h2so4 + 1.2*mf_h2so4**2)*                           &
+  !-- organic aerosols---------------------------------------------------------
+  ! VS: HCl solubility on organic aerosol (Solomon 2023 / Stone 2025).
+  ! The sulfate-phase Shi et al. (2001) Henry constant is always
+  ! computed; the organic contribution depends on i_ukca_hetorg_case.
+  ! All downstream uses of m_hcl (k_hcl for ClONO2+HCl, g_s, k_hocl for
+  ! HOCl+HCl, k_hobr for HOBr+HCl) inherit the result. Every case
+  ! reduces exactly to standard UKCA Shi chemistry as the organic input
+  ! -> 0, and below ~200 K the hexanoic solubility falls beneath the
+  ! sulfate value, so cold polar (PSC-regime) chemistry is essentially
+  ! unchanged regardless of case.
+  !
+  ! NOTE for case 2 (Dilution): mf_h2so4 already carries the diluted,
+  ! ternary mole fraction from the block above, so the Shi expression
+  ! below IS the Dilution solubility - no organic term is added.
+  ! focr_b and roc_b were set at the top of this loop iteration.
+
+  ! sulfate/water phase (Shi et al. 2001) - baseline for all cases
+  h_hcl_sulf = (0.094 - 0.61*mf_h2so4 + 1.2*mf_h2so4**2)*                      &
        EXP(-8.68 + (8515.0 - 10718.0*mf_h2so4**0.7)/tt)
 
-  ! bulk liquid concentration of HCl (mol L-1)
+  ! hexanoic-acid HCl mole-ratio solubility, temperature only (used by
+  ! cases 1, 3, 4, 5; NOT by case 2). Fit constants as in the CESM code
+  ! (the Solomon et al. 2023 paper quotes 3300.46 rather than 3345.8).
+  ! Density from Ghatee et al. (2013); the corrected-precedence form of
+  ! Stone et al. (2025) is the default, with the original 2023
+  ! supplementary-code form available for bit-level 2023 comparison.
+  
+  x_hcl = MIN(EXP(28.986 - 3345.8/tt - 18.135*LOG(tt/100.0)), 0.99)
+  ratio_hcl = x_hcl/(1.0 - x_hcl)
+  IF (l_solomon_orig_density) THEN
+    ! Solomon et al. (2023) supplementary code, as published (bug!)
+    den_hex = -5.0083e-7*tt*tt - 5.2309e-4*tt + 1.1238*1000.0
+  ELSE
+    ! Stone et al. (2025), corrected
+    ! from Ghatee et al. (2025) equation 6
+    den_hex = (-5.0083e-7*tt*tt - 5.2309e-4*tt + 1.1238)*1000.0
+  END IF
+
+  l_orgactive = .FALSE.
+
+  SELECT CASE (i_ukca_hetorg_case)
+
+  CASE (1)
+    ! ---- Solomon et al. (2023) Solubility / threshold case ----
+    ! Binary: above the organic/sulfate mass-ratio threshold the
+    ! particle is treated as wholly organic for HCl uptake (the sulfate
+    ! contribution is dropped entirely, unlike the LLPS blend of cases
+    ! 4/5); below it, standard Shi et al. (2001) sulfate solubility.
+    ! h_hcl is discontinuous at roc_b = oc_so4_crit; cases 4/5 are the
+    ! smooth generalisation and are preferred for production runs.
+    IF (roc_b > oc_so4_crit) THEN
+      ! Equation 1 in Methods - Solubility p.265  
+      h_hcl_hex = ratio_hcl*den_hex/mm_hexanoic*kdiss_hcl
+      h_hcl = h_hcl_hex
+      l_orgactive = .TRUE.
+    ELSE
+      h_hcl = h_hcl_sulf
+    END IF
+
+  CASE (2)
+    ! ---- Solomon et al. (2023) Dilution case (REJECTED) ----
+    ! No organic solubility term: the hexanoic-acid Henry constant is
+    ! not used at all. The enhancement is entirely indirect - organics
+    ! dilute the sulfate (block above), lowering mf_h2so4 and hence the
+    ! acidity, so the UNMODIFIED Shi expression returns a larger h_hcl.
+    ! Rejected by Solomon et al. as it overestimates ClO/HOCl and gives
+    ! the wrong sign for the ClONO2 response.
+    h_hcl = h_hcl_sulf
+    l_orgactive = roc_b > forg_min
+
+  CASE (3)
+    ! ---- Stone et al. (2025) case 1: homogeneous mixing (REJECTED) ----
+    ! Organic mass dilutes the H2SO4 weight percent; the reduced acidity
+    ! of the single mixed phase raises HCl solubility via
+    ! H* = H_hex*(1 + Ka/aH). Unlike case 2, only the SOLUBILITY sees
+    ! the organic dilution - the reaction kinetics (viscosity, k_hydr)
+    ! keep the undiluted wt_h2so4, matching the CESM implementation.
+    ! Rejected by Stone et al.: coagulating sulfate re-acidifies the
+    ! mixed particle over time, inverting the multi-year trend.
+    IF (roc_b > 0.0) THEN
+      wt_org_adj = 1.0/((1.0/wt_h2so4) + (roc_b/100.0))
+      wt_org_adj = MAX(wt_org_adj, 0.01)
+      ah_hcl = EXP(60.51 - (0.095*wt_org_adj) + (0.0077*(wt_org_adj**2.0))     &
+               - (1.61e-5*(wt_org_adj**3.0))                                   &
+               - ((1.76 + (2.52e-4*(wt_org_adj**2.0)))*(tt**0.5))              &
+               + ((-805.89 + (253.05*(wt_org_adj**0.076)))/(tt**0.5)))
+      ah_hcl = MAX(ah_hcl, 1.0)
+      ! Equation 1 in Stone et al. (2025)
+      h_hcl = (ratio_hcl*den_hex/mm_hexanoic)*(1.0 + kdiss_hcl/ah_hcl)
+      l_orgactive = roc_b > forg_min
+    ELSE
+      h_hcl = h_hcl_sulf
+    END IF
+
+  CASE (4, 5)
+    ! ---- Stone et al. (2025) cases 2 and 3: LLPS linearisation ----
+    ! Independent organic and sulfate phases; the hexanoic dissociation
+    ! enhancement is the fixed Ka = 10^5.9 (acidity-independent, unlike
+    ! case 3). Identical code for both; the driver's focr distinguishes
+    ! them (case 4 = combined OM, case 5 = wildfire OM only).
+    IF (focr_b > 0.0) THEN
+      h_hcl_hex = ratio_hcl*den_hex/mm_hexanoic*kdiss_hcl
+    ELSE
+      h_hcl_hex = 0.0
+    END IF
+    ! weighed average by mass
+    h_hcl = (1.0 - focr_b)*h_hcl_sulf + focr_b*h_hcl_hex
+    l_orgactive = focr_b > forg_min
+
+  CASE DEFAULT
+    ! case 0: standard UKCA sulfate chemistry, bit-identical to trunk
+    h_hcl = h_hcl_sulf
+
+  END SELECT
+  !-- end organic aerosols-----------------------------------------------------
+
   m_hcl = h_hcl*phcl
 
   ! pseudo-first order rate constant eq 43 on Shi 2001
@@ -1171,346 +1518,46 @@ DO jl=kstart, kend
   ! BrONO2 + H2O
   gam3arr(jl,8) = 1.0 / (1.0/0.8 + 1.0 / (EXP(29.2 - 0.4 * wt_h2so4) + 0.11))
 
+  !*********************************************************************
+  ! VS: HOBr + HCl on liquid aerosol (Solomon 2023 / Stone 2025, R4).
+  ! Ported from CESM mo_strato_rates (Waschewsky & Abbatt 1999 rate
+  ! constant divided by 8 to agree with Hanson 2003; HOBr solubility
+  ! from Hanson 2003). Stone et al. note these R4 rates are likely an
+  ! upper limit and that R4 is secondary to ClONO2+HCl. Evaluated only
+  ! where organics are active so that the standard UKCA behaviour
+  ! (gamma=0 for HOBr+HCl on sulfate) is preserved in organic-free
+  ! air; gam3arr was initialised to zero above.
+  !*********************************************************************
+  IF (l_orgactive .AND. m_hcl > small_value) THEN
+    c_hobr  = 1477.0*(tt**0.5)
+    d_hobr  = 9.0e-9
+    k_wasch = 0.125*EXP(0.542*wt_h2so4 - 6440.0/tt + 10.3)
+    h_hobr  = EXP(-9.86 + 5427.0/tt)
+    k_dl    = 7.5e14*d_hobr*2.0        ! diffusion limit
+    k_hobr  = MIN(k_wasch, k_dl)*m_hcl
+
+    IF (k_hobr > small_value) THEN
+      g_hobr_rxn = (4.0*h_hobr*r_vol*tt/c_hobr)*SQRT(d_hobr*k_hobr)
+      l_hobr     = SQRT(d_hobr/k_hobr)
+      IF (radsa/l_hobr < 1.0e2) THEN
+        f_hobr = (1.0/TANH(radsa/l_hobr)) - l_hobr/radsa
+      ELSE
+        f_hobr = 1.0 - l_hobr/radsa
+      END IF
+      IF (f_hobr > small_value .AND.                                           &
+          f_hobr*g_hobr_rxn > small_value) THEN
+        gam_hobr = 1.0/(1.0 + 1.0/(f_hobr*g_hobr_rxn))
+        gam3arr(jl,6) = MAX(gam_hobr, min_value)
+      END IF
+    END IF
+  END IF
+
 END DO !(jl=kstart, kend)
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 RETURN
 END SUBROUTINE ukca_shi_liquid_aerosol
 
-!-------------------------------------------------------------------------
-! VS added this section
-!===========================================================================
-SUBROUTINE ukca_solomon_liquid_aerosol(kstart,kend,kchmlev,t,th2o,             &
-                                   thcl,tcnit,gam3arr)
-
-!*********************************************************************
-!subroutine description
-!
-!new method for calculating uptake coeffiecients of heterogeneous
-!reactions on liquid sulphate aerosol with dilution from organic acids.  
-!produces differnt gamma values to the pre-existing ukca scheme and to 
-! jmk's Shi scheme for (1) ClONO2+HCl, (2) ClONO2 + H2O, (3) HOCl + HCl 
-! and, optionally (6) HObr + HCl,
-!
-!written by Vichawan S. 03/11/25
-!
-!*********************************************************************
-!technical notes and references
-!
-!calculations of uptake coeffiecients based on the parameterisation
-!of Shi et al. (2001) "Kinetic model for reaction of ClONO2 with H2O
-!and HCl and HOCl with HCl in sulfuric acid solutions" J. Geophys. Res.
-!with modifications by Solomon et al. (2023) "Chlorine activation and 
-!enhanced ozone depletion induced by wildfire aerosol" Nature
-
-USE ukca_config_constants_mod, ONLY: boltzmann
-USE asad_mod,                  ONLY: peps
-USE ukca_mode_setup,           ONLY: nmodes, nmodes_sol,                       &
-                                     cp_su, cp_bc, cp_oc, cp_so
-                                     
-IMPLICIT NONE
-
-INTEGER, INTENT(IN) :: kchmlev             ! no. of chem. levels
-INTEGER, INTENT(IN) :: kstart              ! chem level to begin loop
-INTEGER, INTENT(IN) :: kend                ! chem level to end loop
-
-REAL, INTENT(IN) :: t(kchmlev)             ! temperature (K)
-REAL, INTENT(IN) :: th2o(kchmlev)          ! number density H2O (cm-3)
-REAL, INTENT(IN) :: thcl(kchmlev)          !                HCl
-REAL, INTENT(IN) :: tcnit(kchmlev)         !                ClONO2
-
-REAL, INTENT(OUT) :: gam3arr(kchmlev, 8)   ! uptake coefficients
-
-REAL, PARAMETER :: r_vol=0.082             ! gas constant/vol (atm K-1 M-1)
-
-REAL :: tt               ! local temperature             (K)
-REAL :: p0h2o            ! saturation water vapour       (mbar)
-REAL :: ph2o             ! partial pressure water vapour (mbar)
-REAL :: phcl             ! partial pressure hcl          (atm)
-REAL :: pclono2          ! partial pressure clono2       (atm)
-REAL :: aw               ! water activity                (unitless)
-REAL :: ml_h2so4         ! h2so4 molality                (mol kg-1)
-REAL :: wt_h2so4         ! h2so4 weight percentage       (%)
-REAL :: mr_h2so4         ! h2so4 molarity                (mol l-1)
-REAL :: rho_h2so4        ! h2so4 solution density        (g cm-3)
-REAL :: vis_h2so4        ! viscosity of h2so4 solution   (cp)
-REAL :: a1, b1, c1, d1
-REAL :: a2, b2, c2, d2
-REAL :: z1, z2, z3
-REAL :: mf_h2so4         ! h2so4 mole fraction
-REAL :: a
-REAL :: t0
-REAL :: ah               ! acid activity                 (mol l-1)
-REAL :: y1, y2
-REAL :: k_h2o, k_hydr, k_hcl, k_hocl ! rate constant     (s-1)
-REAL :: k_h              ! rate constant                 (M-1 s-1)
-REAL :: c_clono2, c_hocl ! molecular velocity    (cm s-1)
-REAL :: h_clono2, h_hocl, h_hcl ! Henry coeff     (M atm-1)
-REAL :: s_clono2, s_hocl ! Setchenow coeff               (M-1)
-REAL :: d_clono2, d_hocl ! diffusion coeff (cm2 s-1)
-REAL :: g_h2o, g_hcl, g_s, g_s2, g_hcl2, g_clono2, g_b  ! react. prob.
-REAL :: g_s2_b           ! intermediate value for checking
-REAL :: gam_hocl_f_hcl   ! intermediate value for checking
-REAL :: m_hcl            ! hcl conc.                     (M)
-REAL :: l_clono2, l_hocl ! reacto-diffusive length       (cm)
-REAL :: f_clono2, f_hocl, f_hcl
-REAL :: gam_hocl, gam_clono2 ! reaction prob.
-REAL :: small_value
-REAL, PARAMETER :: min_value=1.0e-15
-INTEGER :: jl
-
-INTEGER(KIND=jpim), PARAMETER :: zhook_in  = 0
-INTEGER(KIND=jpim), PARAMETER :: zhook_out = 1
-REAL(KIND=jprb)               :: zhook_handle
-
-CHARACTER(LEN=*), PARAMETER :: RoutineName='UKCA_SOLOMON_LIQUID_AEROSOL'
-
-IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
-PRINT *, 'SOLOMON WAS CALLED'
-
-! initialise to zero
-gam3arr(:,:)= 0.0
-
-! calculate a small value for comparison in IF blocks. Use same as for rafeps:
-small_value=SQRT(peps)
-
-DO jl=kstart, kend
-  !set temperature lower limit to 185k - below this the
-  !parameterisation breaks down
-  tt = MAX(t(jl),185.0)
-
-  !*********************************************************************
-  !calculations of h2so4 wt% from temp and ph2o, after tabazadeh et al. (1997)
-  !*********************************************************************
-  !calculate sturation water vapour pressure (mbar)
-  p0h2o = EXP(18.452406985 - (3505.1578807/tt) -                               &
-          (330918.55082/tt**2) + (12725068.262/tt**3))
-
-  !calculate partial pressure of h2o (mbar)
-  ! may have small/negative values of th2o - this is trapped below
-  ! -ve values will NOT be passed back to the UM
-  ph2o=1.0e4*th2o(jl)*boltzmann*tt
-
-  !partial pressure hcl and clono2 (atm)
-  ! trap for v. low number densities (molec cm-3). THIS VALUE MAY BE UNPHYSICAL
-  phcl=1.0e4*thcl(jl)*boltzmann*tt/1013.0
-
-  pclono2=1.0e4*tcnit(jl)*boltzmann*tt/1013.0
-
-  !calculate water activity - trap for small/negative values
-  IF (ABS(p0h2o) < small_value) THEN
-    aw = 0.0
-  ELSE
-    aw = ph2o/p0h2o
-    IF (aw < min_value) aw = min_value
-  END IF
-
-  ! determine constants for subsequent reactions, from tabazadeh et al. (1997)
-  IF (aw < 0.85) THEN
-    IF (aw <= 0.05) THEN
-      a1 = 12.37208932
-      b1 = -0.16125516114
-      c1 = -30.490657554
-      d1 = -2.1133114241
-      a2 = 13.455394705
-      b2 = -0.1921312255
-      c2 = -34.285174607
-      d2 = -1.7620073078
-    ELSE
-      a1 = 11.820654354
-      b1 = -0.20786404244
-      c1 = -4.807306373
-      d1 = -5.1727540348
-      a2 = 12.891938068
-      b2 = -0.23233847708
-      c2 = -6.4261237757
-      d2 = -4.9005471319
-    END IF
-  ELSE
-    a1 = -180.06541028
-    b1 = -0.38601102592
-    c1 = -93.317846778
-    d1 = 273.88132245
-    a2 = -176.95814097
-    b2 = -0.36257048154
-    c2 = -90.469744201
-    d2 = 267.45509988
-  END IF
-
-  y1 = a1*(aw**b1) + (c1*aw) + d1
-
-  y2 = a2*(aw**b2) + (c2*aw) + d2
-
-  !calculate molality h2so4 (mol kg-1)
-  ml_h2so4 = y1 + (((tt - 190.0)*(y2 - y1))/70.0)
-
-  ! MOLALITY CANNOT BE -VE
-  ml_h2so4 = MAX(ml_h2so4,small_value)
-
-  !calculate weight % h2so4
-  wt_h2so4 = (9800.0*ml_h2so4)/((98.0*ml_h2so4)+1000.0)
-
-  !*********************************************************************
-  !parameters for the h2so4 solution
-  !*********************************************************************
-
-  !set up terms for h2so4 solution density calculation
-  z1 = 0.12364 - (5.6e-7 * (tt**2.0))
-
-  z2 = -0.02954 + (1.814e-7 * (tt**2.0))
-
-  z3 = 2.343e-3 - (1.487e-6 * tt) - (1.324e-8 * (tt**2.0))
-
-  !calculate h2so4 solution density (g cm-3)
-  rho_h2so4 = 1.0 + (z1*ml_h2so4) + (z2*(ml_h2so4**1.5)) +                     &
-              (z3*(ml_h2so4**2.0))
-
-  !calculate molarity h2so4 (mol l-1)
-  mr_h2so4 = (rho_h2so4*wt_h2so4)/9.8
-
-  !calculate h2so4 mole fraction
-  mf_h2so4 = wt_h2so4/(wt_h2so4+((100.0-wt_h2so4)*(98.0/18.0)))
-
-  !set up terms for h2so4 viscosity calculation
-  IF (wt_h2so4 <= 80.0) THEN ! parameterisation valid for wt% < 80
-    a = 169.5 + (5.18*wt_h2so4) - (0.0825*(wt_h2so4**2.0)) +                   &
-        (3.27e-3*(wt_h2so4**3.0))
-
-    t0 = 144.11 + (0.166*wt_h2so4) - (0.015*(wt_h2so4**2.0)) +                 &
-         (2.18e-4*(wt_h2so4**3.0))
-
-    !calculate viscosity of h2so4 solution
-    vis_h2so4 = a*(tt**(-1.43))*EXP(448.0/(tt-t0))
-
-  ELSE ! assume wt% = 80
-    vis_h2so4 = 1730.14 * (tt**(-1.43))*EXP(448.0/(tt-173.006))
-
-  END IF
-
-  !calculate acid activity
-  ah = EXP(60.51 - (0.095*wt_h2so4) + (0.0077*(wt_h2so4**2.0))                 &
-       - (1.61e-5*(wt_h2so4**3.0))                                             &
-       - ((1.76+(2.52e-4*(wt_h2so4**2.0)))*(tt**0.5))                          &
-       + ((-805.89 + (253.05*(wt_h2so4**0.076)))/(tt**0.5)))
-
-  !*********************************************************************
-  !calculate uptake parameters for clono2+h2o and clono2+hcl
-  !*********************************************************************
-
-  k_h2o = 1.95e10*EXP(-2800.0/tt)
-
-  k_h = 1.22e12*EXP(-6200.0/tt)
-
-  k_hydr = (k_h2o*aw)+(k_h*ah*aw)
-
-  c_clono2 = 1474.0*(tt**0.5)
-
-  s_clono2 = 0.306+(24.0/tt)
-
-  h_clono2 = 1.6e-6*EXP((4710.0/tt)-(s_clono2*mr_h2so4))
-
-  d_clono2 = 5e-8*tt/vis_h2so4
-
-  g_h2o=(4*h_clono2*r_vol*tt/c_clono2)*(d_clono2*k_hydr)**0.5
-
-  h_hcl = (0.094 - 0.61*mf_h2so4 + 1.2*mf_h2so4**2)*                           &
-       EXP(-8.68 + (8515.0 - 10718.0*mf_h2so4**0.7)/tt)
-
-  m_hcl = h_hcl*phcl
-
-  k_hcl = 7.9e11*ah*d_clono2*m_hcl
-
-  l_clono2 = (d_clono2/(k_hydr + k_hcl))**0.5
-
-  f_clono2 = (1/(TANH(radsa/l_clono2))) - l_clono2/radsa
-
-  g_clono2 = f_clono2*g_h2o*((1+(k_hcl/k_hydr))**0.5)
-
-  g_hcl = (g_clono2 * k_hcl)/(k_hcl + k_hydr)
-
-  g_s = 66.12*EXP(-1374.0/tt)*h_clono2*m_hcl
-
-  f_hcl = 1/(1 + (0.612*(g_s + g_hcl)*(pclono2/phcl)))
-
-  g_s2 = f_hcl*g_s
-
-  g_hcl2 = f_hcl*g_hcl
-
-  g_b = g_hcl2 + ((g_clono2*k_hydr)/(k_hcl + k_hydr))
-
-  ! traps for small value division
-  IF (ABS(g_s2 + g_b) < small_value) THEN
-    ! We've got a divide by zero problem
-    gam3arr(jl,1) = 0.0
-    gam3arr(jl,2) = 0.0
-  ELSE
-    ! calculate this first to test against
-    g_s2_b = (1.0 + (1.0/(g_s2 + g_b)))
-    IF (ABS(g_s2_b) < small_value) THEN
-
-      gam3arr(jl,1) = 0.0
-      gam3arr(jl,2) = 0.0
-    ELSE
-      gam_clono2 = 1.0/g_s2_b
-
-      gam3arr(jl,1) = gam_clono2*((g_s2 + g_hcl2)/(g_s2 + g_b))
-
-      gam3arr(jl,2) = gam_clono2 - gam3arr(jl,1)
-
-      ! make sure at a minimum value
-      IF (gam3arr(jl,1) < min_value) gam3arr(jl,1)=min_value
-
-      IF (gam3arr(jl,2) < min_value) gam3arr(jl,2)=min_value
-    END IF
-  END IF
-
-  !*********************************************************************
-  !calculate uptake parameters for hocl+hcl
-  !*********************************************************************
-
-  s_hocl = 0.0776 + 59.18/tt
-
-  h_hocl = 1.91e-6*EXP((5862.4/tt) - (s_hocl*mr_h2so4))
-
-  d_hocl = 6.4e-8 *tt/vis_h2so4
-
-  k_hocl = 1.25e9*ah*d_hocl*m_hcl
-
-  c_hocl = 2009.0*(tt**0.5)
-
-  l_hocl = (d_hocl/k_hocl)**0.5
-
-  f_hocl = (1/(TANH(radsa/l_hocl))) - l_hocl/radsa
-
-  ! check for small value division
-  IF ((ABS(f_hocl) < small_value) .OR. (ABS(f_hcl) < small_value)) THEN
-    gam3arr(jl,3) = 0.0
-  ELSE
-    gam_hocl = (f_hocl*4.0*h_hocl*r_vol*tt/c_hocl) * (d_hocl*k_hocl)**0.5
-
-    ! trap for small value division
-    IF (gam_hocl*f_hcl < small_value) THEN
-      gam3arr(jl,3) = 0.0
-    ELSE
-      gam_hocl_f_hcl = (1.0 + 1.0/(gam_hocl*f_hcl))
-      gam3arr(jl,3) = 1.0/gam_hocl_f_hcl
-
-      ! make sure at a minimum value
-      IF (gam3arr(jl,3) < min_value) gam3arr(jl,3)=min_value
-    END IF
-  END IF
-
-  ! Additional reactions on sulfate aerosol
-  ! BrONO2 + H2O
-  gam3arr(jl,8) = 1.0 / (1.0/0.8 + 1.0 / (EXP(29.2 - 0.4 * wt_h2so4) + 0.11))
-
-END DO !(jl=kstart, kend)
-
-IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
-RETURN
-END SUBROUTINE ukca_solomon_liquid_aerosol
-
-!--------------------------------------------------------------------------------
 
 ! ######################################################################
 SUBROUTINE ukca_solidphase(n_points)
@@ -1626,7 +1673,7 @@ SUBROUTINE ukca_calckpsc(sasa,t,th2o,thcl,tcnit,tn2o5,thocl,                   &
 !
 !     INTERFACE
 !     ---------
-!         ARGUMENTS IN :  SASA   - (SULPHATE) AEROSOL SURFACE AREA
+!         ARGUMENTS IN :  SASA   - (SULFATE) AEROSOL SURFACE AREA
 !                                  PER UNIT VOLUME (cm2 cm-3)
 !                         T      - TEMPERATURE
 !                         TH2O   - H2O NUMBER DENSITY (cm-3)
@@ -1662,7 +1709,7 @@ SUBROUTINE ukca_calckpsc(sasa,t,th2o,thcl,tcnit,tn2o5,thocl,                   &
 !
 !              AKPSC2: ClONO2 + H2O -> HOCl + HNO3
 !              The rate of this reaction is a strong function of the
-!              sulphate acid wt.percent, and hence of temperature.
+!              sulfate acid wt.percent, and hence of temperature.
 !
 !              AKPSC5: HOCL + HCL -> CL2 + H2O
 !              The rate of this reaction is proportional to the Henry's
@@ -1841,7 +1888,7 @@ IF ( lppsc .OR. lpsa ) THEN
   !          4.  AEROSOL REACTIONS
   !              ------- ---------
   !
-  !        If required, include the reactions on the sulphate aerosols.
+  !        If required, include the reactions on the sulfate aerosols.
   IF ( lpsa ) THEN
     !
     CALL ukca_eqcomp(t,th2o,kstart,kend,kchmlev,lphocl,                        &
