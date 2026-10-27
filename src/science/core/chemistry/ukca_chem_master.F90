@@ -105,9 +105,9 @@ INTEGER, PARAMETER :: rm = 1024   ! Used to remove reactions that existed at
 INTEGER, PARAMETER :: di = 2048   ! DEST + iodine
 
 ! Define size of master chemistry
-INTEGER, PARAMETER :: n_chch_master = 400 ! number of known species !DEST +25 DEST_I +18
+INTEGER, PARAMETER :: n_chch_master = 402 ! number of known species !DEST +27 DEST_I +18
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
-INTEGER, PARAMETER :: n_dry_master  = 162 ! number of dry deposition reactions
+INTEGER, PARAMETER :: n_dry_master  = 164 ! number of dry deposition reactions !DEST +2
 INTEGER, PARAMETER :: n_wet_master  = 160 ! number of wet deposition reactions
 INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
@@ -176,7 +176,7 @@ IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_in,zhook_handle)
 ! dry deposition flag, wet deposition flag, scheme,
 ! selection qualifier, deselection / disqualifier, (UM) version when entered
 ! into the master mechanism.
-chch_defs_master(1:149)=[                                                      &
+chch_defs_master(1:151)=[                                                      &
 !   1
 chch_t1( 1,'O(3P)     ',1,'TR        ','Ox        ',0,0,s+st+cs+dest,0,0,107), &
 !   1
@@ -294,7 +294,9 @@ chch_t1(26,'BrO       ',1,'TR        ','Brx       ',0,0,s+st+cs+dest,0,0,107), &
 !  27 VS_note - DEST add new species that deposits
 chch_t1(27,'BrCl      ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  28        WD: 11, VS_note - DEST add new species that dry deposits
-chch_t1(28,'BrONO2    ',1,'TR        ','          ',0,1,s+st+cs+dest,0,0,107), &
+chch_t1(28,'BrONO2    ',1,'TR        ','          ',0,1,s+st+cs,0,0,107),      &
+! DEST - BrNO2 dry deposits
+chch_t1(28,'BrONO2    ',1,'TR        ','          ',1,1,dest,0,0,107),         &
 !  29
 chch_t1(29,'N2O       ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  30 DD: 13,WD: 12,   (50)
@@ -306,7 +308,9 @@ chch_t1(32,'HBr       ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  33 DD: 16,WD: 15,
 chch_t1(33,'HOBr      ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  34        WD: 16, VS_note - DEST adds new species that dry deposits
-chch_t1(34,'ClONO2    ',1,'TR        ','          ',0,1,s+st+cs+dest,0,0,107), &
+chch_t1(34,'ClONO2    ',1,'TR        ','          ',0,1,s+st+cs,0,0,107),      &
+! DEST - ClONO2 dry deposits
+chch_t1(34,'ClONO2    ',1,'TR        ','          ',1,1,dest,0,0,107),         &
 !  35
 chch_t1(35,'CFCl3     ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  36
@@ -522,7 +526,7 @@ chch_t1(92,'HO2S      ',1,'SS        ','          ',0,1,t,0,0,107)             &
 
 
 ! Species definitions continued
-chch_defs_master(150:244)=[                                                    &
+chch_defs_master(152:246)=[                                                    &
 !  93
 chch_t1(93,'s-BuOO    ',1,'SS        ','          ',0,0,r,0,0,107),            &
 !  94
@@ -717,7 +721,7 @@ chch_t1(181,'RU10OOH   ',1,'TR        ','          ',1,1,cs,0,0,107)           &
 ]
 
 
-chch_defs_master(245:n_chch_master)=[                                          &
+chch_defs_master(247:n_chch_master)=[                                          &
 ! 182 DD: 94,WD: 69,
 chch_t1(182,'NRU14OOH  ',1,'TR        ','          ',1,1,cs,0,0,107),          &
 ! 183 DD: 95,WD: 70,
@@ -976,7 +980,9 @@ chch_t1(297,'C2H4Cl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 298
 chch_t1(298,'ClNO2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for ClNO2
 ! 299
-chch_t1(299,'COCl2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! Add W+D deposition for COCl2
+! In DEST vn11.0 dry deposition was active for COCl2,
+! but deposition velocities were set to zero. Should this be done here as well?
+chch_t1(299,'COCl2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! Add W+(D?) deposition for COCl2
 ! more long-lived ODSs, for DEST
 ! 300
 chch_t1(300,'CF2ClCF2Cl',1,'TR        ','          ',0,0,dest,0,0,107),        &
@@ -999,7 +1005,7 @@ chch_t1(307,'CHCl2O2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 308
 chch_t1(308,'Cl2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for Cl2
 ! 309
-chch_t1(309,'Br2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD D deposition for Br2
+chch_t1(309,'Br2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for Br2
 ! iodine chemistry
 ! 310
 chch_t1(310,'HOI       ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for HOI
@@ -9028,9 +9034,26 @@ depvel_t(162,'SEC_ORG_I ',                                                     &
  0.10,  0.10,  0.10,  0.10,  0.10,  0.10,                                      &
  0.10,  0.10,  0.10,  0.10,  0.10,  0.10,                                      &
  0.10,  0.10,  0.10,  0.10,  0.10,  0.10],                                     &
- st+dest,a,0,132)                                                              &
+ st+dest,a,0,132),                                                             &
+!
+! 163 ClONO2, DEST: Ordonez et al., 2012, on all surfaces
+depvel_t(163,'ClONO2    ',                                                     &
+[1.00,  1.00,  1.00,  1.00,  1.00,  1.00,                                      &
+ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,                                      &
+ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,                                      &
+ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,                                      &
+ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00],                                     &
+ dest,0,0,107),                                                                &
+!
+! 164 BrONO2, DEST: Ordonez et al., 2012, on all surfaces
+depvel_t(164,'BrONO2    ',                                                     &
+[0.50,  0.50,  0.50,  0.50,  0.50,  0.50,                                      &
+ 0.50,  0.50,  0.50,  0.50,  0.50,  0.50,                                      &
+ 0.50,  0.50,  0.50,  0.50,  0.50,  0.50,                                      &
+ 0.50,  0.50,  0.50,  0.50,  0.50,  0.50,                                      &
+ 0.50,  0.50,  0.50,  0.50,  0.50,  0.50],                                     &
+ dest,0,0,107)                                                                 &
 ]
-
 ! ----------------------------------------------------------------------
 
 
