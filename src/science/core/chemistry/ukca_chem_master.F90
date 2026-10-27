@@ -298,31 +298,32 @@ chch_t1(29,'N2O       ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  30 DD: 13,WD: 12,   (50)
 chch_t1(30,'HCl       ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  31 DD: 14,WD: 13,
-chch_t1(31,'HOCl      ',1,'TR        ','          ',1,1,s+st+cs,0,0,107),      &
+chch_t1(31,'HOCl      ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  32 DD: 15,WD: 14,
-chch_t1(32,'HBr       ',1,'TR        ','          ',1,1,s+st+cs,0,0,107),      &
+chch_t1(32,'HBr       ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  33 DD: 16,WD: 15,
-chch_t1(33,'HOBr      ',1,'TR        ','          ',1,1,s+st+cs,0,0,107),      &
-!  34        WD: 16,
+chch_t1(33,'HOBr      ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
+!  34        WD: 16, VS_note - DEST adds new species that dry deposits
 chch_t1(34,'ClONO2    ',1,'TR        ','          ',0,1,s+st+cs,0,0,107),      &
 !  35
-chch_t1(35,'CFCl3     ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+chch_t1(35,'CFCl3     ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  36
-chch_t1(36,'CF2Cl2    ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+chch_t1(36,'CF2Cl2    ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  37
-chch_t1(37,'MeBr      ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+chch_t1(37,'MeBr      ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  38 DD: 17,WD: 17,
-chch_t1(38,'HONO      ',1,'TR        ','          ',1,1,ti+t+st+cs,0,0,107),   &
+chch_t1(38,'HONO      ',1,'TR        ','          ',1,1,ti+t+st+cs+dest,       &
+                                                                0,0,107),      &
 !  39
-chch_t1(39,'C2H6      ',1,'TR        ','          ',0,0,ti+t+st+r+cs,          &
+chch_t1(39,'C2H6      ',1,'TR        ','          ',0,0,ti+t+st+r+cs+dest,     &
                                                               0,0,107),        &
 !  40
 chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,ti,0,0,107),           &
 !  40
 chch_t1(40,'EtOO      ',1,'SS        ','          ',0,0,t+r,0,0,107),          &
 !  40 ; Select 'OO' type EtOO in ST mechanism if RN or RP == T
-chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,st,0,rn+rp,107),       &
-chch_t1(40,'EtOO      ',1,'OO        ','          ',0,0,st+cs,rn+rp,0,107),    &
+chch_t1(40,'EtOO      ',1,'TR        ','          ',0,0,st+dest,0,rn+rp,107),       &
+chch_t1(40,'EtOO      ',1,'OO        ','          ',0,0,st+cs+dest,rn+rp,0,107),    &
 !  41 DD: 18,WD: 18,
 chch_t1(41,'EtOOH     ',1,'TR        ','          ',1,1,ti+t+st+r+cs,          &
                                                               0,0,107),        &
