@@ -2216,13 +2216,13 @@ IF (ukca_config%l_ukca_chem) THEN
     WRITE(*,*) '!--VS start focr allocation'
     
     ! 1. initialise aerosol mmrs  
-    IF (.NOT. ALLOCATED(focr))                                    &
+    IF (.NOT. ALLOCATED(so4_total_mmr))                                        &
       ALLOCATE(so4_total_mmr(row_length,rows,model_levels))
-    IF (.NOT. ALLOCATED(focr))                                    &
+    IF (.NOT. ALLOCATED(om1_total_mmr))                                        &
       ALLOCATE(om1_total_mmr(row_length,rows,model_levels))
-    IF (.NOT. ALLOCATED(focr))                                    &
+    IF (.NOT. ALLOCATED(om2_total_mmr))                                        &
       ALLOCATE(om2_total_mmr(row_length,rows,model_levels))
-    IF (.NOT. ALLOCATED(focr))                                    &
+    IF (.NOT. ALLOCATED(aero_total_mmr))                                       &
       ALLOCATE(aero_total_mmr(row_length,rows,model_levels))
 
     ! 2. populate focr, roc using new function, use om1 or om2 depending on the 
@@ -2245,7 +2245,7 @@ IF (ukca_config%l_ukca_chem) THEN
     ! case case=5, set focr (om2)
     
     IF (.NOT. ALLOCATED(focr)) ALLOCATE(focr(row_length,rows,model_levels))
-    IF (.NOT. ALLOCATED(focr)) ALLOCATE(roc(row_length,rows,model_levels))
+    IF (.NOT. ALLOCATED(roc)) ALLOCATE(roc(row_length,rows,model_levels))
     focr = 0.0
     roc = 0.0
 
