@@ -10112,6 +10112,24 @@ TYPE(asad_flux_defn), PARAMETER, PUBLIC :: dest_drydep(12) = [                 &
        ['NALD      ','          '],                                            &
        ['          ','          ','          ','          '])                  &
 ]
+
+TYPE(asad_flux_defn), PARAMETER, PUBLIC :: dest_vslsmip(5) = [                 &
+       asad_flux_defn('RXN',50619,'J',.FALSE.,0,4,                             &
+       ['CH2Cl2    ','PHOTON    '],                                            &
+       ['Cl        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50620,'J',.FALSE.,0,4,                             &
+       ['CHCl3     ','PHOTON    '],                                            &
+       ['CHCl2O2   ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50621,'J',.FALSE.,0,4,                             &
+       ['C2H4Cl2   ','PHOTON    '],                                            &
+       ['Cl        ','Cl        ','          ','          ']),                 &
+       asad_flux_defn('RXN',50622,'B',.FALSE.,0,5,                             &
+       ['CFCl3     ','O(1D)     '],                                            &
+       ['Cl        ','Cl        ','ClO       ','          ']),                 &
+       asad_flux_defn('RXN',50623,'B',.FALSE.,0,5,                             &
+       ['CFCl3     ','OH        '],                                            &
+       ['Cl        ','Cl        ','ClO       ','          '])                  & 
+]
 PUBLIC :: asad_load_default_fluxes
 
 CHARACTER(LEN=*), PARAMETER, PRIVATE :: ModuleName='ASAD_FLUX_DAT'
@@ -10216,6 +10234,7 @@ TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_OH_COCl2_tendency(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_Ox_tendency(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_wetdep(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_drydep(:)
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_dest_vslsmip(:)
 
 INTEGER :: p1                   ! start position in asad_chemical_fluxes array
 INTEGER :: p2                   ! end position in asad_chemical_fluxes array
@@ -10433,7 +10452,9 @@ IF (ukca_config%l_ukca_strattrop .OR. ukca_config%l_ukca_deststrattrop) THEN
     ALLOCATE(aa_dest_wetdep(SIZE(dest_wetdep)))
     aa_dest_wetdep = dest_wetdep
     ALLOCATE(aa_dest_drydep(SIZE(dest_drydep)))
-    aa_dest_drydep = dest_drydep  
+    aa_dest_drydep = dest_drydep
+    ALLOCATE(aa_dest_vslsmip(SIZE(dest_vslsmip)))
+    aa_dest_vslsmip = dest_vslsmip
   END IF
 
 
@@ -10756,7 +10777,8 @@ IF (ALLOCATED(aa_dest_wetdep))                                            &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_wetdep)
 IF (ALLOCATED(aa_dest_drydep))                                            &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_drydep)
-
+IF (ALLOCATED(aa_dest_vslsmip))                                           &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_dest_vslsmip)
 
 ALLOCATE(asad_chemical_fluxes(n_chemical_fluxes))
 
@@ -10995,6 +11017,11 @@ IF (ALLOCATED(aa_dest_drydep)) THEN
   asad_chemical_fluxes(p1:p2) = aa_dest_drydep(:)
   p1 = p2 + 1
 END IF
+IF (ALLOCATED(aa_dest_vslsmip)) THEN
+  p2 = p1 + SIZE(aa_dest_vslsmip) - 1
+  asad_chemical_fluxes(p1:p2) = aa_dest_vslsmip(:)
+  p1 = p2 + 1
+END IF
 
 
 IF (p2 /= n_chemical_fluxes) THEN
@@ -11094,6 +11121,7 @@ IF (ALLOCATED(aa_dest_OH_COCl2_tendency)) DEALLOCATE(aa_dest_OH_COCl2_tendency)
 IF (ALLOCATED(aa_dest_Ox_tendency))      DEALLOCATE(aa_dest_Ox_tendency)
 IF (ALLOCATED(aa_dest_wetdep))           DEALLOCATE(aa_dest_wetdep)
 IF (ALLOCATED(aa_dest_drydep))           DEALLOCATE(aa_dest_drydep)
+IF (ALLOCATED(aa_dest_vslsmip))          DEALLOCATE(aa_dest_vslsmip)
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 
