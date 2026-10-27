@@ -109,7 +109,7 @@ INTEGER, PARAMETER :: n_chch_master = 406 ! number of known species !DEST +31 DE
 INTEGER, PARAMETER :: n_het_master  =  23 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 165 ! number of dry deposition reactions !DEST +3
 INTEGER, PARAMETER :: n_wet_master  = 168 ! number of wet deposition reactions !DEST +8
-INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
+INTEGER, PARAMETER :: n_bimol_master = 1271 ! number of bimolecular reactions !DEST +58
 INTEGER, PARAMETER :: n_ratj_master = 207 ! number of photolysis reactions !DEST +24
 INTEGER, PARAMETER :: n_ratt_master = 118 ! number of termolecular reactions !DEST +2
 
@@ -7036,31 +7036,28 @@ ratb_t1(796,'ClO       ','ClO       ','Cl2       ','O2        ','          ',  &
 ratb_t1(797,'ClO       ','ClO       ','Cl2       ','O2        ','          ',  &
 '          ',3.00e-11,  0.00, 2450.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! JPL2015
-ratb_t1(798,'HBr       ','OH        ','Br        ','H2O       ','          ',  &
-'          ',5.50e-12,  0.00, -200.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
-! JPL2015
-ratb_t1(799,'ClNO2     ','OH        ','HOCl      ','NO2       ','          ',  &
+ratb_t1(798,'ClNO2     ','OH        ','HOCl      ','NO2       ','          ',  &
 '          ',2.40e-12,  0.00, 1250.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! JPL2015; omitts quenching channel, so that k332=0.8*k(JPL2015)
-ratb_t1(800,'COCl2     ','O(1D)     ','CO        ','ClO       ','Cl        ',  &
+ratb_t1(799,'COCl2     ','O(1D)     ','CO        ','ClO       ','Cl        ',  &
 '          ',1.76e-10,  0.00,  -30.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! 3rd reaction channel to 107-108
-ratb_t1(801,'O(1D)     ','HBr       ','H         ','BrO       ','          ',  &
+ratb_t1(800,'O(1D)     ','HBr       ','H         ','BrO       ','          ',  &
 '          ',3.00e-11,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! JPL2015, omitts quenching channel so that k334=0.75*k(JPL2015)
-ratb_t1(802,'Cl2       ','O(1D)     ','Cl        ','ClO       ','          ',  &
+ratb_t1(801,'Cl2       ','O(1D)     ','Cl        ','ClO       ','          ',  &
 '          ',2.03e-10,  0.00,    0.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 !
 ! Extra Cl + VOCs reactions; DEST
 !
 ! JPL2015
-ratb_t1(803,'Cl        ','C2H6      ','HCl       ','EtOO      ','          ',  &
+ratb_t1(802,'Cl        ','C2H6      ','HCl       ','EtOO      ','          ',  &
 '          ',7.20e-11,  0.00,   70.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! JPL2015
-ratb_t1(804,'Cl        ','C3H8      ','HCl       ','iPrOO     ','          ',  &
+ratb_t1(803,'Cl        ','C3H8      ','HCl       ','iPrOO     ','          ',  &
 '          ',6.54e-11,  0.00,  -60.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107),  &
 ! JPL2015
-ratb_t1(805,'Cl        ','C3H8      ','HCl       ','nPrOO     ','          ',  &
+ratb_t1(804,'Cl        ','C3H8      ','HCl       ','nPrOO     ','          ',  &
 '          ',8.12e-11,  0.00,   90.00, 0.00, 0.00, 0.00, 0.00, dest,0,0,107)   &
 ]
      

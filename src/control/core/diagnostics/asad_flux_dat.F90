@@ -8917,7 +8917,7 @@ asad_flux_defn('RXN',50492,'B',.FALSE.,0,6,                                    &
 asad_flux_defn('RXN',50493,'B',.FALSE.,0,5,                                    & !ratb(792)
 ['CHCl2O2   ','MeOO      '],                                                   &
 ['COCl2     ','HCHO      ','HO2       ','          ']),                        &
-asad_flux_defn('RXN',50494,'B',.FALSE.,0,5,                                    & !ratb(800)
+asad_flux_defn('RXN',50494,'B',.FALSE.,0,5,                                    & !ratb(799)
 ['COCl2     ','O(1D)     '],                                                   &
 ['CO        ','ClO       ','Cl        ','          ']),                        &
 asad_flux_defn('RXN',50495,'T',.FALSE.,0,4,                                    & !ratt(52)

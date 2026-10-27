@@ -478,8 +478,8 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
             'CHBr2Cl   ','CHBrCl2   ','NO_aircrft']
       END IF
       n_chem_tracers = 96         ! No chem tracers !DEST: 71+25
-      nr_therm       = 278        ! thermal reactions LS: 220 - 9 (defined differently for DEST)
-                                  ! + 59 (bimol DEST) + 2 (termol DEST) 
+      nr_therm       = 277        ! thermal reactions LS: 220 - 9 (defined differently for DEST)
+                                  ! + 58 (bimol DEST) + 2 (termol DEST) 
                                   ! + 5 (het DEST added back het reactions that was defined differently)
       nr_phot        = 55         ! photolytic (ATA)
 
@@ -529,12 +529,12 @@ ELSE IF (ukca_config%l_ukca_strat .OR. ukca_config%l_ukca_strattrop .OR.       &
       END IF
       n_chem_tracers = 96         ! No chem tracers !DEST: 71+25
       IF (ukca_config%l_ukca_trophet) THEN
-        nr_therm     = 299        ! thermal reactions, LS 241-9 (defined differently for DEST)
-                                  ! + 59 (bimol DEST) + 2 (termol DEST) 
+        nr_therm     = 298        ! thermal reactions, LS 241-9 (defined differently for DEST)
+                                  ! + 58 (bimol DEST) + 2 (termol DEST) 
                                   ! + 5 (het DEST; added back het reactions that was defined differently)
       ELSE
-        nr_therm     = 297        ! thermal reactions, LS 239-9 (defined differently for DEST)
-                                  ! + 59 (bimol DEST) + 2 (termol DEST) 
+        nr_therm     = 296        ! thermal reactions, LS 239-9 (defined differently for DEST)
+                                  ! + 58 (bimol DEST) + 2 (termol DEST) 
                                   ! + 5 (het DEST added back het reactions that was defined differently)
       END IF
       nr_phot        = 59         ! photolytic (ATA)
