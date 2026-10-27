@@ -277,26 +277,26 @@ chch_t1(19,'OH        ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
 chch_t1(20,'HO2       ',1,'TR        ','HOx       ',0,1,ti+s+st+dest,0,0,107), &
 chch_t1(20,'HO2       ',1,'SS        ','HOx       ',0,1,t+r,0,0,107),          &
 chch_t1(20,'HO2       ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
-!  21
+!  21 VS_note - DEST add new species of Cl which deposits
 chch_t1(21,'Cl        ',1,'TR        ','Clx       ',0,0,s+st+cs,0,0,107),      &
 !  22
-chch_t1(22,'Cl2O2     ',1,'TR        ','Clx       ',0,0,s+st+cs,0,0,107),      &
-!  23
+chch_t1(22,'Cl2O2     ',1,'TR        ','Clx       ',0,0,s+st+cs+dest,0,0,107), &
+!  23 VS_note - DEST add new species that deposits
 chch_t1(23,'ClO       ',1,'TR        ','Clx       ',0,0,s+st+cs,0,0,107),      &
 !  24
-chch_t1(24,'OClO      ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
-!  25
+chch_t1(24,'OClO      ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
+!  25 VS_note - DEST add new species that deposits
 chch_t1(25,'Br        ',1,'TR        ','Brx       ',0,0,s+st+cs,0,0,107),      &
 !  26
-chch_t1(26,'BrO       ',1,'TR        ','Brx       ',0,0,s+st+cs,0,0,107),      &
-!  27
+chch_t1(26,'BrO       ',1,'TR        ','Brx       ',0,0,s+st+cs+dest,0,0,107), &
+!  27 VS_note - DEST add new species that deposits
 chch_t1(27,'BrCl      ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
-!  28        WD: 11,
+!  28        WD: 11, VS_note - DEST add new species that dry deposits
 chch_t1(28,'BrONO2    ',1,'TR        ','          ',0,1,s+st+cs,0,0,107),      &
 !  29
-chch_t1(29,'N2O       ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+chch_t1(29,'N2O       ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  30 DD: 13,WD: 12,   (50)
-chch_t1(30,'HCl       ',1,'TR        ','          ',1,1,s+st+cs,0,0,107),      &
+chch_t1(30,'HCl       ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  31 DD: 14,WD: 13,
 chch_t1(31,'HOCl      ',1,'TR        ','          ',1,1,s+st+cs,0,0,107),      &
 !  32 DD: 15,WD: 14,
