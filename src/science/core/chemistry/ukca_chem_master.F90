@@ -278,21 +278,21 @@ chch_t1(20,'HO2       ',1,'TR        ','HOx       ',0,1,ti+s+st+dest,0,0,107), &
 chch_t1(20,'HO2       ',1,'SS        ','HOx       ',0,1,t+r,0,0,107),          &
 chch_t1(20,'HO2       ',1,'CF        ','HOx       ',0,0,ol,0,0,107),           &
 !  21 VS_note - DEST add new species of Cl which deposits
-chch_t1(21,'Cl        ',1,'TR        ','Clx       ',0,0,s+st+cs,0,0,107),      &
+chch_t1(21,'Cl        ',1,'TR        ','Clx       ',0,0,s+st+cs+dest,0,0,107), &
 !  22
 chch_t1(22,'Cl2O2     ',1,'TR        ','Clx       ',0,0,s+st+cs+dest,0,0,107), &
 !  23 VS_note - DEST add new species that deposits
-chch_t1(23,'ClO       ',1,'TR        ','Clx       ',0,0,s+st+cs,0,0,107),      &
+chch_t1(23,'ClO       ',1,'TR        ','Clx       ',0,0,s+st+cs+dest,0,0,107), &
 !  24
 chch_t1(24,'OClO      ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  25 VS_note - DEST add new species that deposits
-chch_t1(25,'Br        ',1,'TR        ','Brx       ',0,0,s+st+cs,0,0,107),      &
+chch_t1(25,'Br        ',1,'TR        ','Brx       ',0,0,s+st+cs+dest,0,0,107), &
 !  26
 chch_t1(26,'BrO       ',1,'TR        ','Brx       ',0,0,s+st+cs+dest,0,0,107), &
 !  27 VS_note - DEST add new species that deposits
-chch_t1(27,'BrCl      ',1,'TR        ','          ',0,0,s+st+cs,0,0,107),      &
+chch_t1(27,'BrCl      ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  28        WD: 11, VS_note - DEST add new species that dry deposits
-chch_t1(28,'BrONO2    ',1,'TR        ','          ',0,1,s+st+cs,0,0,107),      &
+chch_t1(28,'BrONO2    ',1,'TR        ','          ',0,1,s+st+cs+dest,0,0,107), &
 !  29
 chch_t1(29,'N2O       ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  30 DD: 13,WD: 12,   (50)
@@ -304,7 +304,7 @@ chch_t1(32,'HBr       ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  33 DD: 16,WD: 15,
 chch_t1(33,'HOBr      ',1,'TR        ','          ',1,1,s+st+cs+dest,0,0,107), &
 !  34        WD: 16, VS_note - DEST adds new species that dry deposits
-chch_t1(34,'ClONO2    ',1,'TR        ','          ',0,1,s+st+cs,0,0,107),      &
+chch_t1(34,'ClONO2    ',1,'TR        ','          ',0,1,s+st+cs+dest,0,0,107), &
 !  35
 chch_t1(35,'CFCl3     ',1,'TR        ','          ',0,0,s+st+cs+dest,0,0,107), &
 !  36
@@ -955,51 +955,51 @@ chch_t1(284,'SEC_ORG_I ',1,'TR        ','          ',1,1,st,a,0,132)           &
 ! product yield x 4, chemistry scheme, qualifier, disqualifier, version
 rath_defs_master(1:n_het_master)=[                                             &
 rath_t1(1,'ClONO2    ','H2O       ','HOCl      ','HONO2     ','          ',    &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,hp,0,107),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,hp,0,107),              &
 rath_t1(2,'ClONO2    ','HCl       ','Cl        ','Cl        ','HONO2     ',    &
 '          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,hp,0,107),                   &
 rath_t1(3,'HOCl      ','HCl       ','Cl        ','Cl        ','H2O       ',    &
 '          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,hp,0,107),                   &
 rath_t1(4,'N2O5      ','H2O       ','HONO2     ','HONO2     ','          ',    &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,hp,0,107),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,hp,0,107),              &
 rath_t1(5,'N2O5      ','HCl       ','Cl        ','NO2       ','HONO2     ',    &
 '          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,hp,0,107),                   &
 rath_t1(6,'ClONO2    ','HBr       ','BrCl      ','HONO2     ','          ',    &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,eh,0,111),              &
 rath_t1(7,'HOCl      ','HBr       ','BrCl      ','H2O       ','          ',    &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,eh,0,111),              &
 rath_t1(8,'HOBr      ','HCl       ','BrCl      ','H2O       ','          ',    &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,eh,0,111),              &
 rath_t1(9,'BrONO2    ','HCl       ','BrCl      ','HONO2     ','          ',    &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,eh,0,111),              &
 rath_t1(10,'BrONO2    ','H2O       ','HOBr      ','HONO2     ','          ',   &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,eh,0,111),              &
 rath_t1(11,'HOBr      ','HBr       ','Br        ','Br        ','H2O       ',   &
 '          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
 rath_t1(12,'BrONO2    ','HBr       ','Br        ','Br        ','HONO2     ',   &
 '          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
 rath_t1(13,'N2O5      ','HBr       ','Br        ','NO2       ','HONO2     ',   &
-'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs,eh,0,111),                   &
+'          ', 0.000, 0.000, 0.000, 0.000, s+st+cs+dest,eh,0,111),              &
 
 ! Aerosol chemistry: there are no gas phase products, the 'NULLx' products
 !  identify the reactions in asad_hetero
 
 !HSO3+H2O2(aq)
 rath_t1(14,'SO2       ','H2O2      ','NULL0     ','          ','          ',   &
-'          ', 0.000, 0.000, 0.000, 0.000, ti+s+st+ol+r+cs,a,0,107),            &
+'          ', 0.000, 0.000, 0.000, 0.000, ti+s+st+ol+r+cs+dest,a,0,107),       &
 !HSO3+O3(aq)
 rath_t1(15,'SO2       ','O3        ','NULL1     ','          ','          ',   &
-'          ', 0.000, 0.000, 0.000, 0.000, ti+s+st+ol+r+cs,a,0,107),            &
+'          ', 0.000, 0.000, 0.000, 0.000, ti+s+st+ol+r+cs+dest,a,0,107),       &
 !HSO3+O3(aq)
 rath_t1(16,'SO2       ','O3        ','NULL2     ','          ','          ',   &
-'          ', 0.000, 0.000, 0.000, 0.000, ti+s+st+ol+r+cs,a,0,107),            &
+'          ', 0.000, 0.000, 0.000, 0.000, ti+s+st+ol+r+cs+dest,a,0,107),       &
 
 ! Tropospheric heterogeneous reactions
 rath_t1(17,'N2O5      ','          ','HONO2     ','          ','          ',   &
-'          ', 2.000, 0.000, 0.000, 0.000, ti+st+r+cs,th,0,107),                &
+'          ', 2.000, 0.000, 0.000, 0.000, ti+st+r+cs+dest,th,0,107),           &
 ! Heterogeneous
 rath_t1(18,'HO2       ','          ','H2O2      ','          ','          ',   &
-'          ', 0.500, 0.000, 0.000, 0.000, ti+st,th,0,107)  ]
+'          ', 0.500, 0.000, 0.000, 0.000, ti+st+dest,th,0,107)  ]
 
 ! ----------------------------------------------------------------------
 
