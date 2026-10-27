@@ -108,7 +108,7 @@ INTEGER, PARAMETER :: di = 2048   ! DEST + iodine
 INTEGER, PARAMETER :: n_chch_master = 406 ! number of known species !DEST +31 DEST_I +18
 INTEGER, PARAMETER :: n_het_master  =  18 ! number of heterogeneous reactions
 INTEGER, PARAMETER :: n_dry_master  = 165 ! number of dry deposition reactions !DEST +3
-INTEGER, PARAMETER :: n_wet_master  = 164 ! number of wet deposition reactions !DEST +4
+INTEGER, PARAMETER :: n_wet_master  = 168 ! number of wet deposition reactions !DEST +8
 INTEGER, PARAMETER :: n_bimol_master = 1272 ! number of bimolecular reactions !DEST +59
 INTEGER, PARAMETER :: n_ratj_master = 183 ! number of photolysis reactions
 INTEGER, PARAMETER :: n_ratt_master = 118 ! number of termolecular reactions !DEST +2
@@ -986,11 +986,11 @@ chch_t1(296,'C2Cl4     ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 chch_t1(297,'C2H4Cl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! adding extra mid-products, for DEST
 ! 298
-chch_t1(298,'ClNO2     ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for ClNO2
+chch_t1(298,'ClNO2     ',1,'TR        ','          ',0,1,dest,0,0,107),        &
 ! 299
 ! As in DEST vn11.0 dry deposition is active for COCl2
 ! with deposition velocities for 2D parameterisation set to zero.
-chch_t1(299,'COCl2     ',1,'TR        ','          ',1,0,dest,0,0,107),        & !!! Add W deposition for COCl2
+chch_t1(299,'COCl2     ',1,'TR        ','          ',1,1,dest,0,0,107),        &
 ! more long-lived ODSs, for DEST
 ! 300
 chch_t1(300,'CF2ClCF2Cl',1,'TR        ','          ',0,0,dest,0,0,107),        &
@@ -1011,9 +1011,9 @@ chch_t1(306,'CHBrCl2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 307
 chch_t1(307,'CHCl2O2   ',1,'TR        ','          ',0,0,dest,0,0,107),        &
 ! 308
-chch_t1(308,'Cl2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for Cl2
+chch_t1(308,'Cl2       ',1,'TR        ','          ',0,1,dest,0,0,107),        &
 ! 309
-chch_t1(309,'Br2       ',1,'TR        ','          ',0,0,dest,0,0,107),        & !!! ADD W deposition for Br2
+chch_t1(309,'Br2       ',1,'TR        ','          ',0,1,dest,0,0,107),        &
 ! iodine chemistry
 ! 310
 chch_t1(310,'HOI       ',1,'TR        ','          ',0,0,dest,di,0,107),        & !!! Add W+D deposition for HOI
@@ -2695,7 +2695,19 @@ wetdep(124,'Br        ',&! Mozurkewich 1986; Schwarz and Dodson 1984
 [0.12e+01,0.00e+00,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
 ! WD: 125
 wetdep(125,'BrCl      ',&! Sander 2015 (JPL2015)
-[0.98e+00,0.56e+04,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107)          &
+[0.98e+00,0.56e+04,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
+! WD: 126
+wetdep(126,'ClNO2     ',&! Ordonez et al., 2012
+[0.04e+00,0.00e+00,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
+! WD: 127
+wetdep(127,'COCl2     ',&! Sander 2015 (De Bruyn et al., 1995)
+[0.59e-03,0.38e+04,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
+! WD: 128
+wetdep(128,'Cl2       ',&! Sander 2015 (JPL2015)
+[0.93e-01,0.20e+04,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107),         &
+! WD: 129
+wetdep(129,'Br2       ',&! Sander 2015 (JPL2015)
+[0.73e+00,0.44e+04,0.00e+00,0.00e+00,0.00e+00,0.00e+00],dest,0,0,107)          &
 ]
 
 ! ---------------------------------------------------------------------
