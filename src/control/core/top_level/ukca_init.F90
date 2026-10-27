@@ -964,29 +964,73 @@ IF (ukca_config%l_ukca_strat_so4_sa_unmix) THEN
   IF (ukca_config%i_ukca_chem /= i_ukca_chem_strattrop) THEN
     WRITE(cmessage,'(A)')                                                      &
        ' l_ukca_strat_so4_sa_unmix can only be TRUE with ST'
-    errcode = 50
+    errcode = 57
     CALL ereport(routinename,errcode,cmessage)
   END IF
-  IF ( .NOT. ukca_config%l_ukca_mode) THEN
+  IF (.NOT. ukca_config%l_ukca_mode) THEN
     WRITE(cmessage,'(A)')                                                      &
        ' l_ukca_strat_so4_sa_unmix can only be TRUE with l_ukca_mode is True'
-    errcode = 50
+    errcode = 58
     CALL ereport(routinename,errcode,cmessage)
   END IF
-  IF ( .NOT. ukca_config%l_ukca_het_psc) THEN
+  IF (.NOT. ukca_config%l_ukca_het_psc) THEN
     WRITE(cmessage,'(A)')                                                      &
        ' l_ukca_strat_so4_sa_unmix can only be TRUE when l_ukca_het_psc is True'
-    errcode = 50
+    errcode = 59
     CALL ereport(routinename,errcode,cmessage)
   END IF
-  IF ( ukca_config%l_ukca_sa_clim) THEN
+  IF (ukca_config%l_ukca_sa_clim) THEN
     WRITE(cmessage,'(A)')                                                      &
        ' l_ukca_strat_so4_sa_unmix can only be TRUE when l_ukca_sa_clim is False'
-    errcode = 50
+    errcode = 60
     CALL ereport(routinename,errcode,cmessage)
   END IF
 END IF
 !--VS
+
+!--VS Make sure i_ukca_hetorg_case is >1 only when l_ukca_strat_so4_sa_unmix=F,
+! and i_ukca_hetconfig=1 or 2 (Shi scheme only), and l_ukca_het_psc=T, 
+! and l_ukca_sa_clim=F
+IF (ukca_config%i_ukca_hetorg_case >0) THEN
+  IF (ukca_config%i_ukca_chem /= i_ukca_chem_strattrop) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' i_ukca_hetorg_case can only be active (>0) with ST'
+    errcode = 61
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF (.NOT. ukca_config%l_ukca_mode) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' i_ukca_hetorg_case can only be active (>0) with l_ukca_mode is True'
+    errcode = 62
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF (ukca_config%l_ukca_sa_clim) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' i_ukca_hetorg_case can only be active (>0) when l_ukca_sa_clim is F'
+    errcode = 63
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF (.NOT. ukca_config%l_ukca_het_psc) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' i_ukca_hetorg_case can only be active (>0) when l_ukca_het_psc is True'
+    errcode = 64
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF (ukca_config%l_ukca_strat_so4_sa_unmix) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' i_ukca_hetorg_case can only be active (>0) when'
+       ' l_ukca_strat_so4_sa_unmix is False'
+    errcode = 65
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+  IF (ukca_config%i_ukca_hetconfig/=1 .OR. ukca_config%i_ukca_hetconfig/=2) THEN
+    WRITE(cmessage,'(A)')                                                      &
+       ' i_ukca_hetorg_case can only be active (>0) when'
+       ' i_ukca_hetconfig is 1 or 2 (Shi scheme activated)'
+    errcode = 66
+    CALL ereport(routinename,errcode,cmessage)
+  END IF
+END IF
 
 IF (lhook) CALL dr_hook(ModuleName//':'//RoutineName,zhook_out,zhook_handle)
 RETURN

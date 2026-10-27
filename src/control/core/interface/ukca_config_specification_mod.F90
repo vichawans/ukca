@@ -238,6 +238,13 @@ TYPE :: ukca_config_spec_type
   LOGICAL :: l_ukca_strat_so4_sa_unmix ! True to use surface area density
                                        ! from sulfate aerosol ONLY from GLOMAP 
                                        ! for heterogeneous PSC chem.
+  LOGICAL :: i_ukca_hetorg_case        ! 0 = default (organic carbon aerosols
+                                       ! do not change het. rxn. behaviour);
+                                       ! 1 = Solomon solubility case; 
+                                       ! 2 = Solomon dilution case;
+                                       ! 3 = Stone homogeneous mixing case;
+                                       ! 4 = Stone LLPS on OM1;
+                                       ! 5 = Stone LLPS on OM2
   LOGICAL :: l_ukca_trophet            ! True for tropospheric het. chemistry
   LOGICAL :: l_ukca_classic_hetchem    ! True if accounting for heterogeneous
                                        ! chemistry on CLASSIC aerosols (RAQ
@@ -893,6 +900,7 @@ ukca_config%i_ukca_hetconfig = imdi
 ukca_config%l_ukca_limit_nat = .FALSE.
 ukca_config%l_ukca_sa_clim = .FALSE.
 ukca_config%l_ukca_strat_so4_sa_unmix = .FALSE.
+ukca_config%i_ukca_hetorg_case = imdi
 ukca_config%l_ukca_trophet = .FALSE.
 ukca_config%l_ukca_classic_hetchem = .FALSE.
 
@@ -1152,6 +1160,7 @@ SUBROUTINE ukca_get_config(                                                    &
    l_ukca_limit_nat,                                                           &
    l_ukca_sa_clim,                                                             &
    l_ukca_strat_so4_sa_unmix,                                                  &
+   i_ukca_hetorg_case,                                                  &
    l_ukca_trophet,                                                             &
    l_ukca_classic_hetchem,                                                     &
    l_use_photolysis,                                                           &
@@ -1283,6 +1292,7 @@ INTEGER, OPTIONAL, INTENT(OUT) :: nlev_above_trop_o3_env
 INTEGER, OPTIONAL, INTENT(OUT) :: nlev_ch4_stratloss
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_topboundary
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_hetconfig
+LOGICAL, OPTIONAL, INTENT(OUT) :: i_ukca_hetorg_case
 INTEGER, OPTIONAL, INTENT(OUT) :: i_inferno_emi
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_dms_flux
 INTEGER, OPTIONAL, INTENT(OUT) :: i_ukca_light_param
@@ -1599,6 +1609,8 @@ IF (PRESENT(l_ukca_limit_nat)) l_ukca_limit_nat = ukca_config%l_ukca_limit_nat
 IF (PRESENT(l_ukca_sa_clim)) l_ukca_sa_clim = ukca_config%l_ukca_sa_clim
 IF (PRESENT(l_ukca_strat_so4_sa_unmix)) l_ukca_strat_so4_sa_unmix =            &
   ukca_config%l_ukca_strat_so4_sa_unmix
+IF (PRESENT(i_ukca_hetorg_case)) i_ukca_hetorg_case =                          &
+  ukca_config%i_ukca_hetorg_case
 IF (PRESENT(l_ukca_trophet)) l_ukca_trophet = ukca_config%l_ukca_trophet
 IF (PRESENT(l_ukca_classic_hetchem))                                           &
   l_ukca_classic_hetchem = ukca_config%l_ukca_classic_hetchem

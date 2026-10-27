@@ -84,6 +84,7 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       nlev_ch4_stratloss,                                      &
                       i_ukca_topboundary,                                      &
                       i_ukca_hetconfig,                                        &
+                      i_ukca_hetorg_case,                                        &
                       i_inferno_emi,                                           &
                       i_ukca_dms_flux,                                         &
                       i_ukca_light_param,                                      &
@@ -416,6 +417,7 @@ INTEGER, OPTIONAL, INTENT(IN) :: nlev_above_trop_o3_env
 INTEGER, OPTIONAL, INTENT(IN) :: nlev_ch4_stratloss
 INTEGER, OPTIONAL, INTENT(IN) :: i_ukca_topboundary
 INTEGER, OPTIONAL, INTENT(IN) :: i_ukca_hetconfig
+INTEGER, OPTIONAL, INTENT(IN) :: i_ukca_hetorg_case
 INTEGER, OPTIONAL, INTENT(IN) :: i_inferno_emi
 INTEGER, OPTIONAL, INTENT(IN) :: i_ukca_dms_flux
 INTEGER, OPTIONAL, INTENT(IN) :: i_ukca_light_param
@@ -972,6 +974,11 @@ IF (ukca_config%i_ukca_chem /= i_ukca_chem_off) THEN
     IF (PRESENT(l_ukca_strat_so4_sa_unmix))                                    &
       ukca_config%l_ukca_strat_so4_sa_unmix = l_ukca_strat_so4_sa_unmix
 
+    ukca_config%i_ukca_hetorg_case = 0  ! DEFAULT: OM aerosols do not modify
+                                        ! het. rxn. in stratosphere.
+    
+    IF (PRESENT(i_ukca_hetorg_case))                                           &
+      ukca_config%i_ukca_hetorg_case = i_ukca_hetorg_case
   END IF
 
   ! -- Photolysis options --

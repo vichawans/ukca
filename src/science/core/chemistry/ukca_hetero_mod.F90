@@ -118,7 +118,6 @@ REAL, PARAMETER, PRIVATE  :: radsa=1.0e-5  ! aerosol radius(cm)
 ! Should ultimately be namelist-controlled (ukca_config); hardwired here
 ! for development.
 ! ---------------------------------------------------------------------
-INTEGER, PARAMETER, PRIVATE :: i_ukca_hetorg_case = 1 ! 0-5, see above
 REAL, PARAMETER, PRIVATE :: oc_frac_scale = 1.0 ! tuning multiplier on
                                                 ! focr and roc (cf /4)
 REAL, PARAMETER, PRIVATE :: oc_so4_crit = 1.0 ! case 1 only: org/sulfate
@@ -638,18 +637,20 @@ ELSE ! New config
     ! VS: build the organic inputs, applying the tuning multiplier and
     ! restricting to the stratosphere (the UKCA analogue of the
     ! p < 300 hPa gate in CESM mo_strato_rates). The Shi routine reads
-    ! i_ukca_hetorg_case directly (module parameter) and uses zfocr for
+    ! ukca_config%i_ukca_hetorg_case directly (module parameter) and uses zfocr for
     ! cases 4/5 or zroc for case 1,2,3.
     zfocr(:) = 0.0 ! Case 4,5
     zroc(:)  = 0.0 ! Case 1,2,3
-    IF (i_ukca_hetorg_case == 4 .OR. i_ukca_hetorg_case == 5) THEN
+    IF (ukca_config%i_ukca_hetorg_case == 4 .OR.                               &
+        ukca_config%i_ukca_hetorg_case == 5) THEN
       ! Stone LLPS cases: organic mass fraction of total aerosol.
       ! Case 4 uses OM1, case 5 OM2 only
       ! the distinction is made here, in the driver, not in the chemistry.
       WHERE (stratflag(1:n_points))
         zfocr(1:n_points) = MIN(MAX(focr(1:n_points)*oc_frac_scale,0.0),1.0)
       END WHERE
-    ELSE IF (i_ukca_hetorg_case >= 1 .AND. i_ukca_hetorg_case <= 3) THEN
+    ELSE IF (ukca_config%i_ukca_hetorg_case >= 1 .AND.                         &
+             ukca_config%i_ukca_hetorg_case <= 3) THEN
       ! Case 1: Solomon threshold 
       ! Case 2: Solomon dilution
       ! Case 3: Stone homogeneous
@@ -736,7 +737,7 @@ ELSE ! New config
         IF ( jh <= 3 .OR. jh == 8) THEN  ! calculated gamma
           kpsc(1:n_points ,jh) = kpsc(1:n_points, jh) + c_cf(1:n_points)*      &
                                  100.0*za(1:n_points) * gam3calc(1:n_points, jh)
-        ELSE IF (jh == 6 .AND. i_ukca_hetorg_case>0) THEN
+        ELSE IF (jh == 6 .AND. ukca_config%i_ukca_hetorg_case>0) THEN
         ! VS: jh==6 (HOBr+HCl) added for Solomon et al. (2023) scheme;
         ! gam3calc(:,6) is non-zero only at organic-rich points, so base
         ! behaviour (gamma=0 on sulfate) is preserved elsewhere.
@@ -823,12 +824,13 @@ ELSE ! New config
   ! reactant we instead normalise by [X], so the rate becomes
   ! kpsc*[HCl], i.e. limited by the available HCl (equivalent to the
   ! hcldeni/cntdeni switch in the CESM code).
-  IF (i_ukca_hetorg_case > 0) THEN
+  IF (ukca_config%i_ukca_hetorg_case > 0) THEN
     DO jl = 1, n_points
       ! organics active: cases 2/3/4/5 need a non-negligible amount;
       ! case 1 is binary and only activates above its threshold
-      IF ( (i_ukca_hetorg_case == 1 .AND. zroc(jl) > oc_so4_crit) .OR.         &
-           (i_ukca_hetorg_case /= 1 .AND.                                      &
+      IF ( (ukca_config%i_ukca_hetorg_case == 1 .AND. zroc(jl) > oc_so4_crit)  &
+            .OR.                                                               &
+           (ukca_config%i_ukca_hetorg_case /= 1 .AND.                          &
             (zfocr(jl) > forg_min .OR. zroc(jl) > forg_min)) ) THEN
         IF (n_clono2_hcl > 0 .AND. zclono2(jl) > MAX(zhcl(jl),peps))           &
           rk(jl,n_clono2_hcl) = kpsc(jl,1) / zclono2(jl)
@@ -972,7 +974,7 @@ SUBROUTINE ukca_shi_liquid_aerosol(kstart,kend,kchmlev,t,th2o,                 &
 !
 !VS: extended for heterogeneous chemistry on organic aerosol after
 !Solomon et al. (2023) and Stone et al. (2025). The treatment is chosen
-!by the module parameter i_ukca_hetorg_case (see module header):
+!by the module parameter ukca_config%i_ukca_hetorg_case (see module header):
 !
 !  case 1 (Solomon Solubility / threshold): binary switch on the
 !         organic/sulfate mass ratio roc_b. Above oc_so4_crit the
@@ -1224,7 +1226,7 @@ DO jl=kstart, kend
   ! latent divide-by-zero; here roc_b is guaranteed finite and >= 0 by
   ! the driver, and the whole block is skipped when roc_b = 0.
   !*********************************************************************
-  l_dilute = (i_ukca_hetorg_case == 2) .AND. (roc_b > 0.0)
+  l_dilute = (ukca_config%i_ukca_hetorg_case == 2) .AND. (roc_b > 0.0)
   wt_org   = 0.0
   wt_water = 100.0 - wt_h2so4
 
@@ -1345,7 +1347,7 @@ DO jl=kstart, kend
 
   l_orgactive = .FALSE.
 
-  SELECT CASE (i_ukca_hetorg_case)
+  SELECT CASE (ukca_config%i_ukca_hetorg_case)
 
   CASE (1)
     ! ---- Solomon et al. (2023) Solubility / threshold case ----
