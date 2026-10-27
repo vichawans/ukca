@@ -1200,6 +1200,8 @@ IF (firstcall) THEN
   ! for all UKCA tracers, so subtract (ifirst-1) to index the mode tracer array)
 
   ifirst = jpctr + 1
+  WRITE (*,*) '!--VS from ukca_aero_ctl jpctr=', jpctr
+  WRITE (*,*) '!--VS from ukca_aero_ctl ifirst=', ifirst
   IF (verbose > 0) THEN
     WRITE(umMessage, '(A43)') 'Checking MODE tracer addresses are in range:'
     CALL umPrint(umMessage, src='ukca_aero_ctl')

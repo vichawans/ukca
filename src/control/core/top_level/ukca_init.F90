@@ -1023,7 +1023,7 @@ IF (ukca_config%i_ukca_hetorg_case >0) THEN
     errcode = 65
     CALL ereport(routinename,errcode,cmessage)
   END IF
-  IF (ukca_config%i_ukca_hetconfig/=1 .OR. ukca_config%i_ukca_hetconfig/=2) THEN
+  IF (ukca_config%i_ukca_hetconfig/=1 .AND. ukca_config%i_ukca_hetconfig/=2) THEN
     WRITE(cmessage,'(A)')                                                      &
        ' i_ukca_hetorg_case can only be active (>0) when'                      &
        // newline // ' i_ukca_hetconfig is 1 or 2 (Shi scheme activated)'

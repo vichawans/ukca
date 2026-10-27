@@ -2228,11 +2228,20 @@ IF (ukca_config%l_ukca_chem) THEN
     ! 2. populate focr, roc using new function, use om1 or om2 depending on the 
     ! case settings
     IF (ukca_config%i_ukca_hetorg_case > 0) THEN
+      WRITE(*,*) '!--VS n_chem_tracers=', n_chem_tracers
+      WRITE(*,*) '!--VS n_aero_tracers=', n_aero_tracers
+      WRITE(*,*) '!--VS n_mode_tracers=', n_mode_tracers
+      WRITE(*,*) '!--VS shape(all_tracers,4)=', shape(all_tracers)
       WRITE(*,*) '!--VS call ukca_calc_aero_mass'
       CALL ukca_calc_aero_mass(                                                &
-              all_tracers(:,:,:,1:n_chem_tracers+n_aero_tracers),              & 
-              n_chem_tracers,row_length, rows, model_levels,                   &
+              all_tracers(:,:,:,1:n_chem_tracers+n_aero_tracers+n_mode_tracers),              & 
+              n_chem_tracers+n_aero_tracers,row_length, rows, model_levels,                   &
               so4_total_mmr, om1_total_mmr, om2_total_mmr, aero_total_mmr)
+      write(*,*) '!--VS so4_total_mmr =', sum(so4_total_mmr)
+      write(*,*) '!--VS om1_total_mmr =', sum(om1_total_mmr)
+      write(*,*) '!--VS om2_total_mmr =', sum(om2_total_mmr)
+      write(*,*) '!--VS aero_total_mmr =', sum(aero_total_mmr)
+      
     END IF
 
     ! Check cases for strat het reactions on oc
@@ -2248,6 +2257,8 @@ IF (ukca_config%l_ukca_chem) THEN
     IF (.NOT. ALLOCATED(roc)) ALLOCATE(roc(row_length,rows,model_levels))
     focr = 0.0
     roc = 0.0
+
+    write(*,*) '!--VS i_ukca_hetorg_case =', ukca_config%i_ukca_hetorg_case
 
     IF (ukca_config%i_ukca_hetorg_case >= 1 .AND.                              &
         ukca_config%i_ukca_hetorg_case <= 3) THEN
