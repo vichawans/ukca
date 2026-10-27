@@ -89,6 +89,7 @@ CHARACTER(LEN=*), PARAMETER, PRIVATE :: ModuleName='INIJTAB_MOD'
 
 CONTAINS
 SUBROUTINE inijtab(current_time, l_ukca_fastjx)
+USE ukca_config_specification_mod, ONLY: ukca_config
 USE ukca_stdto3_mod, ONLY: stdto3, nin
 USE ukca_tbjs_mod, ONLY:     tabj2a   , tabj2b   , tabj3    ,                  &
        tabj3a   , tabjno   , tabjno31 , tabjno32 , tabjno2  ,                  &
@@ -140,6 +141,10 @@ USE acsf1301_mod, ONLY: acsf1301
 USE acsmcfm_mod, ONLY: acsmcfm
 USE acsh141b_mod, ONLY: acsh141b
 USE acsh142b_mod, ONLY: acsh142b
+! Updated routines for DEST
+USE acsf11_updt_mod, ONLY: acsf11_updt
+USE acsf12_updt_mod, ONLY: acsf12_updt
+USE acscnit_updt_mod, ONLY: acscnit_updt
 !
 USE acsmc_mod, ONLY: acsmc
 USE quanto12_mod, ONLY: quanto12
@@ -446,12 +451,18 @@ DO jo=1,jpo3p
     !        CCl4
     CALL acsccl4(tabt(jt),jpwav,wavenm,accl4)
 
-    !        F11 (CFCl3)
-    CALL acsf11 (tabt(jt),wavenm,af11)
-
-    !        F12 (CF2Cl2)
-    CALL acsf12 (tabt(jt),wavenm,af12)
-
+    IF ( ukca_config%l_ukca_deststrattrop ) THEN
+       !        F11 (CFCl3)
+       CALL acsf11_updt(tabt(jt),jpwav,wavenm,af11)
+       !        F12 (CF2Cl2)
+       CALL acsf12_updt(tabt(jt),jpwav,wavenm,af12)
+    ELSE
+       !        F11 (CFCl3)
+       CALL acsf11 (tabt(jt),wavenm,af11)
+       !        F12 (CF2Cl2)
+       CALL acsf12 (tabt(jt),wavenm,af12)
+    END IF
+    
     !        F22 (CHF2Cl)
     CALL acsf22 (tabt(jt),jpwav,wavenm,af22)
     !!! DEST
@@ -479,11 +490,16 @@ DO jo=1,jpo3p
     !        HNO3
     CALL acshno3(tabt(jt),ahno3)
 
-    !        ClONO2
-    CALL acscnit(tabt(jt),wavenm,acnita, acnitb)
-
-    !        BrONO2
-    !CALL acsbnit(tabt(jt),wavenm,abrno3)
+    IF ( ukca_config%l_ukca_deststrattrop ) THEN
+       !        ClONO2
+       CALL acscnit_updt(tabt(jt),wavenm,acnita, acnitb)
+       !        BrONO2
+       ! Calculate cross-section for DEST
+       CALL acsbnit(tabt(jt),wavenm,abrno3)
+    ELSE
+       !        ClONO2
+       CALL acscnit(tabt(jt),wavenm,acnita, acnitb)
+    END IF
     
     !        H2O2
     CALL acsh2o2(tabt(jt),jpwav,wavenm,ah2o2)
