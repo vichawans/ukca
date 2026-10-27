@@ -405,12 +405,12 @@ REAL, ALLOCATABLE :: plumeria_height(:,:)
 
 !--VS 3D array for organic carbon and total aerosol masses to use in chem_ctl
 ! by ukca_calc_aero_mass
-REAL, ALLOCATABLE :: focr(:,:,:)
-REAL, ALLOCATABLE :: roc(:,:,:)
 REAL, ALLOCATABLE :: so4_total_mmr(:,:,:)
 REAL, ALLOCATABLE :: om1_total_mmr(:,:,:)
 REAL, ALLOCATABLE :: om2_total_mmr(:,:,:)
 REAL, ALLOCATABLE :: aero_total_mmr(:,:,:)
+REAL, ALLOCATABLE :: focr(:,:,:) ! fraction om1/total or om2/total 
+REAL, ALLOCATABLE :: roc(:,:,:)  ! ratio oc/so4
 INTEGER :: i_ukca_hetorg_case
 
 
@@ -2254,10 +2254,13 @@ IF (ukca_config%l_ukca_chem) THEN
 
     IF (i_ukca_hetorg_case >= 1 .AND. i_ukca_hetorg_case <= 3) THEN
       roc = om1_total_mmr / so4_total_mmr
+      write(*,*) '!--VS roc =', sum(so4_sa)
     ELSE IF (i_ukca_hetorg_case == 4) THEN
       focr = om1_total_mmr / aero_total_mmr
+      write(*,*) '!--VS focr =', sum(so4_sa)
     ELSE IF (i_ukca_hetorg_case == 5) THEN
       focr = om2_total_mmr / aero_total_mmr
+      write(*,*) '!--VS focr =', sum(so4_sa)
     END IF
 
     
