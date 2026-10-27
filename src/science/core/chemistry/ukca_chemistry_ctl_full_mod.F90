@@ -53,6 +53,8 @@ SUBROUTINE ukca_chemistry_ctl_full(                                            &
                 delso2_wet_o3,                                                 &
                 delh2so4_chem,                                                 &
                 so4_sa,                                                        &
+                focr,                                                          &
+                roc,                                                           &
                 atm_ch4_mol,                                                   &
                 atm_co_mol,                                                    &
                 atm_n2o_mol,                                                   &
@@ -119,6 +121,8 @@ REAL, INTENT(IN) :: qcf(tot_n_pnts)
 REAL, INTENT(IN) :: qcl(tot_n_pnts)
 REAL, INTENT(IN) :: cloud_frac(tot_n_pnts)
 REAL, INTENT(IN) :: so4_sa(tot_n_pnts)              ! aerosol surface area
+REAL, INTENT(IN) :: focr(tot_n_pnts) ! om1/total or om2/total
+REAL, INTENT(IN) :: roc(tot_n_pnts)  ! om/so4
 REAL, INTENT(IN) :: zdryrt(theta_field_size,jpdd)   ! dry dep rate
 REAL, INTENT(IN) :: zwetrt(tot_n_pnts,jpdw)         ! wet dep rate
 REAL, INTENT(IN) :: photol_rates(tot_n_pnts,jppj)
@@ -376,7 +380,7 @@ END IF
 
 CALL asad_cdrive(cdot, zftr, pres, temp, zq, co2_1d, cloud_frac, qcl, ix, jy,  &
                  k, zdryrt2, zwetrt, rc_het, zprt1d, tot_n_pnts, have_nat,     &
-                 stratflag, H_plus)
+                 stratflag, focr, roc, H_plus)
 
 IF (ukca_config%l_ukca_het_psc) THEN
   ! Save MMR of NAT PSC particles into 3-D array for PSC sedimentation.

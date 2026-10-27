@@ -53,6 +53,8 @@ SUBROUTINE ukca_chemistry_ctl_col(                                             &
                 delso2_wet_o3,                                                 &
                 delh2so4_chem,                                                 &
                 so4_sa,                                                        &
+                focr,                                                          &
+                roc,                                                           &
                 atm_ch4_mol,                                                   &
                 atm_co_mol,                                                    &
                 atm_n2o_mol,                                                   &
@@ -138,6 +140,8 @@ REAL, INTENT(IN) :: qcf(row_length,rows,model_levels)  ! qcf
 REAL, INTENT(IN) :: qcl(row_length,rows,model_levels)  ! qcl
 REAL, INTENT(IN) :: cloud_frac(row_length,rows,model_levels)
 REAL, INTENT(IN) :: so4_sa(row_length,rows,model_levels) ! aerosol surface area
+REAL, INTENT(IN) :: focr(row_length,rows,model_levels) ! om1/total or om2/total
+REAL, INTENT(IN) :: roc(row_length,rows,model_levels)  ! om/so4
 REAL, INTENT(IN) :: zdryrt(row_length,rows,jpdd)              ! dry dep rate
 REAL, INTENT(IN) :: zwetrt(row_length,rows,model_levels,jpdw) ! wet dep rate
 REAL, INTENT(IN) :: photol_rates(row_length,rows,model_levels,jppj)
@@ -217,6 +221,8 @@ REAL :: rc_het(model_levels,2)                ! heterog rates for trop chem
 REAL :: H_plus_2d_arr(theta_field_size,model_levels) ! 2-D pH array to use in
                                                      ! wet deposition
 REAL :: H_plus_1d_arr(model_levels)  ! 1-D pH array to use in chemical solvers
+REAL :: focr_1d_arr(model_levels)  ! 1-D pH array to use in chemical solvers
+REAL :: roc_1d_arr(model_levels)  ! 1-D pH array to use in chemical solvers
 
 ! Local arrays to store full column values of selected asad_mod variables
 ! to pass to chemical_diagnostics and psc_diagnotics subroutines
@@ -286,7 +292,7 @@ END IF
 !$OMP         zp, zprt1d, zq, zt, co2_1d, zwetrt2,                             &
 !$OMP         kcs, kce, chunk_size, dpd_full, dpw_full,                        &
 !$OMP         fpsc1_full, fpsc2_full, prk_full, y_full, jspf, jna,             &
-!$OMP         H_plus_1d_arr)                                                   &
+!$OMP         focr_1d_arr,roc_1d_arr,H_plus_1d_arr)                                                   &
 !$OMP SHARED(advt, all_ntp, atm_cf2cl2_mol, atm_cfcl3_mol, atm_ch4_mol,        &
 !$OMP        atm_co_mol, atm_h2_mol, atm_mebr_mol, atm_n2o_mol, avogadro,      &
 !$OMP        c_species, c_na_species, cloud_frac,                              &
@@ -303,7 +309,7 @@ END IF
 !$OMP        n_mebr, n_n2o, nadvt, nlev_with_ddep,                             &
 !$OMP        nn_h2o2, nn_h2so4, nn_o1d, nn_o3, nn_o3p, nn_oh, nn_so2,          &
 !$OMP        o1d_in_ss, o3p_in_ss, photol_rates, pres, q, qcf, qcl,            &
-!$OMP        row_length, rows, so4_sa, shno3_3d,                               &
+!$OMP        row_length, rows, so4_sa, focr, roc, shno3_3d,                    &
 !$OMP        temp, tracer, uph2so4inaer, volume, zdryrt, zwetrt,               &
 !$OMP        H_plus_3d_arr)
 
@@ -340,6 +346,10 @@ DO i=1,rows
 
     ! collate 1-D H_plus values to use in asad NR solver
     H_plus_1d_arr(:) = H_plus_3d_arr(j,i,:)
+
+    !--VS make focr and roc column
+    focr_1d_arr(:) = focr(j,i,:)
+    roc_1d_arr(:) = roc(j,i,:)
 
     IF (ANY(speci(:) == 'CO2       ')) THEN
       ! Copy the CO2 concentration into the asad module as VMR
@@ -488,6 +498,7 @@ DO i=1,rows
         za(:)=0.0
         za(1:chunk_size) = so4_sa(j,i,kcs:kce)
 
+
         ! Initialise sph2o for current chunk
         sph2o(:) = 0.0
         IF (ukca_config%l_ukca_het_psc) THEN
@@ -511,6 +522,8 @@ DO i=1,rows
                          chunk_size,                                           &
                          have_nat1d(kcs:kce),                                  &
                          stratflag(kcs:kce),                                   &
+                         focr_1d_arr(kcs:kce),                                 &
+                         roc_1d_arr(kcs:kce),                                  &
                          H_plus_1d_arr(kcs:kce))
 
         ! Store the full column values of dpd, dpw, fpsc1,

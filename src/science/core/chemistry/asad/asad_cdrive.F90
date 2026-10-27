@@ -92,7 +92,8 @@ CONTAINS
 
 SUBROUTINE asad_cdrive(cdot, ftr, pp, pt, pq, co2_1d, cld_f, cld_l,            &
                        ix, jy, nlev, dryrt, wetrt, rc_het, prt,                &
-                       n_points, have_nat, stratflag, H_plus_1d_arr)
+                       n_points, have_nat, stratflag, focr_1d_arr, roc_1d_arr, &
+                       H_plus_1d_arr)
 
 USE asad_mod,        ONLY: cdt, ctype, fdot, f,                                &
                            jpspec, jpcspf, jppj,                               &
@@ -147,6 +148,11 @@ REAL, INTENT(IN) :: cld_f(n_points)          ! Cloud fraction
 REAL, INTENT(IN) :: cld_l(n_points)          ! Cloud liquid water (kg/kg)
 LOGICAL, INTENT(IN) :: have_nat(n_points)    ! Mask for natpsc
 LOGICAL, INTENT(IN) :: stratflag(n_points)   ! Strat indicator
+
+! 1-D organic aerosol ratios
+REAL, INTENT(IN) :: focr_1d_arr(n_points)
+REAL, INTENT(IN) :: roc_1d_arr(n_points)
+
 
 ! 1-D pH array to be passed to asad_hetero
 REAL, INTENT(IN) :: H_plus_1d_arr(n_points)

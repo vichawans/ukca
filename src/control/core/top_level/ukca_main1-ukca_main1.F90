@@ -409,7 +409,7 @@ REAL, ALLOCATABLE :: so4_total_mmr(:,:,:)
 REAL, ALLOCATABLE :: om1_total_mmr(:,:,:)
 REAL, ALLOCATABLE :: om2_total_mmr(:,:,:)
 REAL, ALLOCATABLE :: aero_total_mmr(:,:,:)
-REAL, ALLOCATABLE :: focr(:,:,:) ! fraction om1/total or om2/total 
+REAL, ALLOCATABLE :: focr(:,:,:) ! fraction om1/total or om2/total
 REAL, ALLOCATABLE :: roc(:,:,:)  ! ratio oc/so4
 INTEGER :: i_ukca_hetorg_case
 
@@ -2512,6 +2512,8 @@ IF (ukca_config%l_ukca_chem) THEN
            delso2_wet_o3,                                                      &
            delh2so4_chem,                                                      &
            so4_sa,                                                             &
+           focr,                                                               &
+           roc,                                                                &
            ! Diagnostics
            atm_ch4_mol,                                                        &
            atm_co_mol,                                                         &
