@@ -1892,7 +1892,8 @@ IF (ukca_config%l_ukca_chem) THEN
       ! LBC code contained within UKCA_SCENARIO_CTL
       CALL ukca_scenario_ctl(n_boundary_vals, lbc_spec,                        &
                              i_year, i_day_number, lbc_mmr,                    &
-                             .NOT. ukca_config%l_ukca_stratcfc)
+                              .NOT. ( ukca_config%l_ukca_stratcfc .OR.         &
+                                      ukca_config%l_ukca_deststrattrop ) )
 
     END IF
 

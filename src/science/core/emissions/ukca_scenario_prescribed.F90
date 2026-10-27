@@ -44,6 +44,8 @@ CONTAINS
 SUBROUTINE ukca_scenario_prescribed(n_lbc_specs, lbc_specs,                    &
                                     lbc_mmr, perform_lumping)
 
+USE ukca_config_specification_mod, ONLY: ukca_config
+  
 USE ukca_environment_fields_mod, ONLY: atmospheric_ccl4,                       &
                        atmospheric_cfc113, atmospheric_cfc114,                 &
                        atmospheric_cfc115, atmospheric_cfc11,                  &
@@ -58,7 +60,7 @@ USE ukca_environment_fields_mod, ONLY: atmospheric_ccl4,                       &
                        atmospheric_meccl3, atmospheric_mecl,                   &
                        atmospheric_n2o, atmospheric_chbr3,                     &
                        atmospheric_n2
-USE ukca_constants,    ONLY: c_mebr
+USE ukca_constants,    ONLY: c_mebr, c_cf3br, c_cf2br2, c_cf2brcf2br
 
 USE ukca_scenario_common_mod, ONLY: ich2br2, i_cfcl3, i_cf2cl2, i_cf2clcfcl2,  &
                        i_cf2clcf2cl, i_cf2clcf3, i_ccl4, i_meccl3, i_chf2cl,   &
@@ -179,7 +181,8 @@ full_lbc(i_mecl)= atmospheric_mecl
 full_lbc(i_mebr)= atmospheric_mebr
 ! Add 6 pptv of bromine to MeBr to account for the effect of very
 ! short-lived bromine gases - !! SHOULD WE STILL DO THIS PRE-INDUSTRIAL?
-IF (ich2br2 == 0) THEN
+! In DEST emissions are prescribed for CH2Br2 so no need to do this
+IF (ich2br2 == 0 .AND. (.NOT. ukca_config%l_ukca_deststrattrop ) ) THEN
   full_lbc(i_mebr) = full_lbc(i_mebr) + 5.0e-12*c_mebr
 END IF
 
@@ -209,6 +212,13 @@ full_lbc(i_ch2fcf3)= atmospheric_hfc134a
 ! Perform lumping
 IF (perform_lumping) THEN
   CALL ukca_lump_lbcs(n_full_spc, full_lbc)
+   
+ELSE IF ( ukca_config%l_ukca_deststrattrop ) THEN
+  !! Add halons that are not included in DEST, CF2Br2 (H1202) and CF2BrCF2Br (H2402), to CF3Br (H1301)
+  !! HALON1301(mmr)=HALON1301(mmr)+2*HALON2402(vmr)*c_halon1301+2*HALON1202(vmr)*c_halon1301
+  full_lbc(i_cf3br) = full_lbc(i_cf3br) + &
+        ( 2*full_lbc(i_cf2brcf2br) * c_cf3br / c_cf2brcf2br ) + & 
+        ( 2*full_lbc(i_cf2br2) * c_cf3br / c_cf2br2)
 END IF
 
 ! Assign values to LBC array

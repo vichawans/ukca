@@ -35,8 +35,8 @@ PUBLIC
 INTEGER, SAVE :: n_use_tracers        ! No. of tracers used
 INTEGER, SAVE :: n_use_emissions      ! No. of emissions used
 INTEGER, SAVE :: n_3d_emissions       ! No. of 3-D emissions used
-INTEGER, PARAMETER :: n_boundary_vals  = 7    ! No. lower boundary vals for
-                                              ! stratospheric chemistry
+INTEGER, PARAMETER :: n_boundary_vals  = 18   ! No. lower boundary vals for
+                                              ! stratospheric chemistry, DEST+11
 INTEGER, PARAMETER :: n_cfc_lumped  = 13 ! No. of CFC species that are not part
                                          ! of boundary values but are lumped
                                          ! into some of the boundary val CFCs
@@ -103,11 +103,15 @@ n_nonchem_tracers    = 0
 ! Initialise LBC arrays used in emiss_ctl
 lbc_mmr(:) = rmdi
 !  Species with potential lower boundary conditions (same for all flavours)
+!  DEST: umplumping of ODSs
 lbc_spec =                                                                     &
      ['N2O       ','CF2Cl2    ',                                               &
        'CFCl3     ','MeBr      ',                                              &
        'H2        ','CH4       ',                                              &
-       'COS       ']
+       'COS       ',                                                           &
+       'CF2ClCFCl2','CF2ClCF2Cl','CF2ClCF3  ','CCl4      ','MeCl      ',       &
+       'MeCCl3    ','CHF2Cl    ','MeCFCl2   ','MeCF2Cl   ','CF2ClBr   ',       &
+       'CF3Br     ']
 ! Species that are lumped into the major CFCs used as boundary values
 cfc_lumped = ['CF2ClCFCl2','CF2ClCF2Cl','CF2ClCF3  ','CCl4      ',             &
                'MeCCl3    ','CHF2Cl    ','MeCFCl2   ','MeCF2Cl   ',            &

@@ -51,7 +51,8 @@ USE ukca_constants,  ONLY: m_br, m_brcl, m_bro, m_brono2, m_c, m_c2h4,         &
                            m_so2, m_so4, m_toluene, m_c2h2, m_tbut2ene,        &
                            m_benzene, m_etoh, m_etcho, m_mek, m_hcooh,         &
                            m_meco2h, m_hoch2cho, m_mp, m_chbr3, m_ch2brcl,     &
-                           m_chbr2cl, m_chbrcl2
+                           m_chbr2cl, m_chbrcl2, m_cf2clcf2cl, m_cf2clcf3,     &
+                           m_mecfcl2, m_mecf2cl, m_cf3br
 
 USE ereport_mod,     ONLY: ereport
 USE parkind1,        ONLY: jpim,  jprb     ! DrHook
@@ -200,11 +201,26 @@ CASE ('CFCl3     ')
 CASE ('CF2ClCFCl2')
   get_molmass = m_cf2clcfcl2
 
+CASE ('CF2ClCF2Cl')
+  get_molmass = m_cf2clcf2cl
+
+CASE ('CF2ClCF3  ')
+  get_molmass = m_cf2clcf3
+
+CASE ('CF3Br     ')
+  get_molmass = m_cf3br
+
 CASE ('CF2ClBr   ')
   get_molmass = m_cf2clbr
 
 CASE ('CHF2Cl    ')
   get_molmass = m_chf2cl
+
+CASE ('MeCFCl2   ')
+  get_molmass = m_mecfcl2
+
+CASE ('MeCF2Cl   ')
+  get_molmass = m_mecf2cl
 
   ! -----------------------------------------
   ! Reactive and total chlorine
