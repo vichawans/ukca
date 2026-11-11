@@ -373,6 +373,7 @@ TYPE :: ukca_config_spec_type
                                        ! B-E Offline Oxidants scheme
   LOGICAL :: l_fix_ukca_h2so4_ystore   ! True to fix storage of H2SO4 in ASAD
                                        ! N-R schemes for updating in GLOMAP
+  LOGICAL :: l_fix_ukca_n2o5_h2o       ! True to filter N2O5+H2O to strat and trop only
 
   ! Settings for managing photolysis environmental driver
   ! requirements on behalf of external UKCA Photolysis code
@@ -457,6 +458,10 @@ TYPE :: glomap_config_spec_type
   REAL :: acc_cor_scav_scaling         ! Scaling factor for scavenging
                                        ! parameters for the accumulation and
                                        ! coarse modes
+  REAL :: solinsol_hygro_ratio(4)      ! SOL/INSOL hygroscopicity ratios
+    				       ! cp_su, cp_cl, cp_bc, cp_oc
+    				       ! This ratio only affects the wet
+    				       ! part of the aerosol
 
   ! -- GLOMAP deposition configuration options --
   LOGICAL :: l_ddepaer                 ! True for aerosol dry deposition
@@ -975,6 +980,7 @@ ukca_config%l_fix_ukca_h2dd_x = .FALSE.
 ukca_config%l_fix_drydep_so2_water = .FALSE.
 ukca_config%l_fix_ukca_offox_h2o_fac = .FALSE.
 ukca_config%l_fix_ukca_h2so4_ystore = .FALSE.
+ukca_config%l_fix_ukca_n2o5_h2o = .FALSE.
 
 ! -- Settings for managing Photolysis driver requirements
 ukca_config%i_photol_scheme = imdi
@@ -1023,6 +1029,7 @@ glomap_config%mode_activation_dryr = rmdi
 glomap_config%l_dust_mp_ageing = .FALSE.
 glomap_config%dry_depvel_acc_scaling = rmdi
 glomap_config%acc_cor_scav_scaling = rmdi
+glomap_config%solinsol_hygro_ratio(:) = rmdi
 
 ! -- GLOMAP deposition configuration options --
 glomap_config%l_ddepaer = .FALSE.
@@ -1151,6 +1158,7 @@ SUBROUTINE ukca_get_config(                                                    &
    sigwmin,                                                                    &
    sigma_updraught_scaling,                                                    &
    userval_ch2cl2, userval_chcl3, userval_c2cl4, userval_c2h4cl2,              &
+   solinsol_hygro_ratio,                                                       &
    l_cal360,                                                                   &
    l_ukca_chem_aero,                                                           &
    l_ukca_mode,                                                                &
@@ -1210,6 +1218,7 @@ SUBROUTINE ukca_get_config(                                                    &
    l_fix_drydep_so2_water,                                                     &
    l_fix_ukca_offox_h2o_fac,                                                   &
    l_fix_ukca_h2so4_ystore,                                                    &
+   l_fix_ukca_n2o5_h2o,                                                        &
    l_ukca_chem, l_ukca_trop, l_ukca_aerchem, l_ukca_raq, l_ukca_raqaero,       &
    l_ukca_offline_be, l_ukca_tropisop, l_ukca_strattrop, l_ukca_deststrattrop, &
    l_ukca_strat,                                                               &
@@ -1362,6 +1371,7 @@ REAL, OPTIONAL, INTENT(OUT) :: userval_ch2cl2(5)
 REAL, OPTIONAL, INTENT(OUT) :: userval_chcl3(5)
 REAL, OPTIONAL, INTENT(OUT) :: userval_c2cl4(5)
 REAL, OPTIONAL, INTENT(OUT) :: userval_c2h4cl2(5)
+REAL, OPTIONAL, INTENT(OUT) :: solinsol_hygro_ratio(4)
 
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_cal360
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_chem_aero
@@ -1437,6 +1447,7 @@ LOGICAL, OPTIONAL, INTENT(OUT) :: l_fix_ukca_h2dd_x
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_fix_drydep_so2_water
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_fix_ukca_offox_h2o_fac
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_fix_ukca_h2so4_ystore
+LOGICAL, OPTIONAL, INTENT(OUT) :: l_fix_ukca_n2o5_h2o
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_chem
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_trop
 LOGICAL, OPTIONAL, INTENT(OUT) :: l_ukca_aerchem
@@ -1748,6 +1759,8 @@ IF (PRESENT(l_fix_ukca_offox_h2o_fac))                                         &
   l_fix_ukca_offox_h2o_fac = ukca_config%l_fix_ukca_offox_h2o_fac
 IF (PRESENT(l_fix_ukca_h2so4_ystore))                                          &
   l_fix_ukca_h2so4_ystore = ukca_config%l_fix_ukca_h2so4_ystore
+IF (PRESENT(l_fix_ukca_n2o5_h2o))                                              &
+  l_fix_ukca_n2o5_h2o = ukca_config%l_fix_ukca_n2o5_h2o
 
 ! -- UKCA internal configuration variables
 IF (PRESENT(l_ukca_chem)) l_ukca_chem = ukca_config%l_ukca_chem
@@ -1812,6 +1825,8 @@ IF (PRESENT(l_ddepaer))                                                        &
 IF (PRESENT(mode_incld_so2_rfrac))                                             &
   mode_incld_so2_rfrac = glomap_config%mode_incld_so2_rfrac
 IF (PRESENT(l_aero_rainout)) l_aero_rainout = glomap_config%l_aero_rainout
+IF (PRESENT(solinsol_hygro_ratio)) solinsol_hygro_ratio(:) =                   &
+  glomap_config%solinsol_hygro_ratio(:)
 IF (PRESENT(l_cv_rainout)) l_cv_rainout = glomap_config%l_cv_rainout
 IF (PRESENT(i_mode_nucscav)) i_mode_nucscav = glomap_config%i_mode_nucscav
 IF (PRESENT(l_impc_scav)) l_impc_scav = glomap_config%l_impc_scav
