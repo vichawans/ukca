@@ -8826,6 +8826,19 @@ asad_flux_defn('PSC',50464,'1',.FALSE.,0,1,                                    &
 asad_flux_defn('PSC',50465,'2',.FALSE.,0,1,                                    & !PSC2
 ['XXX       ','          '],                                                   &
 ['          ','          ','          ','          '])                         &
+! Add extra het chem fluxes for both troposphere and stratosphere
+! Reactions are used in both StratTrop and CRI-Strat2
+! Note that B85 is a biomolecular reaction but is aping a heterogeneous one
+TYPE(asad_flux_defn), PARAMETER, PUBLIC ::                                     &
+                         het_chem_n2o5_h2o(2) = [                              &
+! B85 N2O5+H2O
+asad_flux_defn('RXN',50993,'B',.FALSE.,0,4,                                    &
+['N2O5      ','H2O       '],                                                   &
+['HONO2     ','HONO2     ','          ','          ']),                        &
+! PSC N2O5-H2O H04
+asad_flux_defn('RXN',50994,'H',.FALSE.,0,4,                                    &
+['N2O5      ','H2O       '],                                                   &
+['HONO2     ','HONO2     ','          ','          '])                         &
 ]
 
 
@@ -8916,6 +8929,7 @@ TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_drydep(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_ch4_ste(:)
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_het_chem_strattrop(:) !Yao
 TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_strat_het_strattrop(:) !--VS
+TYPE(asad_flux_defn), ALLOCATABLE, SAVE :: aa_het_chem_n2o5_h2o(:)
 
 INTEGER :: p1                   ! start position in asad_chemical_fluxes array
 INTEGER :: p2                   ! end position in asad_chemical_fluxes array
@@ -9097,6 +9111,9 @@ IF (ukca_config%l_ukca_strattrop) THEN
     ALLOCATE(aa_ch4_ste(SIZE(asad_ch4_ste)))
     aa_ch4_ste = asad_ch4_ste
   END IF
+  ! aa_het_chem_n2o5_h2o
+  ALLOCATE(aa_het_chem_n2o5_h2o(SIZE(het_chem_n2o5_h2o)))
+  aa_het_chem_n2o5_h2o = het_chem_n2o5_h2o
 
 ELSE IF (ukca_config%l_ukca_cristrat) THEN
   ! Select the asad diagnostics appropriate for CRI-Strat chemistry and
@@ -9305,6 +9322,9 @@ ELSE IF (ukca_config%l_ukca_cristrat) THEN
     ALLOCATE(aa_oxidN_wetdep(SIZE(cri_oxidN_wetdep)))
     aa_oxidN_wetdep = cri_oxidN_wetdep
   END IF
+  ! aa_het_chem_n2o5_h2o
+  ALLOCATE(aa_het_chem_n2o5_h2o(SIZE(het_chem_n2o5_h2o)))
+  aa_het_chem_n2o5_h2o = het_chem_n2o5_h2o
 
 
 ELSE IF (ukca_config%l_ukca_offline .OR. ukca_config%l_ukca_offline_be) THEN
@@ -9382,6 +9402,8 @@ IF (ALLOCATED(aa_het_chem_strattrop))                                          &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_het_chem_strattrop)
 IF (ALLOCATED(aa_strat_het_strattrop))                                         &
    n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_strat_het_strattrop)
+IF (ALLOCATED(aa_het_chem_n2o5_h2o))                                           &
+   n_chemical_fluxes = n_chemical_fluxes + SIZE(aa_het_chem_n2o5_h2o)
 
 ALLOCATE(asad_chemical_fluxes(n_chemical_fluxes))
 
@@ -9534,6 +9556,10 @@ IF (ALLOCATED(aa_strat_het_strattrop)) THEN
   p2 = p1 + SIZE(aa_strat_het_strattrop) - 1
   asad_chemical_fluxes(p1:p2) = aa_strat_het_strattrop(:)
   p1 = p2 + 1
+IF (ALLOCATED(aa_het_chem_n2o5_h2o)) THEN
+  p2 = p1 + SIZE(aa_het_chem_n2o5_h2o) - 1
+  asad_chemical_fluxes(p1:p2) = aa_het_chem_n2o5_h2o(:)
+  p1 = p2 + 1
 END IF
 
 IF (p2 /= n_chemical_fluxes) THEN
@@ -9590,6 +9616,7 @@ END IF
 ! Deallocate the generic arrays
 IF (ALLOCATED(aa_strat_het_strattrop))   DEALLOCATE(aa_strat_het_strattrop)
 IF (ALLOCATED(aa_het_chem_strattrop))    DEALLOCATE(aa_het_chem_strattrop)
+IF (ALLOCATED(aa_het_chem_n2o5_h2o))     DEALLOCATE(aa_het_chem_n2o5_h2o)
 IF (ALLOCATED(aa_ch4_ste))               DEALLOCATE(aa_ch4_ste)
 IF (ALLOCATED(aa_ch4_drydep))            DEALLOCATE(aa_ch4_drydep)
 IF (ALLOCATED(aa_ch4_budget_loss))       DEALLOCATE(aa_ch4_budget_loss)
