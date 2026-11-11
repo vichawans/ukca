@@ -19,7 +19,7 @@
 
 SimSys_Scripts:
     source: git@github.com:MetOffice/SimSys_Scripts.git
-    ref: main
+    ref: 2025.12.1
 
 ukca:
     source:
