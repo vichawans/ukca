@@ -75,6 +75,7 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       i_ukca_chem_version,                                     &
                       nrsteps,                                                 &
                       chem_timestep,                                           &
+                      i_chem_timestep_halvings,                                &
                       dts0,                                                    &
                       nit,                                                     &
                       i_ukca_quasinewton_start,                                &
@@ -128,6 +129,7 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       ph_fit_intercept,                                        &
                       sigwmin,                                                 &
                       sigma_updraught_scaling,                                 &
+                      solinsol_hygro_ratio,                                    &
                       const_rmol,                                              &
                       const_tfs,                                               &
                       const_rho_water,                                         &
@@ -206,6 +208,7 @@ SUBROUTINE ukca_setup(error_code,                                              &
                       l_fix_ukca_h2dd_x,                                       &
                       l_fix_ukca_offox_h2o_fac,                                &
                       l_fix_ukca_h2so4_ystore,                                 &
+                      l_fix_ukca_n2o5_h2o,                                     &
                       l_mode_bhn_on,                                           &
                       l_mode_bln_on,                                           &
                       l_ddepaer,                                               &
@@ -405,6 +408,7 @@ INTEGER, OPTIONAL, INTENT(IN) :: i_error_method
 INTEGER, OPTIONAL, INTENT(IN) :: i_ukca_chem_version
 INTEGER, OPTIONAL, INTENT(IN) :: nrsteps
 INTEGER, OPTIONAL, INTENT(IN) :: chem_timestep
+INTEGER, OPTIONAL, INTENT(IN) :: i_chem_timestep_halvings
 INTEGER, OPTIONAL, INTENT(IN) :: dts0
 INTEGER, OPTIONAL, INTENT(IN) :: nit
 INTEGER, OPTIONAL, INTENT(IN) :: i_ukca_quasinewton_start
@@ -459,6 +463,7 @@ REAL, OPTIONAL, INTENT(IN) :: ph_fit_intercept
 REAL, OPTIONAL, INTENT(IN) :: sigwmin
 REAL, OPTIONAL, INTENT(IN) :: hno3_uptake_coeff
 REAL, OPTIONAL, INTENT(IN) :: sigma_updraught_scaling
+REAL, OPTIONAL, INTENT(IN) :: solinsol_hygro_ratio(4)
 REAL, OPTIONAL, INTENT(IN) :: const_rmol
 REAL, OPTIONAL, INTENT(IN) :: const_tfs
 REAL, OPTIONAL, INTENT(IN) :: const_rho_water
@@ -538,6 +543,7 @@ LOGICAL, OPTIONAL, INTENT(IN) :: l_fix_drydep_so2_water
 LOGICAL, OPTIONAL, INTENT(IN) :: l_fix_ukca_h2dd_x
 LOGICAL, OPTIONAL, INTENT(IN) :: l_fix_ukca_offox_h2o_fac
 LOGICAL, OPTIONAL, INTENT(IN) :: l_fix_ukca_h2so4_ystore
+LOGICAL, OPTIONAL, INTENT(IN) :: l_fix_ukca_n2o5_h2o
 LOGICAL, OPTIONAL, INTENT(IN) :: l_mode_bhn_on
 LOGICAL, OPTIONAL, INTENT(IN) :: l_mode_bln_on
 LOGICAL, OPTIONAL, INTENT(IN) :: l_ddepaer
@@ -597,6 +603,8 @@ LOGICAL :: l_be_scheme_selected    ! True if B-E solver required for chemistry
 LOGICAL :: l_nr_scheme_selected    ! True if N-R solver required for chemistry
 LOGICAL :: l_strat_scheme_selected ! True if a Stratospheric scheme is
                                    ! selected for chemistry
+
+REAL :: sum_solinsol_hygro_ratio   ! Sum of solinsol hygroscopicity ratios (=1)
 
 INTEGER (KIND=jpim), PARAMETER :: zhook_in  = 0  ! DrHook tracing entry
 INTEGER (KIND=jpim), PARAMETER :: zhook_out = 1  ! DrHook tracing exit
@@ -812,6 +820,10 @@ IF (ukca_config%i_ukca_chem /= i_ukca_chem_off) THEN
       IF (PRESENT(i_ukca_quasinewton_end))                                     &
         ukca_config%i_ukca_quasinewton_end = i_ukca_quasinewton_end
     END IF
+
+    ukca_config%i_chem_timestep_halvings = 0
+    IF (PRESENT(i_chem_timestep_halvings))                                     &
+      ukca_config%i_chem_timestep_halvings = i_chem_timestep_halvings
 
   END IF
 
@@ -1226,6 +1238,13 @@ IF (ukca_config%l_ukca_mode .AND. l_nr_scheme_selected) THEN
     ukca_config%l_fix_ukca_h2so4_ystore = l_fix_ukca_h2so4_ystore
 END IF
 
+IF (ukca_config%i_ukca_chem == i_ukca_chem_strattrop .OR.                      &
+    ukca_config%i_ukca_chem == i_ukca_chem_cristrat) THEN
+  ukca_config%l_fix_ukca_n2o5_h2o = .TRUE.
+  IF (PRESENT(l_fix_ukca_n2o5_h2o))                                            &
+    ukca_config%l_fix_ukca_n2o5_h2o = l_fix_ukca_n2o5_h2o
+END IF
+
 ! Settings for managing photolysis environmental driver
 ! requirements on behalf of external UKCA Photolysis code
 
@@ -1306,6 +1325,9 @@ IF (ukca_config%l_ukca_mode) THEN
         glomap_config%acc_cor_scav_scaling = acc_cor_scav_scaling
 
     END IF
+
+    IF (PRESENT(solinsol_hygro_ratio))                                         &
+      glomap_config%solinsol_hygro_ratio(:) = solinsol_hygro_ratio(:)
 
     ! -- GLOMAP deposition configuration options --
 
@@ -1713,6 +1735,22 @@ IF (ukca_config%l_ukca_mode .AND. .NOT. ukca_config%l_ukca_emissions_off) THEN
     glomap_config%i_dust_scheme=-1                     ! No dust
   END IF
 
+END IF
+
+! Ensure the sum of solinsol_hygro_ratio is 1
+IF (ukca_config%l_ukca_mode .AND.                                              &
+    glomap_config%i_mode_setup == 11) THEN
+  sum_solinsol_hygro_ratio = 0.0
+  DO i = 1,4
+    sum_solinsol_hygro_ratio = sum_solinsol_hygro_ratio +                      &
+                               glomap_config%solinsol_hygro_ratio(i)
+  END DO
+  IF (PRESENT(solinsol_hygro_ratio)) THEN
+    glomap_config%solinsol_hygro_ratio(:) =                                    &
+      glomap_config%solinsol_hygro_ratio(:) / sum_solinsol_hygro_ratio
+  ELSE
+    glomap_config%solinsol_hygro_ratio(:) = [1.0, 0.0, 0.0, 0.0]
+  END IF
 END IF
 
 ! Initialise chemical definition arrays

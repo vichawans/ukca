@@ -87,7 +87,7 @@ SUBROUTINE ukca_hetero(n_points, have_nat, stratflag)
 ! Declarations:
 ! These are of the form:-
 
-USE asad_mod,        ONLY: specf, cdt, f, nhrkx, p, peps, rk,                  &
+USE asad_mod,        ONLY: specf, cdt_diag, f, nhrkx, p, peps, rk,             &
                            shno3, sph, sph2o, sphno3, t, tnd, wp, za,          &
                            fpsc1, sh2o, jpcspf, jphk
 USE ukca_config_constants_mod,  ONLY: avogadro, boltzmann
@@ -446,7 +446,7 @@ IF (ukca_config%i_ukca_hetconfig == 0) THEN
                  psc1(1:n_points), psc2(1:n_points),                           &
                  psc3(1:n_points), psc4(1:n_points),                           &
                  psc5(1:n_points), gpsa, gphocl,                               &
-                 gppsc, gpsimp, n_points, 1, n_points, cdt )
+                 gppsc, gpsimp, n_points, 1, n_points, cdt_diag )
   !
   ! divide rates by h2o or hcl as asad treats psc reactions as bimolecular
   !
@@ -490,9 +490,18 @@ IF (ukca_config%i_ukca_hetconfig == 0) THEN
     rk(:,n_hocl_hcl) = hk(:,3)
   END IF
 
+  ! Optionally filter N2O5+H2O by stratflag to prevent double-counting.
   IF (n_n2o5_h2o > 0) THEN
     ! 4. N2O5 + H2O -> 2 HNO3
-    rk(:,n_n2o5_h2o) = hk(:,4)
+    IF (ukca_config%l_fix_ukca_n2o5_h2o) THEN
+      WHERE (stratflag)
+        rk(:,n_n2o5_h2o) = hk(:,4)
+      ELSE WHERE
+        rk(:,n_n2o5_h2o) = 0.0
+      END WHERE
+    ELSE
+      rk(:,n_n2o5_h2o) = hk(:,4)
+    END IF
   END IF
 
   IF (n_n2o5_hcl > 0) THEN
@@ -605,11 +614,11 @@ ELSE ! New config
     !            ----- --- --- ---
     DO jl = 1, n_points
       zrate=MAX(1.0,                                                           &
-                cdt*(kpsc(jl,1) * zclono2(jl)+                                 &
-                     kpsc(jl,5) * zn2o5(jl)+                                   &
-                     kpsc(jl,3) * zhocl(jl)+                                   &
-                     kpsc(jl,6) * zhobr(jl)+                                   &
-                     kpsc(jl,7) * zbrono2(jl)))
+                cdt_diag*(kpsc(jl,1) * zclono2(jl)+                            &
+                          kpsc(jl,5) * zn2o5(jl)+                              &
+                          kpsc(jl,3) * zhocl(jl)+                              &
+                          kpsc(jl,6) * zhobr(jl)+                              &
+                          kpsc(jl,7) * zbrono2(jl)))
       zdhcl = MIN(zrate, zhcl(jl))
       zfact = zdhcl / zrate
 
@@ -625,11 +634,11 @@ ELSE ! New config
     IF ( ukca_config%i_ukca_hetconfig == 2 ) THEN
       DO jl = 1, n_points
         zrate=MAX(1.0,                                                         &
-                  cdt*(kpsc(jl,9)  * zhobr(jl)+                                &
-                       kpsc(jl,10) * zhocl(jl)+                                &
-                       kpsc(jl,11) * zclono2(jl)+                              &
-                       kpsc(jl,12) * zbrono2(jl)+                              &
-                       kpsc(jl,13) * zn2o5(jl)))
+                  cdt_diag*(kpsc(jl,9)  * zhobr(jl)+                           &
+                            kpsc(jl,10) * zhocl(jl)+                           &
+                            kpsc(jl,11) * zclono2(jl)+                         &
+                            kpsc(jl,12) * zbrono2(jl)+                         &
+                            kpsc(jl,13) * zn2o5(jl)))
         zdhbr = MIN(zrate, zhbr(jl))
         zfact = zdhbr / zrate
 
@@ -659,13 +668,26 @@ ELSE ! New config
 
   WHERE ( zh2o > peps )
     rk(:,n_clono2_h2o) = kpsc(:,2) / zh2o
-    rk(:,n_n2o5_h2o) = kpsc(:,4) / zh2o
     rk(:,n_brono2_h2o) = kpsc(:,8) / zh2o
   ELSE WHERE
     rk(:,n_clono2_h2o) = 0.0
-    rk(:,n_n2o5_h2o) = 0.0
     rk(:,n_brono2_h2o) = 0.0
   END WHERE
+
+  ! Optionally filter N2O5+H2O by stratflag to prevent double-counting.
+  IF (ukca_config%l_fix_ukca_n2o5_h2o) THEN
+    WHERE ( zh2o > peps .AND. stratflag )
+      rk(:,n_n2o5_h2o) = kpsc(:,4) / zh2o
+    ELSE WHERE
+      rk(:,n_n2o5_h2o) = 0.0
+    END WHERE
+  ELSE
+    WHERE ( zh2o > peps )
+      rk(:,n_n2o5_h2o) = kpsc(:,4) / zh2o
+    ELSE WHERE
+      rk(:,n_n2o5_h2o) = 0.0
+    END WHERE
+  END IF
 
   WHERE ( zhbr > peps )
     rk(:,n_hobr_hbr) = kpsc(:,9) / zhbr
